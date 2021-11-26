@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "moody"]
+	url = https://github.com/blink486/moody.git
+	fetch = +refs/heads/*:refs/remotes/moody/*
+[remote "opinz"]
+	url = https://github.com/blink486/opinz
+	fetch = +refs/heads/*:refs/remotes/opinz/*
+[remote "opi"]
+	url = https://github.com/blink486/opi.git
+	fetch = +refs/heads/*:refs/remotes/opi/*

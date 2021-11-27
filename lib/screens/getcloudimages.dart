@@ -275,6 +275,9 @@ class _ViewSurveyState extends State<ViewSurvey> {
               height: 200,
               child: lviewB(),
             ),
+            Center(
+              child: Text("Hello ${voteTally}"),
+            ),
           ],
         ),
       ),
@@ -322,6 +325,19 @@ class _ViewSurveyState extends State<ViewSurvey> {
             // textAlign: TextAlign.center,
           ),
         ),
+        InkWell(
+            onTap: () {
+              print("Container ${i} clicked");
+              _castVote();
+            },
+            child: new Container(
+              height: 50,
+              width: 50,
+              child: Text(
+                "Votes: ${survey.sets[i].votes.toString()}",
+                // textAlign: TextAlign.center,
+              ),
+            ))
       ],
     );
   }

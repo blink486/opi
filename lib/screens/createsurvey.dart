@@ -25,7 +25,7 @@ class _CreateSurveyState extends State<CreateSurvey> {
     // Emoji smile = Emoji.fromJson(json)   ('Grinning Face');
     return Scaffold(
       appBar: AppBar(
-        title: Text("1.1 createsurvey -   Menu Page" /*+ widget.searchstr*/),
+        title: Text("1.1 createsurvey -  Menu Page" /*+ widget.searchstr*/),
         // actions: <Widget>[HomeNav()],
       ),
       body: SingleChildScrollView(

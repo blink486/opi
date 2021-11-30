@@ -34,7 +34,7 @@ class _AddQuestionsState extends State<AddQuestions> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("3.0 addquestions .dt " /*+ widget.searchstr*/),
+        title: Text("3.0 addquestionss .dt " /*+ widget.searchstr*/),
         // actions: <Widget>[HomeNav()],
       ),
       body: SingleChildScrollView(

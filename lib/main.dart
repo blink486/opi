@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Emoji Picker Exampl e App'),
+          title: const Text('Emoji Picker Exampl eApp'),
         ),
         body: Column(
           children: [

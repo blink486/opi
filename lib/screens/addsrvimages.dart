@@ -7,18 +7,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:moodclicks/model/survey.dart';
+// import 'package:moodclicks/model/survey.dart';
 import 'package:moodclicks/model/surveyo.dart';
 import 'package:moodclicks/model/testmapping.dart';
-import 'package:moodclicks/screens/addimagescloud.dart';
 import 'package:moodclicks/screens/addsrvimagesBKP.dart';
-import 'package:moodclicks/screens/getcloudimages.dart';
-import 'package:moodclicks/screens/questioncard.dart';
+import 'package:moodclicks/screens/getcloudimageswdonly.dart';
 import 'package:moodclicks/screens/returnfromcloudsurvey.dart';
-import 'package:moodclicks/screens/tmp.dart';
-import 'package:moodclicks/services/fectch_coins_service.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:moodclicks/model/classopinion.dart';
 
 class AddSrvImages extends StatefulWidget {
   final String name;
@@ -76,7 +74,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         imageUrlFire = downloadUrl;
       });
     } else {
-      print('No path found');
+      print('No path ffound');
     }
   }
 
@@ -428,10 +426,11 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 // body['personalizations'][0]['dynamic_template_data']['Salary'] = 5000.00;
 
   void AddObjectToArray() {
-    Set set = Set("https://www.google.com/", 15);
+    Set set = Set("", "https://www.google.co.fr/", "", 68);
     FirebaseFirestore.instance
         .collection("questions")
-        .doc(widget.surveyId)
+        // .doc(widget.surveyId)
+        .doc('2HeifNo8JqL5R39U4n3y')
         .update({
       "sets": FieldValue.arrayUnion([set.toMap()])
     });
@@ -488,7 +487,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
   Widget build(BuildContext context) {
     // var item = yourItemList.length - 1;
 
-    FutureBuilder<Exercise> exercise;
+    // FutureBuilder<Exercise> exercise;
 
     return Scaffold(
       appBar: AppBar(
@@ -1113,19 +1112,19 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                     } //(ImageSource.gallery),
                     ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextButton.icon(
-                    icon: Icon(Icons.camera_alt_outlined),
-                    label:
-                        Text("Download ReadNestedData()  from Firebase Sample"),
-                    onPressed: () {
-                      ReadNestedDataSample();
-                      // exercise = jsonDecode();
-                      // Exercise tutorial = Exercise.fromMap()   .fromJson(jsonDecode(nestedObjText));
-                    } //(ImageSource.gallery),
-                    ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: TextButton.icon(
+              //       icon: Icon(Icons.camera_alt_outlined),
+              //       label:
+              //           Text("Download ReadNestedData()  from Firebase Sample"),
+              //       onPressed: () {
+              //         ReadNestedDataSample();
+              //         // exercise = jsonDecode();
+              //         // Exercise tutorial = Exercise.fromMap()   .fromJson(jsonDecode(nestedObjText));
+              //       } //(ImageSource.gallery),
+              //       ),
+              // ),
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -1200,7 +1199,9 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              ViewSurvey())); //Go Sample Cards
+                              // ViewSurvey()));
+                              ViewSurveyOnlyList()));
+                  //Go Sample Cards
                   // builder: (BuildContext context) => SignUp()));
                   // print('${smile.name}');
                 },
@@ -1411,13 +1412,13 @@ class _AddSrvImagesState extends State<AddSrvImages> {
   }
 }
 
-void SaveNestedData() {
-  Exercise exercise = Exercise("Champins league Final winner?", "Who Wins?");
-  FirebaseFirestore.instance
-      .collection("questions")
-      .doc("4DNTipoOB6GqnGP31dyc")
-      .set(exercise.toMap());
-}
+// void SaveNestedData() {
+//   Exercise exercise = Exercise("Champins league Final winner?", "Who Wins?");
+//   FirebaseFirestore.instance
+//       .collection("questions")
+//       .doc("4DNTipoOB6GqnGP31dyc")
+//       .set(exercise.toMap());
+// }
 
 //  List<String> imgName = [];
 List<Set> log = [];
@@ -1434,39 +1435,39 @@ List<Set> log = [];
 //     });
 //   }
 
-void ReadNestedData() {
-  Exercise ex;
-  FirebaseFirestore.instance
-      .collection("questions")
-      // .doc("4DNTipoOB6GqnGP31dyc")
-      //cV1Ht0R8VifDs89kGbVZ
-      //6wXOEN1gy7sO9JYCzrMe
-      .doc("2HeifNo8JqL5R39U4n3y")
-      .get()
-      .then((docSnapshot) => {
-            print(
-              docSnapshot.data(),
-            ),
-            // ex = ex.fromJson()
-          });
-}
+// void ReadNestedData() {
+//   Exercise ex;
+//   FirebaseFirestore.instance
+//       .collection("questions")
+//       // .doc("4DNTipoOB6GqnGP31dyc")
+//       //cV1Ht0R8VifDs89kGbVZ
+//       //6wXOEN1gy7sO9JYCzrMe
+//       .doc("2HeifNo8JqL5R39U4n3y")
+//       .get()
+//       .then((docSnapshot) => {
+//             print(
+//               docSnapshot.data(),
+//             ),
+//             // ex = ex.fromJson()
+//           });
+// }
 
-void ReadNestedDataSample() {
-  Exercise ex;
-  FirebaseFirestore.instance
-      .collection("sample")
-      // .doc("4DNTipoOB6GqnGP31dyc")
-      //cV1Ht0R8VifDs89kGbVZ
-      //6wXOEN1gy7sO9JYCzrMe
-      .doc("iQkfaDnPAag5nK22Z2QH")
-      .get()
-      .then((docSnapshot) => {
-            print(
-              docSnapshot.data(),
-            ),
-            // ex = ex.fromJson()
-          });
-}
+// void ReadNestedDataSample() {
+//   Exercise ex;
+//   FirebaseFirestore.instance
+//       .collection("sample")
+//       // .doc("4DNTipoOB6GqnGP31dyc")
+//       //cV1Ht0R8VifDs89kGbVZ
+//       //6wXOEN1gy7sO9JYCzrMe
+//       .doc("iQkfaDnPAag5nK22Z2QH")
+//       .get()
+//       .then((docSnapshot) => {
+//             print(
+//               docSnapshot.data(),
+//             ),
+//             // ex = ex.fromJson()
+//           });
+// }
 
 Future<Widget?> _rowView() async {
   Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[

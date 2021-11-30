@@ -1,7 +1,9 @@
+// ADD: user, date, surveyEndDate, private, multipleChoice
 class Opinion {
   final String name;
   final String description;
   List<dynamic> sets = [];
+  // TODO: ADD VOTES List<dynamic> votes = [];
 
 // TODO: ADD PRIVATE METHOD TO KEEP ORIGINAL VOTE SCORE AND INCREMENT ONLY BY ONE
 
@@ -29,7 +31,7 @@ class Opinion {
           return Set.fromMap(set);
         }).toList();
 
-  Opinion.fromJson(Map<String, dynamic> json)
+  Opinion.fromJson(Map<String, dynamic> json, param1)
       : name = json['name'],
         description = json['description'],
         sets = json['sets'].json((set) {
@@ -75,3 +77,17 @@ class Set {
         description = map["description"] ?? "",
         votes = map["votes"].toInt();
 }
+
+// Future<Opinion> Opinion.fromJson(Map<String, dynamic> data) async {
+//   return Opinion(
+//     name: data['name'] ?? '',
+//     surveyDesc: data['description'] ?? '',
+//      sets: data[firestoreSets()]
+
+//   );
+// }
+
+
+
+  // TODO: ADD CLASS: VOTES List<dynamic> votes = [];
+  // ADD: user, date, anonVote, vote Array[] (1:n possible votes )

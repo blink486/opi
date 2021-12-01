@@ -13,6 +13,7 @@ import 'package:moodclicks/model/testmapping.dart';
 import 'package:moodclicks/screens/addsrvimagesBKP.dart';
 import 'package:moodclicks/screens/getcloudimageswdonly.dart';
 import 'package:moodclicks/screens/returnfromcloudsurvey.dart';
+import 'package:moodclicks/screens/surveydisplay.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -1167,7 +1168,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              DisplaySurvey())); //Go Sample Cards
+                              // DisplaySurvey()));
+                              SurveyDisplay())); //Go Sample Cards
                   // builder: (BuildContext context) => SignUp()));
                   // print('${smile.name}');
                 },
@@ -1200,7 +1202,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
                               // ViewSurvey()));
-                              ViewSurveyOnlyList()));
+                              SurveyDisplay()));
+                  // ViewSurveyOnlyList()));
                   //Go Sample Cards
                   // builder: (BuildContext context) => SignUp()));
                   // print('${smile.name}');

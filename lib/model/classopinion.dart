@@ -60,23 +60,79 @@ class Set {
   final String downloadUrl;
   final String description;
   final int votes;
+  // final int choice;
+  // final List<int> votescast;
 
-  Set(this.item, this.downloadUrl, this.description, this.votes);
+  Set(this.item, this.downloadUrl, this.description, this.votes
+      // , this.choice
+      //     // this.votescast
+      );
 
   Map<String, dynamic> toMap() => {
         "item": this.item,
         "downloadUrl": this.downloadUrl,
         "description": this.description,
-        "votes": this.votes
+        "votes": this.votes,
+        // "choice": this.choice
+        // "votescast": this.votescast
       };
 
   Set.fromMap(Map<String, dynamic> map)
+      : item = map["item"] ?? "",
+        // Can pass default value  '?? ""' otherwise get NULL error
+        downloadUrl = map["downloadUrl"],
+        description = map["description"] ?? "",
+        votes = map["votes"].toInt() ?? 0;
+  // choice = map["choice"].toInt() ?? 0;
+
+  // votescast = map["votescast"];
+}
+
+class Choices {
+  final String item;
+  final String downloadUrl;
+  final String description;
+  final int votes;
+  // final int choice;
+  final List<int> votescast;
+
+  Choices(
+      this.item,
+      this.downloadUrl,
+      this.description,
+      this.votes,
+      // this.choice
+      this.votescast);
+
+  Map<String, dynamic> toMap() => {
+        "item": this.item,
+        "downloadUrl": this.downloadUrl,
+        "description": this.description,
+        "votes": this.votes,
+        // "choice": this.choice
+        "votescast": this.votescast
+      };
+
+  Choices.fromMap(Map<String, dynamic> map)
       : item = map["item"] ??
             "", // Can pass default value  '?? ""' otherwise get NULL error
         downloadUrl = map["downloadUrl"],
         description = map["description"] ?? "",
-        votes = map["votes"].toInt();
+        votes = map["votes"].toInt(),
+        // choice = map["choice"].toInt();
+
+        votescast = map["votescast"];
 }
+
+
+
+
+
+
+
+
+
+// ##################   OLD DELETE: ###########################
 
 // Future<Opinion> Opinion.fromJson(Map<String, dynamic> data) async {
 //   return Opinion(

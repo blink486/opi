@@ -424,18 +424,37 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     });
   }
 
-// body['personalizations'][0]['dynamic_template_data']['Salary'] = 5000.00;
+// ADD VOTES CAST 1...n Votes where there is a choice of > 1  START
+
+  void dummyAddList(int n) {
+    castVotes.add(n);
+  }
+
+  List<int> castVotes = [];
+
+  List<int> toListVotes() {
+    List<int> sendVotes = [];
+    castVotes.forEach((item) {
+      sendVotes.add(item);
+    });
+    return sendVotes.toList();
+  }
 
   void AddObjectToArray() {
-    Set set = Set("", "https://www.google.co.fr/", "", 68);
+    // Set set = Set("", "https://www.google.co.fr/", "", 68, toListVotes());
+    Choices choices =
+        Choices("", "https://www.google.co.fr/", "", 78, toListVotes());
     FirebaseFirestore.instance
-        .collection("questions")
+        .collection("opinion")
         // .doc(widget.surveyId)
-        .doc('2HeifNo8JqL5R39U4n3y')
+        // .doc('2HeifNo8JqL5R39U4n3y')
+        .doc('IU1In3pRSfHyI4Ora3oQ')
         .update({
-      "sets": FieldValue.arrayUnion([set.toMap()])
+      "votechoices": FieldValue.arrayUnion([choices.toMap()])
     });
   }
+
+// ADD VOTES CAST 1...n Votes where there is a choice of > 1  END
 
   Future<Widget> _rowView() async {
     Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
@@ -1100,6 +1119,13 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                   onPressed: () => AddObjectToArray(), //(ImageSource.gallery),
                 ),
               ),
+              ElevatedButton.icon(
+                  icon: Icon(Icons.ac_unit),
+                  label: Text("Submit Vote:"),
+                  onPressed: () => {
+                        dummyAddList(23),
+                        print(castVotes[0].toString()),
+                      }),
 
               Padding(
                 padding: const EdgeInsets.all(10.0),

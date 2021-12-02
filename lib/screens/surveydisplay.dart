@@ -143,7 +143,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
             //   ),
             // ),
             Center(
-              child: Text(" TExt Widget name"),
+              child: Text(" Document: w87f6S1H6ES4PPaehWxJ"),
             ),
             ElevatedButton.icon(
                 icon: Icon(Icons.info),
@@ -158,10 +158,11 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                   : Text("Error : Empty List, No Data Received"),
             ),
             ElevatedButton.icon(
-                icon: Icon(Icons.print),
-                label: Text("Print Survey"),
+                icon: Icon(Icons.ac_unit),
+                label: Text("Submit Vote:"),
                 onPressed: () => {
-                      printfut(),
+                      dummyAddList(1),
+                      AddObjectToVotingChoices(),
                     }),
 
             // Center(
@@ -174,6 +175,18 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
             //       ? lviewB()
             //       : Text("Error : Empty List, No Data Received"),
             // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: TextButton.icon(
+            //     icon: Icon(Icons.camera_alt_outlined),
+            //     label: Expanded(
+            //       child: Text(
+            //           "KEEP: Upload AddObjectToArray to Fire: Attach SETS array to existing"),
+            //     ),
+            //     onPressed: () =>
+            //         AddObjectToSetsArray(), //(ImageSource.gallery),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -185,7 +198,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     // var bd =
     await FirebaseFirestore.instance
         .collection("opinion")
-        .doc("2zHmv5oqetOQixD1OJBw")
+        .doc("w87f6S1H6ES4PPaehWxJ")
         .get()
         .then((docSnapshot) => {
               opinion =
@@ -353,7 +366,7 @@ List<Set> polloptionsx = [];
 Future<dynamic> importData() async {
   var surveyData = await FirebaseFirestore.instance
       .collection("opinion")
-      .doc("2zHmv5oqetOQixD1OJBw")
+      .doc("w87f6S1H6ES4PPaehWxJ")
       .get();
   try {
     if (surveyData.exists) ;
@@ -423,7 +436,7 @@ class GetUserName extends StatelessWidget {
         FirebaseFirestore.instance.collection('opinion');
 
     return FutureBuilder<DocumentSnapshot>(
-      future: opinion_src.doc('2zHmv5oqetOQixD1OJBw').get(),
+      future: opinion_src.doc('w87f6S1H6ES4PPaehWxJ').get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -437,7 +450,7 @@ class GetUserName extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           // Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-          opinion_src.doc('2zHmv5oqetOQixD1OJBw').get().then((docSnapshot) => {
+          opinion_src.doc('w87f6S1H6ES4PPaehWxJ').get().then((docSnapshot) => {
                 opinion =
                     Opinion.fromMap(docSnapshot.data() as Map<String, dynamic>),
                 opinion.sets.forEach((set) {
@@ -551,3 +564,71 @@ void _printSurveyFromFut(Opinion opx) {
     print(opx.sets[i].votes);
   }
 }
+
+// CollectionReference opinions = FirebaseFirestore.instance.collection('opinion');
+
+// Future<void> _addVote(int i, int v) {
+//   return opinions
+//       .doc('2zHmv5oqetOQixD1OJBw')
+//       .update({'sets[${i}].votes': v})
+//       .then((value) => print("User Voted"))
+//       .catchError((error) => print("Failed to update user: $error"));
+// }
+
+CollectionReference opinions = FirebaseFirestore.instance.collection('opinion');
+
+Future<void> _addVote(int i, int v) {
+  return opinions
+      .doc('w87f6S1H6ES4PPaehWxJ')
+      .update({'[[sets][1].votes]': v})
+      .then((value) => print("User Voted"))
+      .catchError((error) => print("Failed to update user: $error"));
+}
+
+// ADD VOTES CAST 1...n Votes where there is a choice of > 1  START
+
+void dummyAddList(int n) {
+  castVotes.add(n);
+}
+
+List<int> castVotes = [];
+
+List<int> toListVotes() {
+  List<int> sendVotes = [];
+  castVotes.forEach((item) {
+    sendVotes.add(item);
+  });
+  return sendVotes.toList();
+}
+
+void AddObjectToVotingChoices() {
+  Choices choice = Choices(
+      "ENterUserIDHere2", "https://www.google.co.fr/", "", 68, toListVotes());
+  FirebaseFirestore.instance
+      .collection("opinion")
+      // .doc(widget.surveyId)
+      // .doc('2HeifNo8JqL5R39U4n3y')
+      .doc('w87f6S1H6ES4PPaehWxJ')
+      .update({
+    "votingchoices": FieldValue.arrayUnion([choice.toMap()])
+  });
+}
+
+
+
+// void AddObjectToSetsArray() {
+//   Set set = Set(
+//     "",
+//     "https://www.google.co.fr/",
+//     "",
+//     68,
+//   );
+//   FirebaseFirestore.instance
+//       .collection("questions")
+//       // .doc(widget.surveyId)
+//       // .doc('2HeifNo8JqL5R39U4n3y')
+//       .doc('xrEC0X1K2d9RJK8zJ5pz')
+//       .update({
+//     "sets": FieldValue.arrayUnion([set.toMap()])
+//   });
+// }

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
+import 'package:moodclicks/screens/addsrvimages.dart';
 import 'package:moodclicks/screens/getcloudimages.dart';
+import 'package:moodclicks/screens/test.dart';
 
 class SurveyDisplay extends StatefulWidget {
   const SurveyDisplay({Key? key}) : super(key: key);
@@ -33,6 +36,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
       setState(() {
         oplist(value);
         listLength(value);
+        setVoteStatus();
       });
     });
 
@@ -62,14 +66,14 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     return listStatus = list.sets.length;
   }
 
-  void _castVote() {
-    setState(() {
-      voteTally += 1;
-      voteTally = voteTally % (2);
+  // void _castVote() {
+  //   setState(() {
+  //     voteTally += 1;
+  //     voteTally = voteTally % (2);
 
-      print("${voteTally} ONe Vote  adde d");
-    });
-  }
+  //     print("${voteTally} ONe Vote  adde d");
+  //   });
+  // }
 
   void printfut() {
     opik.then((value) {
@@ -101,13 +105,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
         child: Column(
           children: <Widget>[
             Text("Heres your Survey Data:"),
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: ElevatedButton.icon(
-            //     icon: Icon(Icons.info),
-            //     label: Text("Get Survey From Firebase"),
-            //     onPressed: () => readNestedData(),
-            //   ),
+
             // ),
             // SingleChildScrollView(
             //   physics: NeverScrollableScrollPhysics(),
@@ -161,32 +159,52 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                 icon: Icon(Icons.ac_unit),
                 label: Text("Submit Vote:"),
                 onPressed: () => {
+                      // print(choiceList[0].votescast),
                       dummyAddList(1),
-                      AddObjectToVotingChoices(),
+                      submitChoices(),
+
+                      setState(() {
+                        voted = 'y';
+                      }),
+
+                      Navigator.pop(context)
+
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) => super.widget))
+
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             // ViewSurvey()));
+                      //             HomeNav())),
+                      // ViewSurveyOnlyList()));
+                      //Go Sample Cards
+                      // builder: (BuildContext context) => SignUp()));
+                      // print('${smile.name}');
+                      // },
+                      // Navigator.pop(context)
                     }),
-
-            // Center(
-            //   child: Text("${opik.toString()}"),
-            // ),
-
-            // Container(
-            //   height: 200,
-            //   child: listStatus > 0
-            //       ? lviewB()
-            //       : Text("Error : Empty List, No Data Received"),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: TextButton.icon(
-            //     icon: Icon(Icons.camera_alt_outlined),
-            //     label: Expanded(
-            //       child: Text(
-            //           "KEEP: Upload AddObjectToArray to Fire: Attach SETS array to existing"),
-            //     ),
-            //     onPressed: () =>
-            //         AddObjectToSetsArray(), //(ImageSource.gallery),
-            //   ),
-            // ),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("Print Stuff:"),
+                onPressed: () => {
+                      print('HEllo'),
+                      print(choiceList[0].votescast.toString()),
+                      print(choiceList.length.toString()),
+                      Text('${choiceList[0].votescast[0]}')
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("Vote CAst Already! $voted:"),
+                onPressed: () => {
+                      print('HEllo'),
+                      print(choiceList[0].votescast.toString()),
+                      print(choiceList.length.toString()),
+                      Text('${choiceList[0].votescast[0]}')
+                    }),
           ],
         ),
       ),
@@ -232,38 +250,72 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     );
   }
 
+// CHANGE COLOR ON SELECTION : START
+  Color _colorContainer = Colors.blue;
+  var choice;
+  void selectedChoice(int i) {
+    setState(() {
+      choice = i;
+    });
+  }
+
+  Color clicked(int i) {
+    // if (voted == 'n') {
+    if (i == choice) {
+      return Colors.pink;
+    }
+    // if (voted == 'y') {
+    //   return Colors.grey;
+    // }
+    return Colors.green;
+  }
+
+//TODO: Change to bool
+
+// CHANGE COLOR ON SELECTION : END
+
   Widget buildQlist(i) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text("Choice: ${i + 1} "),
-        Container(
-          height: 120,
-          width: 80,
-          child: Image.network(survey.sets[i].downloadUrl),
-        ),
-        Container(
-          height: 50,
-          width: 50,
-          child: Text(
-            "Votes: ${survey.sets[i].votes.toString()}",
-            // textAlign: TextAlign.center,
+    return Container(
+      // color: _colorContainer,
+      height: 123,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text("Choice: ${i + 1} "),
+          Container(
+            height: 120,
+            width: 80,
+            child: Image.network(survey.sets[i].downloadUrl),
           ),
-        ),
-        InkWell(
-            onTap: () {
-              print("Container ${i} clicked");
-              _castVote();
-            },
-            child: new Container(
-              height: 50,
-              width: 50,
-              child: Text(
-                "Votes: ${survey.sets[i].votes.toString()}",
-                // textAlign: TextAlign.center,
+          Container(
+            height: 50,
+            width: 50,
+            child: Text(
+              "Votes: ${survey.sets[i].votes.toString()}",
+              // textAlign: TextAlign.center,
+            ),
+          ),
+          Row(children: [
+            InkWell(
+              onTap: () {
+                print("Container ${i} clicked");
+                // _castVote();
+                AddObjectToVotingChoices(i);
+                selectedChoice(i);
+              },
+              child: new Container(
+                color: _colorContainer = clicked(i),
+                height: 50,
+                width: 50,
+                child: Text(
+                  "Votes: ${survey.sets[i].votes.toString()}",
+                  // textAlign: TextAlign.center,
+                ),
               ),
-            ))
-      ],
+            ),
+          ])
+        ],
+      ),
     );
   }
 
@@ -293,7 +345,8 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
             InkWell(
                 onTap: () {
                   print("Container ${i} clicked");
-                  _castVote();
+                  // _castVote();
+                  AddObjectToVotingChoices(i);
                 },
                 child: new Container(
                   height: 50,
@@ -588,6 +641,8 @@ Future<void> _addVote(int i, int v) {
 // ADD VOTES CAST 1...n Votes where there is a choice of > 1  START
 
 void dummyAddList(int n) {
+  if (castVotes.length > 0) castVotes.clear();
+
   castVotes.add(n);
 }
 
@@ -601,34 +656,60 @@ List<int> toListVotes() {
   return sendVotes.toList();
 }
 
-void AddObjectToVotingChoices() {
-  Choices choice = Choices(
-      "ENterUserIDHere2", "https://www.google.co.fr/", "", 68, toListVotes());
-  FirebaseFirestore.instance
-      .collection("opinion")
-      // .doc(widget.surveyId)
-      // .doc('2HeifNo8JqL5R39U4n3y')
-      .doc('w87f6S1H6ES4PPaehWxJ')
-      .update({
-    "votingchoices": FieldValue.arrayUnion([choice.toMap()])
-  });
-}
+// void _castVotes() {
+//   setState(() {
+//     voteTally += 1;
+//     voteTally = voteTally % (2);
 
-
-
-// void AddObjectToSetsArray() {
-//   Set set = Set(
-//     "",
-//     "https://www.google.co.fr/",
-//     "",
-//     68,
-//   );
-//   FirebaseFirestore.instance
-//       .collection("questions")
-//       // .doc(widget.surveyId)
-//       // .doc('2HeifNo8JqL5R39U4n3y')
-//       .doc('xrEC0X1K2d9RJK8zJ5pz')
-//       .update({
-//     "sets": FieldValue.arrayUnion([set.toMap()])
+//     print("${voteTally} ONe Vote  adde d");
 //   });
 // }
+
+final currUser2 = FirebaseAuth.instance.currentUser!.uid.toString();
+
+List<Choices> choiceList = [];
+
+void AddObjectToVotingChoices(int option) {
+  choiceList.clear();
+  print(option);
+  Choices choice = Choices(currUser2, "https://www.google.co.fr/",
+      "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
+  choiceList.add(choice);
+}
+
+void submitChoices() {
+  print("VOted?? ${choiceList.length}");
+  // if (voted == 'y')
+  //   print('VOTED COMPLETED');
+  // else {
+  if (choiceList.length > 0) {
+    try {
+      FirebaseFirestore.instance
+          .collection("opinion")
+          // .doc(widget.surveyId)
+          // .doc('2HeifNo8JqL5R39U4n3y')
+          .doc('w87f6S1H6ES4PPaehWxJ')
+          .update({
+        "votingchoices": FieldValue.arrayUnion([choiceList[0].toMap()]),
+      });
+      choiceList.clear();
+    } catch (e) {
+      print('Error Uploading to Cloud: ${e}');
+    }
+  } else if (choiceList.isEmpty) {
+    print('Votes Not Cast. Please vote before clicking Submit ');
+  } else if (choiceList.length == 0) {
+    print(
+        'Choice Length List 0 ; Votes Not Cast. Please vote before clicking Submit ');
+  } else
+    print("Non of the above");
+  // voted = 'y';
+  // }
+}
+
+var voted;
+
+void setVoteStatus() {
+  String voted = 'n';
+  print(voted);
+}

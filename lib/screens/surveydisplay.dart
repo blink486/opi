@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/screens/addsrvimages.dart';
+import 'package:moodclicks/screens/chartsandvis.dart';
 import 'package:moodclicks/screens/getcloudimages.dart';
 import 'package:moodclicks/screens/test.dart';
 
@@ -204,6 +205,17 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                       print(choiceList[0].votescast.toString()),
                       print(choiceList.length.toString()),
                       Text('${choiceList[0].votescast[0]}')
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("View Results Charts"),
+                onPressed: () => {
+                      print('Moving to CHARTS'),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              // builder: (BuildContext context) => ImpCharts()))
+                              builder: (BuildContext context) => alldata()))
                     }),
           ],
         ),

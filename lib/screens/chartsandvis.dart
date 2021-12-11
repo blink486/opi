@@ -93,7 +93,7 @@ class _alldataState extends State<alldata> {
     _getDoc();
 
     readNestedData();
-
+    readVoteData();
     // futureDoc = _getDoc();
   }
 
@@ -114,6 +114,27 @@ class _alldataState extends State<alldata> {
           print("Print Lower level Data from ARRAY of  MAPS:"),
           print(opinion.sets[0].votes),
           opx = opinion,
+        });
+  }
+
+  late Choices cpx;
+
+  Future<void> readVoteData() async {
+    Choices choices;
+    _getDoc().then((docSnapshot) => {
+          choices = Choices.fromMap(docSnapshot.data() as Map<String, dynamic>),
+          docSnapshot.forEach((votescast) {
+            choices.votescast.add(votescast);
+            //   // Set setInst = set as Set;
+            //   // log("Reps :" + setInst.reps.toString());
+            //   // polloptions.add(set);
+            //   // polloptionsx.add(setInst);
+          }),
+          print("Print CHOICES level Data:"),
+          print(choices.description),
+          print("Print CHOICES Lower level Data from ARRAY of  MAPS:"),
+          // print(choices.votescast[0]),
+          cpx = choices,
         });
   }
 
@@ -159,6 +180,22 @@ class _alldataState extends State<alldata> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 2,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    // child: charts.BarChart(series),
+                    child: Text("GRAPH HERE"),
+                  ),
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.ac_unit),
+                      label: Text("View Results Charts"),
+                      onPressed: () => {
+                            print(snapshot.toString()),
+                            print(cpx.description),
+                          }),
                 ])
               : Container();
         },
@@ -259,82 +296,86 @@ class B {
   }
 }
 
+class VoteResults {
+  late final String option;
+  late final int votes;
+  late final Color barColor;
 
+  VoteResults(this.option, this.votes, this.barColor);
+}
 
+// List<Choices> results = [];
+// List<VoteResults> voteResults = [];
 
-// class GetChoices extends StatefulWidget {
-//   // final String documentId;
+// void addResults(Opinion dataSet){
+//   List<Set> voteResults = [];
+//   Set voteLoop ;
+// for (int i = 0 ; i < dataSet.sets.length; i++)
 
-//   // GetChoices(this.documentId);
+// voteResults.add(Set(dataSet.sets[i].item, dataSet.sets[i].downloadUrl, dataSet.sets[i].description, dataSet.sets[i].votecast[i].  votes));
 
-//   @override
-//   _GetChoicesState createState() => _GetChoicesState();
+//     WorldPopulation('2016', 54, Colors.pink),
+//     WorldPopulation('2017', 23, Colors.purple),
+//     WorldPopulation('2018', 74, Colors.yellow),
+//     WorldPopulation('2019', 84, Colors.amber),
+//     WorldPopulation('2020', 94, Colors.green),
+//     WorldPopulation('2021', 99, Colors.black),
+
 // }
+//   ;
 
-// class _GetChoicesState extends State<GetChoices> {
-//   late Opinion opinion;
 
-//   @override
-//   Future<Widget> build(BuildContext context) async {
-//     CollectionReference opinion_src =
-//         FirebaseFirestore.instance.collection('opinion');
+// List<Set> results = [];
+// List<VoteResults> voteResults = [];
 
-//     // return FutureBuilder<DocumentSnapshot>(
-//     //   future: opinion_src.doc('2zHmv5oqetOQixD1OJBw').get(),
-//     //   builder:
-//     //       (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-//     //     if (snapshot.hasError) {
-//     //       return Text("Something went wrong");
-//     //     }
+// void addResults(Opinion dataSet){
+//   List<Set> voteResults = [];
+//   Set voteLoop ;
+// for (int i = 0 ; i < dataSet.sets.length; i++)
 
-//     //     if (snapshot.hasData && !snapshot.data!.exists) {
-//     //       return Text("Document does not exist");
-//     //     }
+// voteResults.add(Set(dataSet.sets[i].item, dataSet.sets[i].downloadUrl, dataSet.sets[i].description, dataSet.sets[i].votecast[i].  votes));
 
-//     //     if (snapshot.connectionState == ConnectionState.done) {
-//     //       // Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-//     //       // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-//     //       opinion_src.doc('2zHmv5oqetOQixD1OJBw').get().then((docSnapshot) => {
-//     //             opinion =
-//     //                 Opinion.fromMap(docSnapshot.data() as Map<String, dynamic>),
-//     //             opinion.sets.forEach((set) {
-//     //               Set setInst = set as Set;
-//     //               // log("Reps :" + setInst.reps.toString());
-//     //               // polloptions.add(set);
-//     //               // polloptionsx.add(setInst);
-//     //             }),
-//     //             print("Print TOP level Data:"),
-//     //             print(opinion.description),
-//     //             print("Print Lower level Data from ARRAY of  MAPS:"),
-//     //             print(opinion.sets[0].votes),
-//     //             // survey = opinion,
-//     //           });
-//     //       // return docSnapshot;
-//     //     }
+//     WorldPopulation('2016', 54, Colors.pink),
+//     WorldPopulation('2017', 23, Colors.purple),
+//     WorldPopulation('2018', 74, Colors.yellow),
+//     WorldPopulation('2019', 84, Colors.amber),
+//     WorldPopulation('2020', 94, Colors.green),
+//     WorldPopulation('2021', 99, Colors.black),
 
-//     //     return Text("loading");
-//     //   },
-//     // );
-//     FutureBuilder<DocumentSnapshot>(
-//       future: FirebaseFirestore.instance
-//           .collection('opinion')
-//           .doc('2zHmv5oqetOQixD1OJBw')
-//           .get(),
-//       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-//         if (snapshot.hasError)
-//           return Center(
-//             child: Text(snapshot.hasError.toString()),
-//           );
-//         return snapshot.hasData
-//             ? Text(
-//                 "${snapshot.data!['name']}",
-//                 style: TextStyle(
-//                     color: Colors.amber,
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.bold),
-//               )
-//             : Container();
-//       },
-//     );
-//   }
 // }
+//   ;
+
+
+
+    // var docs = media.data!.docs;
+    // var box = Hive.box<Favorite>('favorites');
+
+    // Map<String, Quantity> myIngredients = {};
+
+    // return ListView.builder(
+    //   itemCount: media.data!.docs.length,
+    //   itemBuilder: (ctx, i) {
+    //     // Convert data from firebase into <String, Quantity>
+    //     Map.from(docs[i].get('ingredients')).entries.forEach((e) {
+    //       myIngredients[e.key] = Quantity(
+    //         amount: e.value['amount'].toDouble(),
+    //         unit: e.value['unit'],
+    //       );
+    //     });
+
+    //     Medium md = Medium(
+    //       initials: docs[i].get('initials'),
+    //       longName: docs[i].get('longName'),
+    //       ingredients: myIngredients,
+    //       steps: docs[i].get('steps').cast<String>(),
+    //       mediumState: PhysicalState.values.elementAt(
+    //         docs[i].get('mediumState'),
+    //       ),
+    //       reference: docs[i].data().containsKey('reference')
+    //           ? docs[i].get('reference')
+    //           : '',
+    //       isComplement: docs[i].data().containsKey('isComplement')
+    //           ? docs[i].get('isComplement')
+    //           : false,
+    //       ps: docs[i].data().containsKey('ps') ? docs[i].get('ps') : '',
+    //     );

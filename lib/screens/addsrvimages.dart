@@ -440,19 +440,20 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     return sendVotes.toList();
   }
 
-  void AddObjectToArray() {
-    // Set set = Set("", "https://www.google.co.fr/", "", 68, toListVotes());
-    Choices choices =
-        Choices("", "https://www.google.co.fr/", "", 78, toListVotes());
-    FirebaseFirestore.instance
-        .collection("opinion")
-        // .doc(widget.surveyId)
-        // .doc('2HeifNo8JqL5R39U4n3y')
-        .doc('IU1In3pRSfHyI4Ora3oQ')
-        .update({
-      "votechoices": FieldValue.arrayUnion([choices.toMap()])
-    });
-  }
+  // void AddObjectToArray() {
+  //   // Set set = Set("", "https://www.google.co.fr/", "", 68, toListVotes());
+  //   Choices choices =
+  //       // Choices("", "https://www.google.co.fr/", "", 78, toListVotes());
+  //               Choices("", "https://www.google.co.fr/", "", 78, toListVotes());
+  //   FirebaseFirestore.instance
+  //       .collection("opinion")
+  //       // .doc(widget.surveyId)
+  //       // .doc('2HeifNo8JqL5R39U4n3y')
+  //       .doc('IU1In3pRSfHyI4Ora3oQ')
+  //       .update({
+  //     "votechoices": FieldValue.arrayUnion([choices.toMap()])
+  //   });
+  // }
 
 // ADD VOTES CAST 1...n Votes where there is a choice of > 1  END
 
@@ -1108,17 +1109,17 @@ class _AddSrvImagesState extends State<AddSrvImages> {
               SizedBox(
                 height: 50,
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextButton.icon(
-                  icon: Icon(Icons.camera_alt_outlined),
-                  label: Expanded(
-                    child: Text(
-                        "KEEP: Upload AddObjectToArray to Fire: Attach SETS array to existing"),
-                  ),
-                  onPressed: () => AddObjectToArray(), //(ImageSource.gallery),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: TextButton.icon(
+              //     icon: Icon(Icons.camera_alt_outlined),
+              //     label: Expanded(
+              //       child: Text(
+              //           "KEEP: Upload AddObjectToArray to Fire: Attach SETS array to existing"),
+              //     ),
+              //     onPressed: () => AddObjectToArray(), //(ImageSource.gallery),
+              //   ),
+              // ),
               ElevatedButton.icon(
                   icon: Icon(Icons.ac_unit),
                   label: Text("Submit Vote:"),
@@ -1527,4 +1528,23 @@ Future<Widget?> _rowView() async {
   ]);
 
   return Row();
+}
+
+List<Map> ballotMapList = [];
+List<Map> castBallots = [];
+
+Future<List<Map>> addBallot(String options) async {
+  if (options.isNotEmpty) {
+    try {
+      Map<String, dynamic> data = {
+        "option": options,
+        "vote": 1,
+      };
+
+      ballotMapList.add(data);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  return List.empty();
 }

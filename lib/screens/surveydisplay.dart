@@ -28,7 +28,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     super.initState();
     readNestedData();
     polloptions.clear();
-    // var kb = importData();
 
     print("Boj Opinio below:");
 
@@ -44,20 +43,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     // print(opik.then((value) => value.sets));
   }
 
-  // late int voteTally = opList[0].sets[0].votes;
-  // late int listStatus = opList[0].sets.length;
-
-  // late int voteTally = survey.sets[0].votes;
-  // late int listStatus = survey.sets.length;
-
-  // late int voteTally = 1;
-  // late int listStatus = 2;
-
-  // late int voteTally = opList[0].sets[0].votes;
-
   int voteTally = 0;
-
-  // late int listStatus = opList[0].sets.length;
 
   int listStatus = 0;
 
@@ -106,41 +92,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
         child: Column(
           children: <Widget>[
             Text("Heres your Survey Data:"),
-
-            // ),
-            // SingleChildScrollView(
-            //   physics: NeverScrollableScrollPhysics(),
-            //   child: Container(
-            //     height: 40,
-            //     width: 400,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //       children: <Widget>[
-            //         Text(voteTally.toString()),
-            //         ElevatedButton.icon(
-            //             icon: Icon(Icons.info),
-            //             label: Text("vote"),
-            //             onPressed: () => {
-            //                   // readNestedData(),
-            //                   _castVote(),
-            //                   print(voteTally),
-            //                   print('Sets Length:'),
-            //                 }),
-            //         ElevatedButton.icon(
-            //             icon: Icon(Icons.info),
-            //             label: Text("Sets"),
-            //             onPressed: () => {_printSets()}),
-            //         ElevatedButton.icon(
-            //             icon: Icon(Icons.info),
-            //             label: Text("poll"),
-            //             onPressed: () => {
-            //                   print("BREAK"),
-            //                   print(opList[0].sets[1].votes),
-            //                 }),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             Center(
               child: Text(" Document: w87f6S1H6ES4PPaehWxJ"),
             ),
@@ -160,33 +111,12 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                 icon: Icon(Icons.ac_unit),
                 label: Text("Submit Vote:"),
                 onPressed: () => {
-                      // print(choiceList[0].votescast),
                       dummyAddList(1),
                       submitChoices(),
-
                       setState(() {
                         voted = 'y';
                       }),
-
                       Navigator.pop(context)
-
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (BuildContext context) => super.widget))
-
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (BuildContext context) =>
-                      //             // ViewSurvey()));
-                      //             HomeNav())),
-                      // ViewSurveyOnlyList()));
-                      //Go Sample Cards
-                      // builder: (BuildContext context) => SignUp()));
-                      // print('${smile.name}');
-                      // },
-                      // Navigator.pop(context)
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -217,6 +147,27 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => alldata()))
                     }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("Add Choices TO Firebase:"),
+                onPressed: () => {
+                      print("ADDING UPDATED to FIREbase:"),
+                      // AddObjectToVotingChoices2(),
+                      AddToFire(),
+                      // print(choiceList[0].votescast.toString()),
+                      // print(choiceList.length.toString()),
+                      // Text('${choiceList[0].votescast[0]}')
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("Update Choices: ADD Ballots"),
+                onPressed: () => {
+                      print("BALLOT:"),
+                      addBallot2('1'),
+                      // print(choiceList[0].votescast.toString()),
+                      // print(choiceList.length.toString()),
+                      // Text('${choiceList[0].votescast[0]}')
+                    }),
           ],
         ),
       ),
@@ -225,7 +176,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
 
   Future<void> readNestedData() async {
     Opinion opinion;
-    // var bd =
     await FirebaseFirestore.instance
         .collection("opinion")
         .doc("w87f6S1H6ES4PPaehWxJ")
@@ -332,7 +282,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
   }
 
   // ADD NEW  FUTURE METHOD Version:
-
   late Opinion survey;
 
   Future<Widget> buildQlistC(i) async => opik.then((value) {
@@ -374,7 +323,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
 
   Future<Column> buildQlistZCol(List<Opinion> opList) async {
     for (int i = 0; i < opList[0].sets.length; i++) buildQlistZ(i);
-
     return Column();
   }
 
@@ -412,12 +360,6 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     );
   }
 }
-
-// void _assign(Opinion o) {
-//   var rts = o;
-//   print("rts VALUE: ");
-//   print(o.name);
-// }
 
 List<Set> polloptions = [];
 // List<Row> optionrow = [];
@@ -684,8 +626,17 @@ List<Choices> choiceList = [];
 void AddObjectToVotingChoices(int option) {
   choiceList.clear();
   print(option);
-  Choices choice = Choices(currUser2, "https://www.google.co.fr/",
-      "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
+  Choices choice = Choices(
+    currUser2,
+    "https://www.google.co.fr/",
+    // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
+    "w87f6S1H6ES4PPaehWxJ",
+    option,
+    VostCst,
+    // ball.toMap();
+  );
+  // castBallots.toList()[0]['votes'].toString());
+
   choiceList.add(choice);
 }
 
@@ -725,3 +676,204 @@ void setVoteStatus() {
   String voted = 'n';
   print(voted);
 }
+
+List<Map> ballotMapList = [];
+List<Map> castBallots = [];
+List<Ballot> Ballots = [];
+Future<List<Map>> ballotMapListft = [] as Future<List<Map>>;
+
+List<dynamic> VostCst = [];
+
+Future<List<Map>> addBallot(String options) async {
+  if (options.isNotEmpty) {
+    Ballot b;
+    try {
+      Map<String, dynamic> data = {
+        "option": options,
+        "vote": 1,
+      };
+
+      ballotMapList.add(data);
+
+      // b = data;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  return List.empty();
+}
+
+// Future<List<Map>> addBallot(String options) async {
+void addBallot2(String options) {
+  if (options.isNotEmpty) {
+    // Ballot b;
+    try {
+      Map<String, dynamic> data = {
+        "option": options,
+        "vote": 1,
+      };
+      // Ballot b  =  Ballot(options, 1)  ,
+
+      Ballots.add(Ballot(options, 1));
+
+      ballotMapList.add(data);
+      castBallots.add(data);
+      VostCst.clear();
+      VostCst.add(data);
+      print("THIS HEREE");
+      print(VostCst.toString());
+      // b = data;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  // return List.empty();
+}
+
+List<Choices> choiceList2 = [];
+
+Future<Ballot> balls = [] as Future<Ballot>;
+
+Future<List<Map<dynamic, dynamic>>> jd = [] as Future<List<Map>>;
+
+Future AddObjectToVotingChoices2() async {
+  Ballot ball;
+  final _fireStore = FirebaseFirestore.instance;
+
+  List voteList = [];
+  choiceList.clear();
+  for (int i = 0; i < castBallots.length; i++)
+    voteList.add({
+      "option": castBallots.toList()[i]['option'],
+      "vote": castBallots.toList()[i]['vote'],
+    });
+  for (int i = 0; i < castBallots.length; i++)
+    ball = Ballot(voteList[i]['option'], voteList[i]['vote']);
+
+  jd = castBallots as Future<List<Map>>;
+
+  print(voteList[0]['option']);
+
+  // print(ball[0].vote);
+
+  Choices mychoice = Choices(
+      currUser2,
+      "https://www.google.co.fr/",
+      // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
+      "w87f6S1H6ES4PPaehWxJ",
+      1,
+      // ballotMapList.toList(forEac),
+      // "hello".toString()
+      VostCst);
+
+  await _fireStore.collection('opinion').doc('w87f6S1H6ES4PPaehWxJ').set({
+    "item": currUser2,
+    "downloadUrl": "https://www.google.co.frs/",
+    "description": "w87f6S1H6ES4PPaehWxJ",
+    "votes": 1,
+    // "Ballot": FieldValue.arrayUnion(voteList),
+    "votingchoices": FieldValue.arrayUnion(voteList[0].toMap()),
+    // "f0xdloadUerl": imgMapList[i]['downloadUrl'],
+  }, SetOptions(merge: true)).then((_) {
+    print("IMAGES added to Survey!!");
+  });
+}
+
+AddToFire() async {
+  final _fireStore = FirebaseFirestore.instance;
+
+  // await _fireStore.collection('opinion').doc('w87f6S1H6ES4PPaehWxJ').set({
+  //   // "item": currUser2,
+  //   // "downloadUrl": "https://www.google.co.frs/",
+  //   // "description": "w87f6S1H6ES4PPaehWxJ",
+  //   // "votes": 1,
+  //   // // "Ballot": FieldValue.arrayUnion(voteList),
+  //   // "votingchoices": FieldValue.arrayUnion(voteList[0].toMap()),
+  //   // // "f0xdloadUerl": imgMapList[i]['downloadUrl'],
+
+  // VostCst.add('1');
+  // VostCst.add('0');
+  List<dynamic> d = [];
+  Ballot bb = Ballot('2', 1);
+  d.add(bb);
+  Ballot cc = Ballot('1', 1);
+  d.add(cc);
+  Ballot dd = Ballot('3', 1);
+  d.add(dd);
+  Ballot ee = Ballot('3', 1);
+  d.add(ee);
+  //  Map<String, dynamic> data = {
+  //       "option": options,
+  //       "vote": 1,
+  //     };
+
+  Choices c = Choices(
+      currUser2, "https://www.google.co.frs/", "w87f6S1H6ES4PPaehWxJ", 1, d);
+
+  print(c.votescast);
+
+  await _fireStore.collection('opinion').doc('w87f6S1H6ES4PPaehWxJ').update({
+    // "item": c.item,
+    // "downloadUrl": c.downloadUrl,
+    // "description": c.description,
+    // "votes": c.votes,
+    // "Ballot": FieldValue.arrayUnion(voteList),
+    "votingchoices": c.toMap(),
+
+    // "f0xdloadUerl": imgMapList[i]['downloadUrl'],
+  });
+  // }, SetOptions(merge: true)).then((_) {
+  //   print("IMAGES added to Survey!!");
+  // });
+}
+
+
+
+
+
+
+// void manualAdd(){
+// var k = Future<List<Map<dynamic, dynamic>>> bb(String 1);
+// Ballot b = Ballot('2', 1);
+// Choices c = Choices(item, downloadUrl, description, votes, addBallot)
+
+// }
+
+// // print(option);
+// Choices choice = Choices(
+//     currUser2,
+//     "https://www.google.co.fr/",
+//     // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
+//     "w87f6S1H6ES4PPaehWxJ",
+//     1,
+//     castBallots.asMap());
+//     // castBallots.toList()[0]['votes'].toString());
+
+// choiceList.add(choice);
+
+// Map<String, dynamic> toMap() => {
+//       "option": this.option,
+//       "vote": this.vote,
+//     };
+
+// Future<List<Map>> addBallot(String options) async {
+//   if (options.isNotEmpty) {
+//    var Ballot B ;
+
+// B.toMap();
+
+//       ballotMapList.add(Ballot);
+//     } catch (e) {
+//       print(e.toString());
+//     }
+//   }
+//   return List.empty();
+// }
+
+// List<int> toListVotes() {
+//   List<int> sendVotes = [];
+//   castVotes.forEach((item) {
+//     sendVotes.add(item);
+//   });
+//   return sendVotes.toList();
+// }

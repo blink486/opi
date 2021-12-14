@@ -139,13 +139,7 @@ class Choices {
   // List<dynamic> votescast;
   List<dynamic> votescast = [];
 
-  Choices(
-      this.item,
-      this.downloadUrl,
-      this.description,
-      this.votes,
-      // Future<List<Map>> addBallot,
-      // this.choice
+  Choices(this.item, this.downloadUrl, this.description, this.votes,
       this.votescast);
 
   Map<String, dynamic> toMap() => {
@@ -227,13 +221,13 @@ class Ballot {
 //    final List<dynamic> votescast;
 
 
-//     factory Choices.fromJson(Map<String, dynamic> json) => Choices(
-//         item: json["item"],
-//         downloadUrl: json["downloadUrl"],
-//         description: json["description"],
-//         votes: json["votes"],
-//         votescast: List<dynamic>.from(json["votescast"].map((x) => x)),
-//     );
+    // factory Choices.fromJson(Map<String, dynamic> json) => Choices(
+    //     item: json["item"],
+    //     downloadUrl: json["downloadUrl"],
+    //     description: json["description"],
+    //     votes: json["votes"],
+    //     votescast: List<dynamic>.from(json["votescast"].map((x) => x)),
+    // );
 
 //     Map<String, dynamic> toJson() => {
 //         "item": item,

@@ -1,61 +1,3 @@
-// import 'package:charts_flutter/flutter.dart' as charts;
-// import 'package:flutter/material.dart';
-
-// class ImpCharts extends StatefulWidget {
-//   const ImpCharts({Key? key}) : super(key: key);
-
-//   @override
-//   _ImpChartsState createState() => _ImpChartsState();
-// }
-
-// class _ImpChartsState extends State<ImpCharts> {
-//   static final List<WorldPopulation> populationData = [
-//     WorldPopulation('2016', 54, Colors.pink),
-//     WorldPopulation('2017', 23, Colors.purple),
-//     WorldPopulation('2018', 74, Colors.yellow),
-//     WorldPopulation('2019', 84, Colors.amber),
-//     WorldPopulation('2020', 94, Colors.green),
-//     WorldPopulation('2021', 99, Colors.black),
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List<charts.Series<WorldPopulation, String>> series = [
-//       charts.Series(
-//           data: populationData,
-//           id: "World Population",
-//           domainFn: (WorldPopulation pops, _) => pops.year,
-//           measureFn: (WorldPopulation pops, _) => pops.population,
-//           colorFn: (WorldPopulation pops, _) =>
-//               charts.ColorUtil.fromDartColor(pops.barColor))
-//     ];
-
-//     return Scaffold(
-//       backgroundColor: Colors.grey.shade200,
-//       body: Center(
-//         child: Padding(
-//           padding: const EdgeInsets.all(10),
-//           child: Container(
-//             width: MediaQuery.of(context).size.width,
-//             height: MediaQuery.of(context).size.height / 2,
-//             decoration: BoxDecoration(
-//                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
-//             child: charts.BarChart(series),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class WorldPopulation {
-//   final String year;
-//   final int population;
-//   final Color barColor;
-
-//   WorldPopulation(this.year, this.population, this.barColor);
-// }
-
 //   Script from:  Mins 7:35 @  https://www.youtube.com/watch?v=QshpV3gh708
 
 import 'package:firebase_core/firebase_core.dart';
@@ -63,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/model/testclass.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class alldata extends StatefulWidget {
   const alldata({Key? key}) : super(key: key);
@@ -83,7 +26,7 @@ class _alldataState extends State<alldata> {
   _getDoc() {
     return FirebaseFirestore.instance
         .collection('opinion')
-        .doc('w87f6S1H6ES4PPaehWxJ')
+        .doc('ukYTOJ7sTkJ8S8yg38cv')
         .get();
   }
 
@@ -91,10 +34,108 @@ class _alldataState extends State<alldata> {
   void initState() {
     super.initState();
     _getDoc();
-
-    readNestedData();
     readVoteData();
+    readNestedData();
     // futureDoc = _getDoc();
+  }
+
+  late Choices cpx;
+  List<Ballot> balList = [];
+
+  readVoteBalData() async {
+    balList.clear();
+
+    Ballot b = Ballot('10', 11);
+
+    int blen;
+
+    await _getDoc().then((docSnapshot) => {
+          blen = docSnapshot.data()['votescast']['Ballot'].length,
+          print("Length{$blen}"),
+          for (int i = 0; i < blen; i++)
+            {
+              b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
+                  docSnapshot.data()['votescast']['Ballot'][i]['vote']),
+              // balList.add(b.toMap());
+              print(b.option),
+              print(b.vote),
+              balList.add(b)
+            }
+        });
+  }
+
+  void printBalList() {
+    for (int i = 0; i < balList.length; i++) {
+      print(balList[i].option);
+      print(balList[i].vote);
+    }
+  }
+
+  List<VoteResults> voteResult = [];
+
+  void createVoteList() {
+    // for (int i = 0; i < balList.length; i++) {
+    for (int i = 0; i < 1; i++) {
+      print(balList[i].option);
+
+      //  VoteResult.add() VoteResults[balList][i].option);
+      VoteResults vr = VoteResults(balList[i].option, 3, Colors.pink);
+      print(balList[i].vote);
+      voteResult.add(vr);
+    }
+  }
+
+  // void addVotesToSet(i) {
+  //   // for (int i = 0; i < balList.length; i++) {
+  //   //   print(balList[i].option);
+
+  //   //  VoteResult.add() VoteResults[balList][i].option);
+  //   VoteResults vr = VoteResults(balList[i].option, 3, Colors.green);
+  //   // print(balList[i].vote);
+  //   voteResult.add(vr);
+  // }
+
+  Future<void> readVoteData() async {
+    Choices choices;
+
+    Ballot b = Ballot('1', 1);
+    String x;
+    int blen;
+
+    _getDoc().then((docSnapshot) => {
+          blen = docSnapshot.data()['votescast']['Ballot'].length,
+
+          for (int i = 0; i < blen; i++)
+            b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
+                docSnapshot.data()['votescast']['Ballot'][i]['vote'].toInt),
+          // balList.add(b.toMap());
+          print(b.option),
+
+          x = docSnapshot.data()['votescast']['Ballot'][0]['option'].toString(),
+          print(x),
+          print(docSnapshot.data()['votescast']['Ballot'].length),
+          print(
+              "Loading CHOICES :   {$docSnapshot.data()['votescast']['item'] as String} "),
+          print(x),
+          choices = Choices.fromMap(
+              docSnapshot.data()['votescast'] as Map<String, dynamic>),
+          choices.votescast.forEach((votescast) {
+            Ballot ballotInst = votescast['Ballot'] as Ballot;
+            // choices.votescast.add(votescast);
+
+            //   //   // Set setInst = set as Set;
+            //   //   // log("Reps :" + setInst.reps.toString());
+            //   //   // polloptions.add(set);
+            //   //   // polloptionsx.add(setInst);
+          }),
+          print(choices.description),
+          print("Print CHOICES level Data:"),
+          // print(choices.votescast[0].option),
+          // print(choices.votescast[0].vote.toString()),
+          print("Print CHOICES Lower level Data from ARRAY of  MAPS:"),
+          // print(choices.votescast[0]),
+          cpx = choices,
+        });
   }
 
   late Opinion opx;
@@ -117,32 +158,42 @@ class _alldataState extends State<alldata> {
         });
   }
 
-  late Choices cpx;
+  // late Choices cpx;
 
-  Future<void> readVoteData() async {
-    Choices choices;
-    _getDoc().then((docSnapshot) => {
-          choices = Choices.fromMap(docSnapshot.data() as Map<String, dynamic>),
-          docSnapshot.forEach((votescast) {
-            choices.votescast.add(votescast);
-            //   // Set setInst = set as Set;
-            //   // log("Reps :" + setInst.reps.toString());
-            //   // polloptions.add(set);
-            //   // polloptionsx.add(setInst);
-          }),
-          print("Print CHOICES level Data:"),
-          print(choices.description),
-          print("Print CHOICES Lower level Data from ARRAY of  MAPS:"),
-          // print(choices.votescast[0]),
-          cpx = choices,
-        });
-  }
+  // Future<void> readVoteData() async {
+  //   Choices choices;
+  //   _getDoc().then((docSnapshot) => {
+  //         choices = Choices.fromMap(docSnapshot.data() as Map<String, dynamic>),
+  //         docSnapshot.forEach((votescast) {
+  //           choices.votescast.add(votescast);
+  //           //   // Set setInst = set as Set;
+  //           //   // log("Reps :" + setInst.reps.toString());
+  //           //   // polloptions.add(set);
+  //           //   // polloptionsx.add(setInst);
+  //         }),
+  //         print("Print CHOICES level Data:"),
+  //         print(choices.description),
+  //         print("Print CHOICES Lower level Data from ARRAY of  MAPS:"),
+  //         // print(choices.votescast[0]),
+  //         cpx = choices,
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    List<charts.Series<VoteResults, String>> series = [
+      charts.Series(
+          data: voteResult,
+          id: "World Population",
+          domainFn: (VoteResults pops, _) => pops.option,
+          measureFn: (VoteResults pops, _) => pops.votes,
+          colorFn: (VoteResults pops, _) =>
+              charts.ColorUtil.fromDartColor(pops.barColor))
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("all data"),
+        title: Text("chartsandvis.dart"),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _getDoc(),
@@ -163,6 +214,7 @@ class _alldataState extends State<alldata> {
                       "${snapshot.data!['sets'].length}"
                       "   "
                       " ${snapshot.data!['name']}",
+
                       style: TextStyle(
                           color: Colors.amber,
                           fontSize: 18,
@@ -172,7 +224,7 @@ class _alldataState extends State<alldata> {
                   Text(
                     // "${snapshot.data!['name']}",
                     // "${snapshot.data!['sets'][2]['downloadUrl']}",
-                    "${opx.sets[2].votes}"
+                    "${opx.sets[1].votes}"
                     "   "
                     " Huloo",
                     style: TextStyle(
@@ -180,21 +232,90 @@ class _alldataState extends State<alldata> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 2,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    // child: charts.BarChart(series),
-                    child: Text("GRAPH HERE"),
+                  // Text(
+                  //   // "${snapshot.data!['name']}",
+                  //   // "${snapshot.data!['sets'][2]['downloadUrl']}",
+                  //   "${cpx.description}"
+                  //   "   "
+                  //   " Huloo",
+                  //   style: TextStyle(
+                  //       color: Colors.amber,
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width,
+                  //   height: MediaQuery.of(context).size.height / 2,
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(10)),
+                  //   // child: charts.BarChart(series),
+                  //   child: Text("GRAPH HERE"),
+                  // ),
+                  Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 2,
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: charts.BarChart(series),
+                        ),
+                      ),
+                    ),
                   ),
+                  Text(
+                    // "${snapshot.data!['name']}",
+                    // "${snapshot.data!['sets'][2]['downloadUrl']}",
+                    "${snapshot.data!['votescast']['Ballot'][0]['option']}"
+                    "   "
+                    "${snapshot.data!['votescast']['Ballot'][0]['vote']}",
+
+                    style: TextStyle(
+                        color: Colors.amber,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  // Text(
+                  //   // "${snapshot.data!['name']}",
+                  //   // "${snapshot.data!['sets'][2]['downloadUrl']}",
+                  //   "${cpx.votescast[0].votes.toString()}"
+                  //   "   "
+                  //   " Huloo CPX votes cast [0]",
+                  //   style: TextStyle(
+                  //       color: Colors.amber,
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold),
+                  // ),
                   ElevatedButton.icon(
                       icon: Icon(Icons.ac_unit),
                       label: Text("View Results Charts"),
                       onPressed: () => {
-                            print(snapshot.toString()),
-                            print(cpx.description),
+                            print('Bravo!'),
+                            // print(cpx.votescast[1].option),
+                            createVoteList(),
+                            readVoteBalData(),
+                            print(balList.length),
+                            // addVotesToSet(1),
+                            // readVoteData()
+                            // print(cpx.votescast[1].votes.toString()),
+                            // print(opx.sets[0].downloadUrl),
+                          }),
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.ac_unit),
+                      label: Text("View Results Charts Contents"),
+                      onPressed: () => {
+                            print('Bravo2!'),
+                            print(voteResult
+                                .length), //   cpx.votescast[1].option),
+                            print('Bravo2!  printBalList()'),
+                            printBalList()
+                            // readVoteData()
+                            // print(cpx.votescast[1].votes.toString()),
+                            // print(opx.sets[0].downloadUrl),
                           }),
                 ])
               : Container();
@@ -220,11 +341,11 @@ class _alldataState extends State<alldata> {
   }
 }
 
-void printSnap(AsyncSnapshot<DocumentSnapshot> snapshot) {
-  for (int i = 0; i < snapshot.data!['sets'].length; i++);
+// void printSnap(AsyncSnapshot<DocumentSnapshot> snapshot) {
+//   for (int i = 0; i < snapshot.data!['sets'].length; i++);
 
-  print('AsyncSnapshot<DocumentSnapshot> snapshot)');
-}
+//   print('AsyncSnapshot<DocumentSnapshot> snapshot)');
+// }
 
 // Future<Text> printSnap2(AsyncSnapshot<DocumentSnapshot> snapshot) async {
 //   try {
@@ -241,60 +362,45 @@ void printSnap(AsyncSnapshot<DocumentSnapshot> snapshot) {
 //   // print('AsyncSnapshot<DocumentSnapshot> snapshot)');
 // }
 
-Future<Text> printSnap2(AsyncSnapshot<DocumentSnapshot> snapshot) async {
-  try {
-    String words;
-    if (snapshot.hasData) ;
-    {
-      for (int i = 0; i < snapshot.data!['sets'].length; i++)
-        return Text(snapshot.data!['sets'].length.toString());
-    }
-  } catch (e) {
-    print(e.toString());
-  }
-  throw Text('Nodata');
-  // print('AsyncSnapshot<DocumentSnapshot> snapshot)');
-}
+// void print_Opi() {
+//   print(opp.sets[0].votes);
+// }
 
-void print_Opi() {
-  print(opp.sets[0].votes);
-}
+// late Opinion opp;
 
-late Opinion opp;
+// Future<dynamic> importData() async {
+//   var surveyData = await FirebaseFirestore.instance
+//       .collection("opinion")
+//       .doc("ukYTOJ7sTkJ8S8yg38cv")
+//       .get();
+//   try {
+//     if (surveyData.exists) ;
+//     {
+//       return surveyData;
+//     }
+//   } catch (e) {
+//     return Text(e.toString());
+//   }
+// }
 
-Future<dynamic> importData() async {
-  var surveyData = await FirebaseFirestore.instance
-      .collection("opinion")
-      .doc("w87f6S1H6ES4PPaehWxJ")
-      .get();
-  try {
-    if (surveyData.exists) ;
-    {
-      return surveyData;
-    }
-  } catch (e) {
-    return Text(e.toString());
-  }
-}
-
-class B {
-  Future<Opinion?> createOpObjCl() async {
-    late Opinion opiz;
-    var opi = await importData().then((value) {
-      opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);
-      opiz.sets.forEach((set) {
-        Set setInst = set as Set;
-      });
-      print("Obj Return");
-      print(opiz.name);
-      opp = opiz;
-      return opiz;
-    });
-    // print(opi.toString());
-    print("Other Return");
-    // return opiz;
-  }
-}
+// class B {
+//   Future<Opinion?> createOpObjCl() async {
+//     late Opinion opiz;
+//     var opi = await importData().then((value) {
+//       opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);
+//       opiz.sets.forEach((set) {
+//         Set setInst = set as Set;
+//       });
+//       print("Obj Return");
+//       print(opiz.name);
+//       opp = opiz;
+//       return opiz;
+//     });
+//     // print(opi.toString());
+//     print("Other Return");
+//     // return opiz;
+//   }
+// }
 
 class VoteResults {
   late final String option;
@@ -303,6 +409,9 @@ class VoteResults {
 
   VoteResults(this.option, this.votes, this.barColor);
 }
+
+
+
 
 // List<Choices> results = [];
 // List<VoteResults> voteResults = [];

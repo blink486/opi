@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/screens/addsrvimages.dart';
 import 'package:moodclicks/screens/chartsandvis.dart';
+import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
 import 'package:moodclicks/screens/getcloudimages.dart';
 import 'package:moodclicks/screens/test.dart';
 
@@ -42,6 +43,9 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
 
     // print(opik.then((value) => value.sets));
   }
+
+//Orig Sample Doc was : w87f6S1H6ES4PPaehWxJ
+  String docId = "ukYTOJ7sTkJ8S8yg38cv";
 
   int voteTally = 0;
 
@@ -93,7 +97,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
           children: <Widget>[
             Text("Heres your Survey Data:"),
             Center(
-              child: Text(" Document: w87f6S1H6ES4PPaehWxJ"),
+              child: Text(" Document: $docId "),
             ),
             ElevatedButton.icon(
                 icon: Icon(Icons.info),
@@ -118,15 +122,15 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                       }),
                       Navigator.pop(context)
                     }),
-            ElevatedButton.icon(
-                icon: Icon(Icons.ac_unit),
-                label: Text("Print Stuff:"),
-                onPressed: () => {
-                      print('HEllo'),
-                      print(choiceList[0].votescast.toString()),
-                      print(choiceList.length.toString()),
-                      Text('${choiceList[0].votescast[0]}')
-                    }),
+            // ElevatedButton.icon(
+            //     icon: Icon(Icons.ac_unit),
+            //     label: Text("Print Stuff:"),
+            //     onPressed: () => {
+            //           print('HEllo'),
+            //           print(choiceList[0].votescast.toString()),
+            //           print(choiceList.length.toString()),
+            //           Text('${choiceList[0].votescast[0]}')
+            //         }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
                 label: Text("Vote CAst Already! $voted:"),
@@ -146,6 +150,17 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                           MaterialPageRoute(
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => alldata()))
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("View Results Charts ORIG UTube"),
+                onPressed: () => {
+                      print('Moving to CHARTS'),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              // builder: (BuildContext context) => ImpCharts()))
+                              builder: (BuildContext context) => ImpCharts()))
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -178,7 +193,7 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
     Opinion opinion;
     await FirebaseFirestore.instance
         .collection("opinion")
-        .doc("w87f6S1H6ES4PPaehWxJ")
+        .doc(docId)
         .get()
         .then((docSnapshot) => {
               opinion =
@@ -373,7 +388,7 @@ List<Set> polloptionsx = [];
 Future<dynamic> importData() async {
   var surveyData = await FirebaseFirestore.instance
       .collection("opinion")
-      .doc("w87f6S1H6ES4PPaehWxJ")
+      .doc("ukYTOJ7sTkJ8S8yg38cv")
       .get();
   try {
     if (surveyData.exists) ;
@@ -443,7 +458,7 @@ class GetUserName extends StatelessWidget {
         FirebaseFirestore.instance.collection('opinion');
 
     return FutureBuilder<DocumentSnapshot>(
-      future: opinion_src.doc('w87f6S1H6ES4PPaehWxJ').get(),
+      future: opinion_src.doc('ukYTOJ7sTkJ8S8yg38cv').get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -457,7 +472,7 @@ class GetUserName extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           // Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-          opinion_src.doc('w87f6S1H6ES4PPaehWxJ').get().then((docSnapshot) => {
+          opinion_src.doc('ukYTOJ7sTkJ8S8yg38cv').get().then((docSnapshot) => {
                 opinion =
                     Opinion.fromMap(docSnapshot.data() as Map<String, dynamic>),
                 opinion.sets.forEach((set) {
@@ -586,7 +601,7 @@ CollectionReference opinions = FirebaseFirestore.instance.collection('opinion');
 
 Future<void> _addVote(int i, int v) {
   return opinions
-      .doc('w87f6S1H6ES4PPaehWxJ')
+      .doc('ukYTOJ7sTkJ8S8yg38cv')
       .update({'[[sets][1].votes]': v})
       .then((value) => print("User Voted"))
       .catchError((error) => print("Failed to update user: $error"));
@@ -630,7 +645,7 @@ void AddObjectToVotingChoices(int option) {
     currUser2,
     "https://www.google.co.fr/",
     // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
-    "w87f6S1H6ES4PPaehWxJ",
+    "ukYTOJ7sTkJ8S8yg38cv",
     option,
     VostCst,
     // ball.toMap();
@@ -651,7 +666,7 @@ void submitChoices() {
           .collection("opinion")
           // .doc(widget.surveyId)
           // .doc('2HeifNo8JqL5R39U4n3y')
-          .doc('w87f6S1H6ES4PPaehWxJ')
+          .doc('ukYTOJ7sTkJ8S8yg38cv')
           .update({
         "votingchoices": FieldValue.arrayUnion([choiceList[0].toMap()]),
       });
@@ -760,16 +775,16 @@ Future AddObjectToVotingChoices2() async {
       currUser2,
       "https://www.google.co.fr/",
       // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
-      "w87f6S1H6ES4PPaehWxJ",
+      "ukYTOJ7sTkJ8S8yg38cv",
       1,
       // ballotMapList.toList(forEac),
       // "hello".toString()
       VostCst);
 
-  await _fireStore.collection('opinion').doc('w87f6S1H6ES4PPaehWxJ').set({
+  await _fireStore.collection('opinion').doc('ukYTOJ7sTkJ8S8yg38cv').set({
     "item": currUser2,
     "downloadUrl": "https://www.google.co.frs/",
-    "description": "w87f6S1H6ES4PPaehWxJ",
+    "description": "ukYTOJ7sTkJ8S8yg38cv",
     "votes": 1,
     // "Ballot": FieldValue.arrayUnion(voteList),
     "votingchoices": FieldValue.arrayUnion(voteList[0].toMap()),
@@ -798,7 +813,7 @@ AddToFire() async {
   d.add(bb);
   Ballot cc = Ballot('1', 1);
   d.add(cc);
-  Ballot dd = Ballot('3', 1);
+  Ballot dd = Ballot('4', 1);
   d.add(dd);
   Ballot ee = Ballot('3', 1);
   d.add(ee);
@@ -808,17 +823,20 @@ AddToFire() async {
   //     };
 
   Choices c = Choices(
-      currUser2, "https://www.google.co.frs/", "w87f6S1H6ES4PPaehWxJ", 1, d);
+      currUser2, "https://www.google.co.frs/", "ukYTOJ7sTkJ8S8yg38cv", 1, d);
 
   print(c.votescast);
 
-  await _fireStore.collection('opinion').doc('w87f6S1H6ES4PPaehWxJ').update({
+// To ONLY add the votingchoices use:
+  // await _fireStore.collection('opinion').add({
+// To INCLUDE orig Survey Headers PLU the votingchoices:
+  await _fireStore.collection('opinion').doc('ukYTOJ7sTkJ8S8yg38cv').update({
     // "item": c.item,
     // "downloadUrl": c.downloadUrl,
     // "description": c.description,
     // "votes": c.votes,
     // "Ballot": FieldValue.arrayUnion(voteList),
-    "votingchoices": c.toMap(),
+    "votescast": c.toMap(),
 
     // "f0xdloadUerl": imgMapList[i]['downloadUrl'],
   });
@@ -826,11 +844,6 @@ AddToFire() async {
   //   print("IMAGES added to Survey!!");
   // });
 }
-
-
-
-
-
 
 // void manualAdd(){
 // var k = Future<List<Map<dynamic, dynamic>>> bb(String 1);

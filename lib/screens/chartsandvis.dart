@@ -30,10 +30,73 @@ class _alldataState extends State<alldata> {
         .get();
   }
 
+  var queryrtn;
+
+  _getDoc2() {
+    // return FirebaseFirestore.instance
+
+    return FirebaseFirestore.instance
+        .collection('opinion')
+        .where('votingchoices.description',
+            isEqualTo:
+                'w87f6S1H6ES4PPaehWxJUSERID') //TODO: This will eventually be the SurveyID
+        // .doc('stJJiVVO821Z2U9NVv3I')
+        .get();
+    // print(db.then((querySnapshot) => {
+    //       print(querySnapshot.toString()),
+    //       // blen = docSnapshot.data()['votescast']['Ballot'].length,
+    //       // print("Length{$blen}"),
+    //       // for (int i = 0; i < blen; i++)
+    //       //   {
+    //       //     b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
+    //       //         docSnapshot.data()['votescast']['Ballot'][i]['vote']),
+    //       //     // balList.add(b.toMap());
+    //       //     print(b.option),
+    //       //     print(b.vote),
+    //       //     balList.add(b)
+    //       //   }
+    //     }));
+    // print("End");
+  }
+
+  readgetDoc2() async {
+    // balList.clear();
+
+    // Ballot b = Ballot('10', 11);
+
+    // int blen;
+
+    await _getDoc2().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        // chargePoints(element.id.toString());
+        var b = element.data()['votingchoices']['Ballot'].length;
+
+        for (int i = 0; i < b; i++) {
+          var k = Ballot(element.data()['votingchoices']['Ballot'][i]['option'],
+              element.data()['votingchoices']['Ballot'][i]['vote']);
+          // Check Graph calc method before adding: balList below
+          // balList.add(k);
+          print(k.option);
+          // print(element.data()['votingchoices']['Ballot'][i]['vote']);
+        }
+
+        // print(b.toString());
+        // print(element.id);
+        // print(element.votingchoices.toString());
+      });
+    });
+  }
+
+  void printQry() {
+    var x = queryrtn.toString();
+    print(x);
+  }
+
   @override
   void initState() {
     super.initState();
     _getDoc();
+    _getDoc2();
     readVoteData();
     readNestedData();
     // futureDoc = _getDoc();
@@ -75,13 +138,16 @@ class _alldataState extends State<alldata> {
 
   void createVoteList() {
     // for (int i = 0; i < balList.length; i++) {
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < balList.length; i++) {
       print(balList[i].option);
-
+      int votes = balList[i].vote;
       //  VoteResult.add() VoteResults[balList][i].option);
-      VoteResults vr = VoteResults(balList[i].option, 3, Colors.pink);
+      VoteResults vr = VoteResults(balList[i].option, votes + 1, Colors.pink);
       print(balList[i].vote);
       voteResult.add(vr);
+      setState(() {
+        voteResult;
+      });
     }
   }
 
@@ -184,7 +250,7 @@ class _alldataState extends State<alldata> {
     List<charts.Series<VoteResults, String>> series = [
       charts.Series(
           data: voteResult,
-          id: "World Population",
+          id: "Voting Results",
           domainFn: (VoteResults pops, _) => pops.option,
           measureFn: (VoteResults pops, _) => pops.votes,
           colorFn: (VoteResults pops, _) =>
@@ -292,7 +358,7 @@ class _alldataState extends State<alldata> {
                   // ),
                   ElevatedButton.icon(
                       icon: Icon(Icons.ac_unit),
-                      label: Text("View Results Charts"),
+                      label: Text("Add to createVoteList"),
                       onPressed: () => {
                             print('Bravo!'),
                             // print(cpx.votescast[1].option),
@@ -316,6 +382,18 @@ class _alldataState extends State<alldata> {
                             // readVoteData()
                             // print(cpx.votescast[1].votes.toString()),
                             // print(opx.sets[0].downloadUrl),
+                          }),
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.ac_unit),
+                      label: Text("Print Deep Query"),
+                      onPressed: () => {
+                            // print('Bravo2!'),
+                            // print(voteResult
+                            //     .length), //   cpx.votescast[1].option),
+                            // print('Bravo2!  printBalList()'),
+                            // printBalList(),
+                            printQry(),
+                            readgetDoc2()
                           }),
                 ])
               : Container();

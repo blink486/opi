@@ -1,5 +1,7 @@
 //   Script from:  Mins 7:35 @  https://www.youtube.com/watch?v=QshpV3gh708
 
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,16 @@ class _alldataState extends State<alldata> {
         .collection('opinion')
         .doc('ukYTOJ7sTkJ8S8yg38cv')
         .get();
+
+    // return FirebaseFirestore.instance
+    //     .collection('opinion')
+    //     .where('votingchoices.description',
+    //         isEqualTo:
+    //             'w87f6S1H6ES4PPaehWxJUSERID') //TODO: This will eventually be the SurveyID
+    //     // .doc('stJJiVVO821Z2U9NVv3I')
+    //     // .orderBy('votingchoices.votes', descending: true) //NEED to CREATE Indexes in Firebase to use in compound queries
+    //     // .limit(1)
+    //     .get();
   }
 
   var queryrtn;
@@ -41,22 +53,9 @@ class _alldataState extends State<alldata> {
             isEqualTo:
                 'w87f6S1H6ES4PPaehWxJUSERID') //TODO: This will eventually be the SurveyID
         // .doc('stJJiVVO821Z2U9NVv3I')
+        // .orderBy('votingchoices.votes', descending: true) //NEED to CREATE Indexes in Firebase to use in compound queries
+        // .limit(1)
         .get();
-    // print(db.then((querySnapshot) => {
-    //       print(querySnapshot.toString()),
-    //       // blen = docSnapshot.data()['votescast']['Ballot'].length,
-    //       // print("Length{$blen}"),
-    //       // for (int i = 0; i < blen; i++)
-    //       //   {
-    //       //     b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
-    //       //         docSnapshot.data()['votescast']['Ballot'][i]['vote']),
-    //       //     // balList.add(b.toMap());
-    //       //     print(b.option),
-    //       //     print(b.vote),
-    //       //     balList.add(b)
-    //       //   }
-    //     }));
-    // print("End");
   }
 
   readgetDoc2() async {
@@ -69,14 +68,19 @@ class _alldataState extends State<alldata> {
     await _getDoc2().then((snapshot) {
       snapshot.docs.forEach((element) {
         // chargePoints(element.id.toString());
+        String s = element.id.toString();
         var b = element.data()['votingchoices']['Ballot'].length;
+        print("DocID:  {$s}");
 
         for (int i = 0; i < b; i++) {
+          // print("blength:  $i");
+
           var k = Ballot(element.data()['votingchoices']['Ballot'][i]['option'],
               element.data()['votingchoices']['Ballot'][i]['vote']);
           // Check Graph calc method before adding: balList below
           // balList.add(k);
           print(k.option);
+          print(k.vote);
           // print(element.data()['votingchoices']['Ballot'][i]['vote']);
         }
 
@@ -88,8 +92,10 @@ class _alldataState extends State<alldata> {
   }
 
   void printQry() {
+    print('RUNNING printQry');
     var x = queryrtn.toString();
     print(x);
+    print('END RUNNING printQry');
   }
 
   @override
@@ -99,13 +105,15 @@ class _alldataState extends State<alldata> {
     _getDoc2();
     readVoteData();
     readNestedData();
+    printSample();
+    createVoteListForGraph();
     // futureDoc = _getDoc();
   }
 
   late Choices cpx;
   List<Ballot> balList = [];
 
-  readVoteBalData() async {
+  stackVoteBalData() async {
     balList.clear();
 
     Ballot b = Ballot('10', 11);
@@ -127,6 +135,31 @@ class _alldataState extends State<alldata> {
         });
   }
 
+  List<Ballot> balList2 = [];
+
+  stackVoteBalData2() async {
+    balList2.clear();
+
+    Ballot b = Ballot('10', 11);
+
+    int blen;
+
+    await _getDoc2().then((docSnapshot) => {
+          blen = docSnapshot.data()['votescast']['Ballot'].length,
+          print("Length{$blen}"),
+          for (int i = 0; i < blen; i++)
+            {
+              b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
+                  docSnapshot.data()['votescast']['Ballot'][i]['vote']),
+              // balList.add(b.toMap());
+              print(b.option),
+              print(b.vote),
+              balList2.add(b),
+              print(balList2.length)
+            }
+        });
+  }
+
   void printBalList() {
     for (int i = 0; i < balList.length; i++) {
       print(balList[i].option);
@@ -134,15 +167,34 @@ class _alldataState extends State<alldata> {
     }
   }
 
+  void printSample() {
+    print("HELLOOS");
+  }
+
+  // Colors barColor(int i) {
+  //   int x = i % 4;
+
+  //   Color s = Colors.black;
+
+  //   if (i == 1) {
+  //     return s;
+  //   } else
+  //     throw (error) {
+  //       print(error);
+  //     };
+  // }
+
   List<VoteResults> voteResult = [];
 
-  void createVoteList() {
+  void createVoteListForGraph() {
     // for (int i = 0; i < balList.length; i++) {
     for (int i = 0; i < balList.length; i++) {
+      Color _randomColor =
+          Colors.primaries[Random().nextInt(Colors.primaries.length)];
       print(balList[i].option);
       int votes = balList[i].vote;
       //  VoteResult.add() VoteResults[balList][i].option);
-      VoteResults vr = VoteResults(balList[i].option, votes + 1, Colors.pink);
+      VoteResults vr = VoteResults(balList[i].option, votes + 1, _randomColor);
       print(balList[i].vote);
       voteResult.add(vr);
       setState(() {
@@ -151,15 +203,24 @@ class _alldataState extends State<alldata> {
     }
   }
 
-  // void addVotesToSet(i) {
-  //   // for (int i = 0; i < balList.length; i++) {
-  //   //   print(balList[i].option);
+  List<VoteResults> voteResult2 = [];
 
-  //   //  VoteResult.add() VoteResults[balList][i].option);
-  //   VoteResults vr = VoteResults(balList[i].option, 3, Colors.green);
-  //   // print(balList[i].vote);
-  //   voteResult.add(vr);
-  // }
+  void createVoteListForGraph2() {
+    // for (int i = 0; i < balList.length; i++) {
+    for (int i = 0; i < balList.length; i++) {
+      Color _randomColor =
+          Colors.primaries[Random().nextInt(Colors.primaries.length)];
+      print(balList2[i].option);
+      int votes = balList2[i].vote;
+      //  VoteResult.add() VoteResults[balList][i].option);
+      VoteResults vr = VoteResults(balList2[i].option, votes + 1, _randomColor);
+      print(balList2[i].vote);
+      voteResult2.add(vr);
+      setState(() {
+        voteResult2;
+      });
+    }
+  }
 
   Future<void> readVoteData() async {
     Choices choices;
@@ -172,16 +233,18 @@ class _alldataState extends State<alldata> {
           blen = docSnapshot.data()['votescast']['Ballot'].length,
 
           for (int i = 0; i < blen; i++)
-            b = Ballot(docSnapshot.data()['votescast']['Ballot'][i]['option'],
-                docSnapshot.data()['votescast']['Ballot'][i]['vote'].toInt),
+            b = Ballot(
+                docSnapshot.data()['votescast']['Ballot'][i]['option'],
+                // docSnapshot.data()['votescast']['Ballot'][i]['vote'].toInt),
+                docSnapshot.data()['votescast']['Ballot'][i]['vote']),
           // balList.add(b.toMap());
           print(b.option),
 
           x = docSnapshot.data()['votescast']['Ballot'][0]['option'].toString(),
           print(x),
           print(docSnapshot.data()['votescast']['Ballot'].length),
-          print(
-              "Loading CHOICES :   {$docSnapshot.data()['votescast']['item'] as String} "),
+          print("Loading CHOICES :  "),
+          //      {$docSnapshot.data()['votescast']['item'] as String} "),
           print(x),
           choices = Choices.fromMap(
               docSnapshot.data()['votescast'] as Map<String, dynamic>),
@@ -224,32 +287,20 @@ class _alldataState extends State<alldata> {
         });
   }
 
-  // late Choices cpx;
-
-  // Future<void> readVoteData() async {
-  //   Choices choices;
-  //   _getDoc().then((docSnapshot) => {
-  //         choices = Choices.fromMap(docSnapshot.data() as Map<String, dynamic>),
-  //         docSnapshot.forEach((votescast) {
-  //           choices.votescast.add(votescast);
-  //           //   // Set setInst = set as Set;
-  //           //   // log("Reps :" + setInst.reps.toString());
-  //           //   // polloptions.add(set);
-  //           //   // polloptionsx.add(setInst);
-  //         }),
-  //         print("Print CHOICES level Data:"),
-  //         print(choices.description),
-  //         print("Print CHOICES Lower level Data from ARRAY of  MAPS:"),
-  //         // print(choices.votescast[0]),
-  //         cpx = choices,
-  //       });
-  // }
-
   @override
   Widget build(BuildContext context) {
     List<charts.Series<VoteResults, String>> series = [
       charts.Series(
           data: voteResult,
+          id: "Voting Results",
+          domainFn: (VoteResults pops, _) => pops.option,
+          measureFn: (VoteResults pops, _) => pops.votes,
+          colorFn: (VoteResults pops, _) =>
+              charts.ColorUtil.fromDartColor(pops.barColor))
+    ];
+    List<charts.Series<VoteResults, String>> series2 = [
+      charts.Series(
+          data: voteResult2,
           id: "Voting Results",
           domainFn: (VoteResults pops, _) => pops.option,
           measureFn: (VoteResults pops, _) => pops.votes,
@@ -298,26 +349,6 @@ class _alldataState extends State<alldata> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
-                  // Text(
-                  //   // "${snapshot.data!['name']}",
-                  //   // "${snapshot.data!['sets'][2]['downloadUrl']}",
-                  //   "${cpx.description}"
-                  //   "   "
-                  //   " Huloo",
-                  //   style: TextStyle(
-                  //       color: Colors.amber,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: MediaQuery.of(context).size.height / 2,
-                  //   decoration: BoxDecoration(
-                  //       color: Colors.white,
-                  //       borderRadius: BorderRadius.circular(10)),
-                  //   // child: charts.BarChart(series),
-                  //   child: Text("GRAPH HERE"),
-                  // ),
                   Expanded(
                     child: Center(
                       child: Padding(
@@ -329,6 +360,21 @@ class _alldataState extends State<alldata> {
                               color: Colors.green,
                               borderRadius: BorderRadius.circular(10)),
                           child: charts.BarChart(series),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 2,
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: charts.BarChart(series2),
                         ),
                       ),
                     ),
@@ -345,43 +391,33 @@ class _alldataState extends State<alldata> {
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
-                  // Text(
-                  //   // "${snapshot.data!['name']}",
-                  //   // "${snapshot.data!['sets'][2]['downloadUrl']}",
-                  //   "${cpx.votescast[0].votes.toString()}"
-                  //   "   "
-                  //   " Huloo CPX votes cast [0]",
-                  //   style: TextStyle(
-                  //       color: Colors.amber,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
                   ElevatedButton.icon(
                       icon: Icon(Icons.ac_unit),
-                      label: Text("Add to createVoteList"),
+                      label: Text("RUN stackVoteBalData()"),
                       onPressed: () => {
                             print('Bravo!'),
-                            // print(cpx.votescast[1].option),
-                            createVoteList(),
-                            readVoteBalData(),
+                            // createVoteListForGraph(),
+                            stackVoteBalData2(),
                             print(balList.length),
-                            // addVotesToSet(1),
-                            // readVoteData()
-                            // print(cpx.votescast[1].votes.toString()),
-                            // print(opx.sets[0].downloadUrl),
                           }),
                   ElevatedButton.icon(
                       icon: Icon(Icons.ac_unit),
-                      label: Text("View Results Charts Contents"),
+                      label: Text("Add to createVoteListForGraph"),
+                      onPressed: () => {
+                            print('Bravo!'),
+                            createVoteListForGraph2(),
+                            // stackVoteBalData(),
+                            print(balList.length),
+                          }),
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.ac_unit),
+                      label: Text("View Results Charts Contents:"),
                       onPressed: () => {
                             print('Bravo2!'),
                             print(voteResult
                                 .length), //   cpx.votescast[1].option),
                             print('Bravo2!  printBalList()'),
                             printBalList()
-                            // readVoteData()
-                            // print(cpx.votescast[1].votes.toString()),
-                            // print(opx.sets[0].downloadUrl),
                           }),
                   ElevatedButton.icon(
                       icon: Icon(Icons.ac_unit),
@@ -394,6 +430,18 @@ class _alldataState extends State<alldata> {
                             // printBalList(),
                             printQry(),
                             readgetDoc2()
+                          }),
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.ac_unit),
+                      label: Text("TEXT Text"),
+                      onPressed: () => {
+                            // print('Bravo2!'),
+                            // print(voteResult
+                            //     .length), //   cpx.votescast[1].option),
+                            // print('Bravo2!  printBalList()'),
+                            // printBalList(),
+
+                            print(_getDoc().toString())
                           }),
                 ])
               : Container();
@@ -488,9 +536,6 @@ class VoteResults {
   VoteResults(this.option, this.votes, this.barColor);
 }
 
-
-
-
 // List<Choices> results = [];
 // List<VoteResults> voteResults = [];
 
@@ -510,7 +555,6 @@ class VoteResults {
 
 // }
 //   ;
-
 
 // List<Set> results = [];
 // List<VoteResults> voteResults = [];
@@ -532,37 +576,3 @@ class VoteResults {
 // }
 //   ;
 
-
-
-    // var docs = media.data!.docs;
-    // var box = Hive.box<Favorite>('favorites');
-
-    // Map<String, Quantity> myIngredients = {};
-
-    // return ListView.builder(
-    //   itemCount: media.data!.docs.length,
-    //   itemBuilder: (ctx, i) {
-    //     // Convert data from firebase into <String, Quantity>
-    //     Map.from(docs[i].get('ingredients')).entries.forEach((e) {
-    //       myIngredients[e.key] = Quantity(
-    //         amount: e.value['amount'].toDouble(),
-    //         unit: e.value['unit'],
-    //       );
-    //     });
-
-    //     Medium md = Medium(
-    //       initials: docs[i].get('initials'),
-    //       longName: docs[i].get('longName'),
-    //       ingredients: myIngredients,
-    //       steps: docs[i].get('steps').cast<String>(),
-    //       mediumState: PhysicalState.values.elementAt(
-    //         docs[i].get('mediumState'),
-    //       ),
-    //       reference: docs[i].data().containsKey('reference')
-    //           ? docs[i].get('reference')
-    //           : '',
-    //       isComplement: docs[i].data().containsKey('isComplement')
-    //           ? docs[i].get('isComplement')
-    //           : false,
-    //       ps: docs[i].data().containsKey('ps') ? docs[i].get('ps') : '',
-    //     );

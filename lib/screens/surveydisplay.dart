@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/screens/addsrvimages.dart';
 import 'package:moodclicks/screens/chartsandvis.dart';
+import 'package:moodclicks/screens/chartsandvis2.dart';
+import 'package:moodclicks/screens/chartsandvis3.dart';
 import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
 import 'package:moodclicks/screens/getcloudimages.dart';
 import 'package:moodclicks/screens/test.dart';
@@ -150,6 +152,19 @@ class _SurveyDisplayState extends State<SurveyDisplay> {
                           MaterialPageRoute(
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => alldata()))
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("View Results Charts NEW"),
+                onPressed: () => {
+                      print('Moving to CHARTS'),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              // builder: (BuildContext context) => ImpCharts()))
+                              builder: (BuildContext context) =>
+                                  StreamBuilderTest()))
+                      // FireToObj()))
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),

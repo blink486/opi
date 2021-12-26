@@ -126,7 +126,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
-                label: Text("Vote CAst Already! $voted:"),
+                label: Text("Vote Cast Already! $voted:"),
                 onPressed: () => {
                       print('HEllo'),
                       print(choiceList[0].votescast.toString()),

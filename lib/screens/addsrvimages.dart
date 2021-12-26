@@ -1099,14 +1099,14 @@ class _AddSrvImagesState extends State<AddSrvImages> {
               SizedBox(
                 height: 50,
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextButton.icon(
-                  icon: Icon(Icons.camera_alt_outlined),
-                  label: Text("Upload SaveNestedData  to Firebase"),
-                  onPressed: () => SaveNestedData(), //(ImageSource.gallery),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: TextButton.icon(
+              //     icon: Icon(Icons.camera_alt_outlined),
+              //     label: Text("Upload SaveNestedData  to Firebase"),
+              //     onPressed: () => SaveNestedData(), //(ImageSource.gallery),
+              //   ),
+              // ),
               SizedBox(
                 height: 50,
               ),
@@ -1129,18 +1129,18 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                         print(castVotes[0].toString()),
                       }),
 
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextButton.icon(
-                    icon: Icon(Icons.camera_alt_outlined),
-                    label: Text("Download ReadNestedData()  from Firebase"),
-                    onPressed: () {
-                      ReadNestedData();
-                      // exercise = jsonDecode();
-                      // Exercise tutorial = Exercise.fromMap()   .fromJson(jsonDecode(nestedObjText));
-                    } //(ImageSource.gallery),
-                    ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: TextButton.icon(
+              //       icon: Icon(Icons.camera_alt_outlined),
+              //       label: Text("Download ReadNestedData()  from Firebase"),
+              //       onPressed: () {
+              //         ReadNestedData();
+              //         // exercise = jsonDecode();
+              //         // Exercise tutorial = Exercise.fromMap()   .fromJson(jsonDecode(nestedObjText));
+              //       } //(ImageSource.gallery),
+              //       ),
+              // ),
               // Padding(
               //   padding: const EdgeInsets.all(10.0),
               //   child: TextButton.icon(
@@ -1170,59 +1170,59 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 ),
                 // ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => AddSrvImagesBkp(
-                          description: widget.name,
-                          name: widget.description,
-                          surveyId: widget.surveyId),
-                    ),
-                  ); //Go Sample Cards
-                  // builder: (BuildContext context) => SignUp()));
-                  // print('${smile.name}');
-                },
-                child: Text(
-                  " KEEP for REf: VIEW Old addsrvimages",
-                  style: TextStyle(fontSize: 14),
-                ),
-                // ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              // DisplaySurvey()));
-                              SurveyDisplay())); //Go Sample Cards
-                  // builder: (BuildContext context) => SignUp()));
-                  // print('${smile.name}');
-                },
-                child: Text(
-                  " returnfromcloudsurvey:",
-                  style: TextStyle(fontSize: 14),
-                ),
-                // ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              LastAt())); //Go Sample Cards
-                  // builder: (BuildContext context) => SignUp()));
-                  // print('${smile.name}');
-                },
-                child: Text(
-                  " TEST MAPPING >>> returnfromcloudsurvey:",
-                  style: TextStyle(fontSize: 14),
-                ),
-                // ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (BuildContext context) => AddSrvImagesBkp(
+              //             description: widget.name,
+              //             name: widget.description,
+              //             surveyId: widget.surveyId),
+              //       ),
+              //     ); //Go Sample Cards
+              //     // builder: (BuildContext context) => SignUp()));
+              //     // print('${smile.name}');
+              //   },
+              //   child: Text(
+              //     " KEEP for REf: VIEW Old addsrvimages",
+              //     style: TextStyle(fontSize: 14),
+              //   ),
+              //   // ),
+              // ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (BuildContext context) =>
+              //                 // DisplaySurvey()));
+              //                 SurveyDisplay())); //Go Sample Cards
+              //     // builder: (BuildContext context) => SignUp()));
+              //     // print('${smile.name}');
+              //   },
+              //   child: Text(
+              //     " returnfromcloudsurvey:",
+              //     style: TextStyle(fontSize: 14),
+              //   ),
+              //   // ),
+              // ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (BuildContext context) =>
+              //                 LastAt())); //Go Sample Cards
+              //     // builder: (BuildContext context) => SignUp()));
+              //     // print('${smile.name}');
+              //   },
+              //   child: Text(
+              //     " TEST MAPPING >>> returnfromcloudsurvey:",
+              //     style: TextStyle(fontSize: 14),
+              //   ),
+              //   // ),
+              // ),
               TextButton(
                 onPressed: () {
                   Navigator.push(

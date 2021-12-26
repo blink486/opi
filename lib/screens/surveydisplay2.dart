@@ -1,3 +1,4 @@
+//2021-12-26 KEEP for v1
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -133,35 +134,35 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                       print(choiceList.length.toString()),
                       Text('${choiceList[0].votescast[0]}')
                     }),
-            ElevatedButton.icon(
-                icon: Icon(Icons.ac_unit),
-                label: Text("View Results Charts"),
-                onPressed: () => {
-                      print('Moving to CHARTS'),
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              // builder: (BuildContext context) => ImpCharts()))
-                              builder: (BuildContext context) => alldata()))
-                    }),
+            // ElevatedButton.icon(
+            //     icon: Icon(Icons.ac_unit),
+            //     label: Text("View Results Charts"),
+            //     onPressed: () => {
+            //           print('Moving to CHARTS'),
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   // builder: (BuildContext context) => ImpCharts()))
+            //                   builder: (BuildContext context) => alldata()))
+            //         }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
                 label: Text("View Results Charts NEW"),
                 onPressed: () => {
-                      print('Moving to CHARTS'),
+                      print('Moving to ResultsChart CHARTS'),
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) =>
-                                  StreamBuilderTest()))
+                                  ResultsChart()))
                       // FireToObj()))
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
                 label: Text("View Results Charts ORIG UTube"),
                 onPressed: () => {
-                      print('Moving to CHARTS'),
+                      print('Moving to ImpCharts CHARTS'),
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -502,15 +503,15 @@ class GetUserName extends StatelessWidget {
   }
 }
 
-void _printSetsSurvey() {
-  print(survey.name);
-  print(survey.description);
-  for (int i = 0; i < survey.sets.length; i++) {
-    // print(polloptions[i].votes);
-    print(survey.sets[i].downloadUrl);
-    print(survey.sets[i].votes);
-  }
-}
+// void _printSetsSurvey() {
+//   print(survey.name);
+//   print(survey.description);
+//   for (int i = 0; i < survey.sets.length; i++) {
+//     // print(polloptions[i].votes);
+//     print(survey.sets[i].downloadUrl);
+//     print(survey.sets[i].votes);
+//   }
+// }
 
 // void _printSets() {
 //   for (int i = 0; i < polloptions.length; i++) {

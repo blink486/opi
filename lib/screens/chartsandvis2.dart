@@ -1,3 +1,5 @@
+//2021-12-26 KEEP for v1
+
 // import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
 
@@ -8,12 +10,12 @@ import 'package:moodclicks/model/surveyo.dart';
 import 'package:moodclicks/screens/chartsandvis.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class StreamBuilderTest extends StatefulWidget {
+class ResultsChart extends StatefulWidget {
   @override
-  _StreamBuilderTestState createState() => _StreamBuilderTestState();
+  _ResultsChartState createState() => _ResultsChartState();
 }
 
-class _StreamBuilderTestState extends State<StreamBuilderTest> {
+class _ResultsChartState extends State<ResultsChart> {
   @override
   void initState() {
     // stackVoteBalData2();
@@ -450,4 +452,12 @@ class _StreamBuilderTestState extends State<StreamBuilderTest> {
   //   int k = (course['votingchoices']['Ballot'][{[]}.length]);
   //   print(k);
   // }
+}
+
+class VoteResults {
+  late final String option;
+  late final int votes;
+  late final Color barColor;
+
+  VoteResults(this.option, this.votes, this.barColor);
 }

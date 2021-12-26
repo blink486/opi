@@ -1,3 +1,5 @@
+//2021-12-26 KEEP for v1
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +19,8 @@ class AddQuestions extends StatefulWidget {
 }
 
 class _AddQuestionsState extends State<AddQuestions> {
-  late Survey surveyLocal;
-  late List<Survey> srv;
+  // late Survey surveyLocal;
+  // late List<Survey> srv;
   final loggedInUser = FirebaseAuth.instance.currentUser!.uid.toString();
 
   TextEditingController srvName = new TextEditingController();
@@ -181,6 +183,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => AddSrvQuestions(
+                        //LINKS to FULL SURVEY MAIN PAGE - Keep as Alternate Route?DELETE as Already have copy of programs
                         description: 'User',
                         name: 'Another',
                       ),
@@ -196,25 +199,25 @@ class _AddQuestionsState extends State<AddQuestions> {
                 // ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              PageViewDemo())); //Go Sample Cards
-                  // builder: (BuildContext context) => SignUp()));
-                  // print('${smile.name}');
-                },
-                child: Text(
-                  emojiHeart + " View Sample Survey (Static):",
-                  style: TextStyle(fontSize: 14),
-                ),
-                // ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(14.0),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (BuildContext context) =>
+            //                   PageViewDemo())); //Go Sample Cards
+            //       // builder: (BuildContext context) => SignUp()));
+            //       // print('${smile.name}');
+            //     },
+            //     child: Text(
+            //       emojiHeart + " View Sample Survey (Static):",
+            //       style: TextStyle(fontSize: 14),
+            //     ),
+            //     // ),
+            //   ),
+            // ),
             // SizedBox(
             //   height: 10,
             // ),

@@ -1,3 +1,5 @@
+//2021-12-26 KEEP for v1
+
 import 'package:flutter/material.dart';
 import 'package:moodclicks/screens/scrollcards.dart';
 import 'package:moodclicks/services/createinitsurvey.dart';
@@ -11,8 +13,8 @@ class CreateSurvey extends StatefulWidget {
 }
 
 class _CreateSurveyState extends State<CreateSurvey> {
-  late Survey surveyLocal;
-  late List<Survey> srv;
+  // late Survey surveyLocal;
+  // late List<Survey> srv;
   // final loggedInUser = FirebaseAuth.instance.currentUser!.uid.toString();
 
   TextEditingController srvName = new TextEditingController();
@@ -113,26 +115,26 @@ class _CreateSurveyState extends State<CreateSurvey> {
             SizedBox(
               height: 4,
             ),
-            Padding(
-              padding: const EdgeInsets.all(34.0),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => PageViewDemo(),
-                    ),
-                  ); //Go Sample Cards
-                  // builder: (BuildContext context) => SignUp()));
-                  // print('${smile.name}');
-                },
-                child: Text(
-                  emojiHeart + " View Sample Survey Display:",
-                  style: TextStyle(fontSize: 18),
-                ),
-                // ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(34.0),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (BuildContext context) => PageViewDemo(),
+            //         ),
+            //       ); //Go Sample Cards
+            //       // builder: (BuildContext context) => SignUp()));
+            //       // print('${smile.name}');
+            //     },
+            //     child: Text(
+            //       emojiHeart + " View Sample Survey Display:",
+            //       style: TextStyle(fontSize: 18),
+            //     ),
+            //     // ),
+            //   ),
+            // ),
             SizedBox(
               height: 10,
             ),

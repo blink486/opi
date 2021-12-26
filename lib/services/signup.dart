@@ -1,3 +1,5 @@
+//2021-12-26 KEEP for v1
+
 // import 'package:firebase_conn/screens/register_business.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                       print(e);
                     }
                   },
-                  child: Text("CREATE New User"),
+                  child: Text("CREATE New User?"),
                 ),
               ],
             ),

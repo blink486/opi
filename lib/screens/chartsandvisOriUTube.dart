@@ -1,3 +1,4 @@
+//2021-12-26 KEEP for v1 - Maybe useful for sample code
 // Script from:  Mins 7:35 @  https://www.youtube.com/watch?v=QshpV3gh708
 
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -34,6 +35,9 @@ class _ImpChartsState extends State<ImpCharts> {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+      appBar: AppBar(
+        title: Text("chartsandvisOriUTube.dt"),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(10),

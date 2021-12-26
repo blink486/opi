@@ -14,6 +14,7 @@ import 'package:moodclicks/screens/addsrvimagesBKP.dart';
 import 'package:moodclicks/screens/getcloudimageswdonly.dart';
 import 'package:moodclicks/screens/returnfromcloudsurvey.dart';
 import 'package:moodclicks/screens/surveydisplay.dart';
+import 'package:moodclicks/screens/surveydisplay2.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -1229,7 +1230,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
                               // ViewSurvey()));
-                              SurveyDisplay()));
+                              // SurveyDisplay()));
+                              SurveyDisplay2()));
                   // ViewSurveyOnlyList()));
                   //Go Sample Cards
                   // builder: (BuildContext context) => SignUp()));

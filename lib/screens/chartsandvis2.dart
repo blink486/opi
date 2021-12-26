@@ -175,9 +175,12 @@ class _StreamBuilderTestState extends State<StreamBuilderTest> {
                   // }
                   ;
                   // List<Ballot>
-                  ballotList = course['votingchoices']['Ballot']
+                  // ballotList = course['votingchoices']['Ballot']
+                  List<Ballot> bl;
+                  bl = course['votingchoices']['Ballot']
                       .map<Ballot>((x) => Ballot.fromMap(x))
                       .toList();
+                  ballotList.addAll(bl);
                   print("Ballist Length");
                   print(ballotList.length);
                   printBallot();

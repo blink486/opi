@@ -73,7 +73,8 @@ class _SignUpState extends State<SignUp> {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) => AddQuestions(
-                              srvCreator: loggedInUser.toString(),
+                              // srvCreator: loggedInUser.toString(),
+                              srvCreator: user.toString(),
                               // searchstr: user.user!.uid.toString(),
                               // searchstr: searchstring.text,
                             ),
@@ -109,7 +110,8 @@ class _SignUpState extends State<SignUp> {
                           MaterialPageRoute(
                             builder: (BuildContext context) => AddQuestions(
                               //TODO: Maybe Parameter not necessary to pass as once logged in your session stays until log out.
-                              srvCreator: loggedInUser.toString(),
+                              srvCreator: newUser.toString(),
+                              //  srvCreator: loggedInUser.toString(),
                               // searchstr: searchstring.text,
                             ),
                           ),
@@ -131,6 +133,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+// TODO: Move this to create a new user class
   void addNewUserToReg() {
     Map<String, dynamic> data = {
       "f01email": email.text,

@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 // ADD: user, date, surveyEndDate, private, multipleChoice
 class Opinion {

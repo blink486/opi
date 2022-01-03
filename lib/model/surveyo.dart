@@ -1,15 +1,15 @@
 //2021-12-26 KEEP for v1 - Maybe useful for sample code
 
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 // import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classExercise.dart';
 import 'package:moodclicks/model/surveymodel.dart';
-import 'package:moodclicks/screens/getcloudimages.dart';
-import 'package:moodclicks/services/createinitsurvey.dart';
+// import 'package:moodclicks/screens/getcloudimages.dart';
+// import 'package:moodclicks/services/createinitsurvey.dart';
 import 'package:moodclicks/services/getdatalist.dart';
 
 import 'classsample.dart';

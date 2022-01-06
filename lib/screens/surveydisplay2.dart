@@ -349,7 +349,8 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text("Choice: ${i + 1} "),
+          Text("${i + 1} "),
+          Text(survey.sets[i].description),
           Container(
             height: 120,
             width: 80,
@@ -437,7 +438,7 @@ Future<dynamic> importData() async {
 }
 
 Future<Opinion?> createOpObj() async {
-  Opinion op = Opinion('heldo', 'dfdfe');
+  Opinion op = Opinion('heldfo', 'dfdfe');
   Opinion opiz;
   var opi = await importData().then((value) {
     opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);

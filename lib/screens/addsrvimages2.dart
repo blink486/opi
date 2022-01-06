@@ -86,7 +86,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         "imageName": fileName, //Name of image
         "downloadUrl": downloadUrl, //Location in CloudFireStorage
         "votes": 0,
-        "optionText": optionText
+        "description": optionText
       };
       imgMapList.add(data);
 
@@ -108,10 +108,14 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         "imageName": fileName, //Name of image
         "downloadUrl": downloadUrl, //Location in CloudFireStorage
         "votes": 0,
-        "optionText": null
+        "description": null
       };
       imgMapList.add(data);
-
+// ADDED: HA 20220103
+      // final imageTemp = File(file.path.toString());
+      // this.imgLocA = imageTemp as String;
+      // setState(() => this.imgLocA = imageTemp as String);
+// ADDED: HA 20220103 END
       setState(() {
         imageUrlFire = downloadUrl;
       });
@@ -130,7 +134,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         "imageName": "", //Name of image
         "downloadUrl": "", //Location in CloudFireStorage
         "votes": 0,
-        "optionText": optionText
+        "description": optionText
       };
       imgMapList.add(data);
 
@@ -142,6 +146,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     }
   }
 
+  late String imgLocA;
+
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -150,6 +156,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
       // final imageTemporary = File(image.path);
       // this.image = imageTemporary;
       // setState(() => this.image = imageTemporary);
+
       final imagePermanent = await saveImagePermanently(image.path);
       print('LOCATION IF IMAGES: ' + image.path);
       this.image = imagePermanent;
@@ -195,7 +202,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         "votes": imgMapList.toList()[i]['votes'],
         "downloadUrl": imgMapList.toList()[i]['downloadUrl'],
         // Update HA: 2022/01/01 add
-        "optionText": imgMapList.toList()[i]['optionText'],
+        // "optionText": imgMapList.toList()[i]['optionText'],
+        "description": imgMapList.toList()[i]['description'],
       });
 
     await _fireStore.collection('opinion').doc(widget.surveyId).set({
@@ -582,12 +590,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                         print('pic pRESSED');
                         _voteIncrMap(index);
                         _voteincr();
-                        print(_printImgMapList);
-                        print("Votes");
-                        print(imgMapList[index]['votes']);
-                        print(image);
-                        print("List of Docs");
-                        print(imgMapList[index]['imageLocation'] as File);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -611,7 +613,51 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 },
               ),
               calculateListOfStars(),
-
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: imgMapList.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          alignment: Alignment.bottomLeft,
+                          height: 180,
+                          width: 100,
+                          child: imgMapList[index]['description'] == null
+                              ? Text('No Image Showing')
+                              // : Image.network(imgMapList[index]['downloadUrl']),
+                              : Image.network(imgMapList[index]['downloadUrl']),
+                          // : Image.file(
+                          //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          alignment: Alignment.bottomLeft,
+                          height: 180,
+                          width: 100,
+                          child: imgMapList[index]['description'] == null
+                              ? Text('No Image Showing')
+                              // : Image.network(imgMapList[index]['downloadUrl']),
+                              : Image.network(imgMapList[index]['description']),
+                          // : Image.file(
+                          //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
+                        ),
+                      ]);
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton.icon(
@@ -935,6 +981,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                         Navigator.of(context).pop();
                         _displayTextInputDialog(context);
                         print("Image Locaion");
+                        // Navigator.of(context).pop();
 
                         // Navigator.of(context).pop();
                         // submitChoice(context);
@@ -943,10 +990,87 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       ),
                 ),
                 SizedBox(height: 20),
-                Text(_textFieldController.text),
+                // Text(_textFieldController.text),
+                SizedBox(height: 20),
+                // Text(OptionsTextList.last),
+                Text(textIputCheck().toString()),
+
+                // Container(
+                //   padding: const EdgeInsets.all(1.0),
+                //   decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       image: DecorationImage(
+                //           image: FileImage(image!), fit: BoxFit.cover)),
+                // )
+
+                // Center(
+                //   child: Text("Add Preview of Image in box below!:"),
+                // ),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+    // .then((value) {
+    //   Navigator.of(context).pop;
+    // });
+  }
+
+  void _popDialogPostAddText(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+          elevation: 16,
+          child: Center(
+            child: Container(
+              height: 200.0,
+              width: 200.0,
+              child: ListView(children: <Widget>[
+                SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton.icon(
+                      icon: Icon(Icons.save),
+                      label: Text("+Option Text/Image: "),
+                      onPressed: () {
+                        // Navigator.of(context).pop();
+                        // _displayTextInputDialog(context);
+                        printLastOption();
+                        print("Submitted Option");
+                        addLastOption(OptionsTextList.last.toString());
+                        Navigator.of(context).pop();
+                        Navigator.pop(context);
+                        // setState(() {});
+
+                        // Navigator.of(context).pop();
+                        // submitChoice(context);
+                      }
+                      //(ImageSource.gallery),
+                      ),
+                ),
+                SizedBox(height: 20),
+                // Text(_textFieldController.text),
                 SizedBox(height: 20),
                 Text(OptionsTextList.last),
-                // Container(
+                // Text(textIputCheck().toString()),
+                // Image(
+                //   image: FileImage(File(image.toString()), scale: 4),
+                // ),
+                Container(
+                  width: 100,
+                  height: 60,
+                  color: Colors.yellow,
+                  child: Image.network(
+                    // "https://firebasestorage.googleapis.com/v0/b/moodclick-3174b.appspot.com/o/folderName%2Fimage_picker7551681923167081009.jpg?alt=media&token=be7bf705-7362-4699-9043-6aab693dc5c4",
+
+                    "$imageUrlFire",
+                    fit: BoxFit.contain,
+                  ),
+                )
+                //  Container(
                 //   padding: const EdgeInsets.all(1.0),
                 //   decoration: BoxDecoration(
                 //       color: Colors.white,
@@ -970,7 +1094,8 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 
   void chooseImg(context) {
     Navigator.of(context).pop();
-    uploadImage(ImageSource.gallery, "smoe text");
+    // uploadImage(ImageSource.gallery, "smoe text");
+    uploadImage(ImageSource.gallery);
 
     // await Future.delayed(Duration(seconds: 5)).then((value) {
     _popDialogAddText(context);
@@ -1037,6 +1162,15 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 
   TextEditingController _textFieldController = TextEditingController();
 
+  bool textIn = false;
+
+  Future<String> textIputCheck() async {
+    if (textIn == true) {
+      return OptionsTextList.last;
+    } else
+      return "";
+  }
+
   Future<void> _displayTextInputDialog(BuildContext context) async {
     return showDialog(
       context: context,
@@ -1058,11 +1192,21 @@ class _AddSrvImagesState extends State<AddSrvImages> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                print(_textFieldController.text);
-                Navigator.pop(context);
+                // print(_textFieldController.text);
+                // Navigator.pop(context);
+                Navigator.of(context).pop();
                 _popDialogAddText(context);
+                setState(() {
+                  textIn = true;
+                });
                 OptionsTextList.add(_textFieldController.text);
                 _textFieldController.clear();
+                _popDialogPostAddText(context);
+                // Navigator.of(context).pop();
+                print('Image LocA:');
+                print(imageUrlFire);
+
+                // print(imgLocA);
               },
             ),
           ],
@@ -1072,6 +1216,35 @@ class _AddSrvImagesState extends State<AddSrvImages> {
   }
 
   List<String> OptionsTextList = [];
+
+  void printLastOption() {
+    if (imgMapList.isEmpty)
+      print("Empty List");
+    else
+      print('LAST:');
+    print(imgMapList[0]['votes']);
+    print(imgMapList.last['description']);
+    print(imgMapList.last['downloadUrl']);
+  }
+
+  void addLastOption(String optionText) {
+    if (imgMapList.isEmpty)
+      print("Empty List");
+    else
+      print(imgMapList.last);
+    imgMapList.last.update('description', (value) => '$optionText');
+    printLastOption();
+  }
+
+  //  Map<String, dynamic> data = {
+  //       "imageLocation": file, //In Phone
+  //       "imageName": fileName, //Name of image
+  //       "downloadUrl": downloadUrl, //Location in CloudFireStorage
+  //       "votes": 0,
+  //       "description": optionText
+  //     };
+  //     imgMapList.add(data);
+
 }
 
 List<Set> log = [];

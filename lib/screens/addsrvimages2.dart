@@ -1,4 +1,5 @@
 // import 'dart:html';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,6 +39,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 // Can also use: https://fabcoding.com/2020/06/08/adding-an-image-picker-in-a-flutter-app-pick-images-using-camera-and-gallery-photos/
   var imageUrlFire;
   File? image;
+
   // File? _image;
 
   // void printimg() {
@@ -75,23 +77,24 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     var fileName = File(basename(imageCloud.path));
     if (imageCloud != null && optionText != null) {
       final name = basename(imageCloud.path);
-      var snapshot =
-          await _storage.ref().child('folderName/$name').putFile(file);
-      print(snapshot);
-      var downloadUrl = await snapshot.ref.getDownloadURL();
-      print('DOWNLOAD url');
-      print(downloadUrl);
+      // var snapshot =
+      //     await _storage.ref().child('folderName/$name').putFile(file);
+      // print(snapshot);
+      // var downloadUrl = await snapshot.ref.getDownloadURL();
+      // print('DOWNLOAD url');
+      // print(downloadUrl);
       Map<String, dynamic> data = {
         "imageLocation": file, //In Phone
         "imageName": fileName, //Name of image
-        "downloadUrl": downloadUrl, //Location in CloudFireStorage
+        // "downloadUrl": downloadUrl,
+        "downloadUrl": '', //Location in CloudFireStorage
         "votes": 0,
         "description": optionText
       };
       imgMapList.add(data);
 
       setState(() {
-        imageUrlFire = downloadUrl;
+        // imageUrlFire = downloadUrl;
       });
 // added HA 20220101
       MaterialPageRoute(builder: (BuildContext context) => QList());
@@ -106,7 +109,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
       Map<String, dynamic> data = {
         "imageLocation": file, //In Phone
         "imageName": fileName, //Name of image
-        "downloadUrl": downloadUrl, //Location in CloudFireStorage
+        "downloadUrl": '', //Location in CloudFireStorage
         "votes": 0,
         "description": null
       };
@@ -117,7 +120,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
       // setState(() => this.imgLocA = imageTemp as String);
 // ADDED: HA 20220103 END
       setState(() {
-        imageUrlFire = downloadUrl;
+        // imageUrlFire = downloadUrl;
       });
       // added HA 20220101
       MaterialPageRoute(builder: (BuildContext context) => QList());
@@ -144,6 +147,90 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     } else {
       print('No path ffound');
     }
+  }
+
+  void submitChoicesToCloud() async {
+    // void submitChoices(ImageSource imgsrc, [String? optionText]) async {
+    final _storage = await FirebaseStorage.instance;
+// TODO: Check Permissions : https://www.youtube.com/watch?v=pvRpzyBYBbA Inludes APPLE Code Adj
+
+    for (int i = 0; i < imgMapList.length; i++) {
+      print(imgMapList[i]['imageName']);
+      print(imgMapList[i]['imageLocation']);
+      print(imgMapList[i]['downloadUrl']);
+    }
+
+    for (int i = 0; i < imgMapList.length; i++) {
+      var name = imgMapList[i]['imageName'];
+      var file = imgMapList[i]['imageLocation'];
+      // print(imgMapList[i]['description']);
+      // print(imgMapList[i]['downloadUrl']);
+
+      var snapshot =
+          await _storage.ref().child('folderName/$name').putFile(file);
+      print(snapshot);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+
+      imgMapList[i]['downloadUrl'] = downloadUrl;
+    }
+    print("URLS Updated");
+
+    // var imageCloud = await ImagePicker().pickImage(source: imgsrc);
+    // List<Map> imgMapCopy = [];
+    // List<Map> img3 = [];
+
+    // List imgMapCopy = List.from(imgMapList);
+    // final imgMapCopy = imgMapList.toList();
+/*
+    List imgMapCopy = [...imgMapList];
+
+    print("imgMapList");
+    for (int i = 0; i < imgMapList.length; i++) {
+      print(imgMapList[i]['description']);
+      print(imgMapList[i]['downloadUrl']);
+    }
+
+    print("ADDING IMAGES to CLOUD");
+
+    for (int i = 0; i < imgMapCopy.length; i++) {
+      imgMapCopy[i]['downloadUrl'] = 'Blankety2';
+    }
+    print("New imgMapCopy:");
+    for (int i = 0; i < imgMapCopy.length; i++) {
+      print(imgMapCopy[i]['description']);
+      print(imgMapCopy[i]['downloadUrl']);
+    }
+
+    print("ORIG imgMapList:");
+
+    for (int i = 0; i < imgMapList.length; i++) {
+      print(imgMapList[i]['description']);
+      print(imgMapList[i]['downloadUrl']);
+    }
+*/
+    // for (int i = 0; i < imgMapList.length; i++) {
+    // final Map newMap = json.decode(json.encode(imgMapList));
+
+    // newMap[i]['downloadUrl'] = 'Blankety3';
+    // newMap["name"]["last"] = "Pinkman";
+    // newMap["asset"]["money"]["cash"] = 0;
+
+    // print('oldMap: $oldMap');
+    // print('newMap: $newMap');
+    // }
+
+//     var img4 = List.from(imgMapList);
+
+//     print("ORIG imgMapList:");
+
+//     for (int i = 0; i < imgMapList.length; i++) {
+//       print(imgMapList[i]['description']);
+//       print(imgMapList[i]['downloadUrl']);
+//     }
+// // Map newMap = {...oldMap}
+//     print(imgMapList);
+//     print("CLONE imgMapList:");
+//     print(img4);
   }
 
   late String imgLocA;
@@ -613,6 +700,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 },
               ),
               calculateListOfStars(),
+
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -621,48 +709,52 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                          alignment: Alignment.bottomLeft,
-                          height: 180,
-                          width: 100,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: imgMapList[index]['description'] == null
                               ? Text('No Image Showing')
-                              // : Image.network(imgMapList[index]['downloadUrl']),
-                              : Image.network(imgMapList[index]['downloadUrl']),
-                          // : Image.file(
-                          //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                          alignment: Alignment.bottomLeft,
-                          height: 180,
-                          width: 100,
-                          child: imgMapList[index]['description'] == null
-                              ? Text('No Image Showing')
-                              // : Image.network(imgMapList[index]['downloadUrl']),
-                              : Image.network(imgMapList[index]['description']),
-                          // : Image.file(
-                          //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
-                        ),
+                              : ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(34), // Image border
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(68), // Image radius
+                                    child: Image.file(
+                                      imgMapList.last['imageLocation'],
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                        )
                       ]);
                 },
+                // ),
+                // ListView.builder(
+                //   physics: NeverScrollableScrollPhysics(),
+                //   shrinkWrap: true,
+                //   itemCount: imgMapList.length,
+                //   itemBuilder: (context, index) {
+                //     return Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: <Widget>[pics2()]);
+                //   },
+              ),
+              preview(context),
+              ElevatedButton.icon(
+                  icon: Icon(Icons.ac_unit),
+                  label: Text("SAVE Images To Cloud:"),
+                  onPressed: () => {
+                        submitChoicesToCloud(),
+                      }),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                child: Text(
+                    'Merge these <> Two Buttons and Move to Next Screen on CLick. Create Variable and setState to Fix These Vals and Remove Edit Option'),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton.icon(
                   icon: Icon(Icons.camera_alt_outlined),
-                  label: Text("KEEP: Upload imageList to Firebase"),
+                  label: Text("KEEP: Upload Choice List to Firebase"),
                   onPressed: () =>
                       // uploadListToFire(),
                       //(ImageSource.gallery),
@@ -671,14 +763,14 @@ class _AddSrvImagesState extends State<AddSrvImages> {
               ),
 
               SizedBox(
-                height: 50,
+                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(_textFieldController.text),
               ),
               SizedBox(
-                height: 50,
+                height: 10,
               ),
 
               ElevatedButton.icon(
@@ -688,6 +780,11 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                         dummyAddList(23),
                         print(castVotes[0].toString()),
                       }),
+
+              ElevatedButton.icon(
+                  icon: Icon(Icons.ac_unit),
+                  label: Text("PrintLocalImgLocation:"),
+                  onPressed: () => {_printimgMapList()}),
 
               TextButton(
                 onPressed: () {
@@ -896,6 +993,71 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     // });
   }
 
+  Widget preview(context) {
+    try {
+      return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: imgMapList.length,
+        itemBuilder: (context, index) {
+          return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: imgMapList[index]['description'] == null
+                      ? Text('No Image Showing')
+                      : ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(34), // Image border
+                          child: SizedBox.fromSize(
+                            size: Size.fromRadius(68), // Image radius
+                            child: Image.file(
+                              imgMapList[index]['imageLocation'],
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(imgMapList[index]['description'].toString())),
+                ),
+                Center(
+                  child: ElevatedButton.icon(
+                    icon: Icon(
+                      Icons.remove_circle,
+                      color: Colors.red,
+                    ),
+                    label: Text("REMOVE"),
+                    // onPressed: () => uploadImage(
+                    //   ImageSource.camera,
+                    // ),
+                    onPressed: () {
+                      print(imgMapList[index]);
+                      _removeBallotOption(index);
+                      // setState(() {});
+                    },
+                  ),
+                ),
+              ]);
+        },
+      );
+    } catch (e) {
+      return Text("Not Pics Yet: $e ");
+    }
+  }
+
+  void _removeBallotOption(int item) {
+    print(item.toString());
+    print("SELECTED OPTIO TO DELETE:");
+    print(imgMapList[index]);
+    imgMapList.removeAt(item);
+    // imgMapList[index].removeWhere((key, value) => false)(item);
+    setState(() {});
+  }
+
   void _popDialogImage(context) {
     showDialog(
       context: context,
@@ -1043,7 +1205,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                         addLastOption(OptionsTextList.last.toString());
                         Navigator.of(context).pop();
                         Navigator.pop(context);
-                        // setState(() {});
+                        setState(() {});
 
                         // Navigator.of(context).pop();
                         // submitChoice(context);
@@ -1245,6 +1407,12 @@ class _AddSrvImagesState extends State<AddSrvImages> {
   //     };
   //     imgMapList.add(data);
 
+  void _printimgMapList() {
+    print("Printing Local image locations: ");
+    for (int i = 0; i < imgMapList.length; i++) {
+      print(imgMapList[i]['imageLocation'].toString());
+    }
+  }
 }
 
 List<Set> log = [];

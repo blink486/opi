@@ -8,6 +8,7 @@ import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
 
 class SurveyDisplay2 extends StatefulWidget {
   final String surveyId;
+
   const SurveyDisplay2({Key? key, required this.surveyId}) : super(key: key);
 
 // ENTER THE DATA HERE
@@ -119,7 +120,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
 
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
-                label: Text("Submit Vote:"),
+                label: Text("SubmitVote:Adds new 'Ballot' to FireList[]"),
                 onPressed: () => {
                       // dummyAddList(1),
                       submitChoices(),
@@ -127,6 +128,17 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                         voted = 'y';
                       }),
                       Navigator.pop(context)
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("+Choices TO Fire:Adds Votes to EXISTING 'Ballot'"),
+                onPressed: () => {
+                      print("ADDING UPDATED to FIREbase:"),
+                      // AddObjectToVotingChoices2(),
+                      AddToFire(),
+                      setState(() {
+                        voted = 'y';
+                      }),
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -148,7 +160,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                           MaterialPageRoute(
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) =>
-                                  ResultsChart()))
+                                  ResultsChart(surveyId: widget.surveyId)))
                       // FireToObj()))
                     }),
             ElevatedButton.icon(
@@ -161,14 +173,6 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                           MaterialPageRoute(
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => ImpCharts()))
-                    }),
-            ElevatedButton.icon(
-                icon: Icon(Icons.ac_unit),
-                label: Text("Add Choices TO Firebase:"),
-                onPressed: () => {
-                      print("ADDING UPDATED to FIREbase:"),
-                      // AddObjectToVotingChoices2(),
-                      AddToFire(),
                     }),
           ],
         ),

@@ -360,14 +360,14 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
             width: 80,
             child: Image.network(survey.sets[i].downloadUrl),
           ),
-          Container(
-            height: 50,
-            width: 50,
-            child: Text(
-              "Votes: ${survey.sets[i].votes.toString()}",
-              // textAlign: TextAlign.center,
-            ),
-          ),
+          // Container(
+          //   height: 50,
+          //   width: 50,
+          //   child: Text(
+          //     "Votes: ${survey.sets[i].votes.toString()}",
+          //     // textAlign: TextAlign.center,
+          //   ),
+          // ),
           Row(children: [
             InkWell(
               onTap: () {

@@ -39,6 +39,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 // Can also use: https://fabcoding.com/2020/06/08/adding-an-image-picker-in-a-flutter-app-pick-images-using-camera-and-gallery-photos/
   var imageUrlFire;
   File? image;
+  bool submittedToCloud = false;
 
   // File? _image;
 
@@ -231,6 +232,10 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 //     print(imgMapList);
 //     print("CLONE imgMapList:");
 //     print(img4);
+    setState(() {});
+
+    Future.delayed(Duration(seconds: 2), () => uploadOpinListToFire());
+    submittedToCloud = true;
   }
 
   late String imgLocA;
@@ -451,6 +456,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     print(_imageList.toString());
   }
 
+//DONT DELETE _voteincr() - Can be reused for Voting via GridView
   void _voteincr() {
     setState(() {
       _votes += 1;
@@ -459,6 +465,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     });
   }
 
+//DONT DELETE _voteIncrMap(index) - Can be reused for Voting via GridView
   void _voteIncrMap(index) {
     setState(() {
       imgMapList[index]['votes'] += 1;
@@ -597,22 +604,23 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 controller: question,
                 decoration: InputDecoration(
                     hintText:
-                        "Add Option item to survey e.g. Take her out for lunch?  "),
+                        "Add Option item to survey e.g. What to have for Dinner?  "),
               ),
               SizedBox(height: 10.0),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ElevatedButton.icon(
-                        icon: Icon(Icons.add_circle),
-                        label: Text("Add Option e.g.Take her out for lunch?"),
-                        onPressed: () {
-                          _popDialogMain(context);
-                        }, //(ImageSource.gallery),
-                      ),
-                    ),
+                    addOptionButton(context),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(10.0),
+                    //   child: ElevatedButton.icon(
+                    //     icon: Icon(Icons.add_circle),
+                    //     label: Text("Add Options e.g.Pizza, Italian, Chinese?"),
+                    //     onPressed: () {
+                    //       _popDialogMain(context);
+                    //     }, //(ImageSource.gallery),
+                    //   ),
+                    // ),
                     // FloatingActionButton(
                     //   child: const Icon(Icons.add_circle),
                     //   // label: Text("Add Option e.g. Take her out for lunch?"),
@@ -662,96 +670,94 @@ class _AddSrvImagesState extends State<AddSrvImages> {
               //   ),
               // ),
 
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: imgMapList.length,
-                itemBuilder: (context, index) {
-                  // var imageLoc = imgMapList[index]['imageLocation'].toString();
-                  // File file =
-                  //     File(imgMapList[index]['imageLocation'].toString());
+              // ListView.builder(
+              //   physics: NeverScrollableScrollPhysics(),
+              //   shrinkWrap: true,
+              //   itemCount: imgMapList.length,
+              //   itemBuilder: (context, index) {
+              //     // var imageLoc = imgMapList[index]['imageLocation'].toString();
+              //     // File file =
+              //     //     File(imgMapList[index]['imageLocation'].toString());
 
-                  return Center(
-                    child: TextButton(
-                      onPressed: () {
-                        print('pic pRESSED');
-                        _voteIncrMap(index);
-                        _voteincr();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                        ),
-                        alignment: Alignment.bottomLeft,
-                        height: 180,
-                        width: 100,
-                        child: imageUrlFire == null
-                            ? Text('No Image Showing')
-                            // : Image.network(imgMapList[index]['downloadUrl']),
-                            : Image.network(imgMapList[index]['downloadUrl']),
-                        // : Image.file(
-                        //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              calculateListOfStars(),
+              //     return Center(
+              //       child: TextButton(
+              //         onPressed: () {
+              //           print('pic pRESSED');
+              //           _voteIncrMap(index); //DONT DELETE _voteIncrMap(index)
+              //           _voteincr(); //DONT DELETE _voteIncrMap(index)
+              //         },
+              //         child: Container(
+              //           decoration: BoxDecoration(
+              //             color: Colors.amber,
+              //             borderRadius: BorderRadius.all(
+              //               Radius.circular(100),
+              //             ),
+              //           ),
+              //           alignment: Alignment.bottomLeft,
+              //           height: 180,
+              //           width: 100,
+              //           child: imageUrlFire == null
+              //               ? Text('No Image Showing')
+              //               // : Image.network(imgMapList[index]['downloadUrl']),
+              //               : Image.network(imgMapList[index]['downloadUrl']),
+              //           // : Image.file(
+              //           //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
+              // calculateListOfStars(),
 
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: imgMapList.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: imgMapList[index]['description'] == null
-                              ? Text('No Image Showing')
-                              : ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(34), // Image border
-                                  child: SizedBox.fromSize(
-                                    size: Size.fromRadius(68), // Image radius
-                                    child: Image.file(
-                                      imgMapList.last['imageLocation'],
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                        )
-                      ]);
-                },
-                // ),
-                // ListView.builder(
-                //   physics: NeverScrollableScrollPhysics(),
-                //   shrinkWrap: true,
-                //   itemCount: imgMapList.length,
-                //   itemBuilder: (context, index) {
-                //     return Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //         children: <Widget>[pics2()]);
-                //   },
+              // ListView.builder(
+              //   physics: NeverScrollableScrollPhysics(),
+              //   shrinkWrap: true,
+              //   itemCount: imgMapList.length,
+              //   itemBuilder: (context, index) {
+              //     return Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //         children: <Widget>[
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: imgMapList[index]['description'] == null
+              //                 ? Text('No Image Showing')
+              //                 : ClipRRect(
+              //                     borderRadius:
+              //                         BorderRadius.circular(34), // Image border
+              //                     child: SizedBox.fromSize(
+              //                       size: Size.fromRadius(68), // Image radius
+              //                       child: Image.file(
+              //                         imgMapList.last['imageLocation'],
+              //                         fit: BoxFit.fill,
+              //                       ),
+              //                     ),
+              //                   ),
+              //           )
+              //         ]);
+              //   },
+              // ),
+              SizedBox(
+                height: 34,
               ),
               preview(context),
-              ElevatedButton.icon(
-                  icon: Icon(Icons.ac_unit),
-                  label: Text("SAVE Images To Cloud:"),
-                  onPressed: () => {
-                        submitChoicesToCloud(),
-                      }),
+              addImgToCloudOrEdit(context),
+              // ElevatedButton.icon(
+              //     icon: Icon(Icons.ac_unit),
+              //     label: Text("SAVE Img To Cloud + //List to Fire:"),
+              //     onPressed: () => {
+              //           if (submittedToCloud)
+              //             {
+              //               showSubmitted(context),
+              //             }
+              //           else
+              //             {
+              //               submitChoicesToCloud(),
+              //               submittedToCloud = true,
+              //             }
+              //         }),
+
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-                child: Text(
-                    'Merge these <> Two Buttons and Move to Next Screen on CLick. Create Variable and setState to Fix These Vals and Remove Edit Option'),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextButton.icon(
                   icon: Icon(Icons.camera_alt_outlined),
                   label: Text("KEEP: Upload Choice List to Firebase"),
@@ -761,6 +767,30 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                       uploadOpinListToFire(),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                child: Text(
+                    'Merge these ^^ Two Buttons above and Move to Next Screen on CLick. Create Variable and setState to Fix These Vals and Remove Edit Option'),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton.icon(
+                  icon: Icon(Icons.ac_unit),
+                  label: Text(":>Submit Img/Choices to CLOUD<:"),
+                  onPressed: () => {
+                        submitChoicesToCloud(),
+                        uploadOpinListToFire(),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => SurveyDisplay2(
+                              surveyId: widget.surveyId,
+                            ),
+                          ),
+                        ),
+                      }),
 
               SizedBox(
                 height: 10,
@@ -911,6 +941,18 @@ class _AddSrvImagesState extends State<AddSrvImages> {
             ));
   }
 
+  void showSubmitted(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ElevatedButton.icon(
+            icon: Icon(Icons.close),
+            label: Text("Submitted Already"),
+            onPressed: () => {Navigator.of(context).pop()}),
+      ),
+    );
+  }
+
   void _popDialogMain(context) {
     showDialog(
       context: context,
@@ -1024,23 +1066,23 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                   child: Center(
                       child: Text(imgMapList[index]['description'].toString())),
                 ),
-                Center(
-                  child: ElevatedButton.icon(
-                    icon: Icon(
-                      Icons.remove_circle,
-                      color: Colors.red,
-                    ),
-                    label: Text("REMOVE"),
-                    // onPressed: () => uploadImage(
-                    //   ImageSource.camera,
+                Center(child: editButton()
+                    // ElevatedButton.icon(
+                    //   icon: Icon(
+                    //     Icons.remove_circle,
+                    //     color: Colors.red,
+                    //   ),
+                    //   label: Text("REMOVE"),
+                    //   // onPressed: () => uploadImage(
+                    //   //   ImageSource.camera,
+                    //   // ),
+                    //   onPressed: () {
+                    //     print(imgMapList[index]);
+                    //     _removeBallotOption(index);
+                    //     // setState(() {});
+                    //   },
                     // ),
-                    onPressed: () {
-                      print(imgMapList[index]);
-                      _removeBallotOption(index);
-                      // setState(() {});
-                    },
-                  ),
-                ),
+                    ),
               ]);
         },
       );
@@ -1054,8 +1096,107 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     print("SELECTED OPTIO TO DELETE:");
     print(imgMapList[index]);
     imgMapList.removeAt(item);
+    //TODO: Need to Also Remove from Cloud
     // imgMapList[index].removeWhere((key, value) => false)(item);
     setState(() {});
+  }
+
+  Widget editButton() {
+    if (submittedToCloud) {
+      return ElevatedButton.icon(
+        icon: Icon(
+          Icons.emoji_emotions_rounded,
+          color: Colors.red,
+        ),
+        label: Text("Saved option"),
+        // onPressed: () => uploadImage(
+        //   ImageSource.camera,
+        // ),
+        onPressed: () {
+          print('NOT Editable - Already Submitted Option to Cloud');
+          // setState(() {});
+        },
+      );
+    }
+    return ElevatedButton.icon(
+      icon: Icon(
+        Icons.remove_circle,
+        color: Colors.red,
+      ),
+      label: Text("REMOVE"),
+      // onPressed: () => uploadImage(
+      //   ImageSource.camera,
+      // ),
+      onPressed: () {
+        print(imgMapList[index]);
+        _removeBallotOption(index);
+        // setState(() {});
+      },
+    );
+  }
+
+//   Widget awaitOptions() {
+
+// return
+//   WidgetsBinding.instance
+//         .addOptionButton((context) => editButton(context));
+
+//  ;
+//   }
+
+  Widget addOptionButton(context) {
+    if (submittedToCloud) {
+      return ElevatedButton.icon(
+        icon: Icon(
+          Icons.add_circle,
+          color: Colors.grey,
+        ),
+        label: Text("Add Options e.g.Pizza, Italian, Chinese?"),
+        onPressed: () {
+          print('Submitted Choices Cannot Edit');
+        }, //(ImageSource.gallery),
+      );
+    }
+    return ElevatedButton.icon(
+      icon: Icon(Icons.add_circle),
+      label: Text("Add Options to Survey e.g.Pizza, Italian, Chinese?"),
+      onPressed: () {
+        _popDialogMain(context);
+      }, //(ImageSource.gallery),
+    );
+  }
+
+  Widget addImgToCloudOrEdit(context) {
+    if (submittedToCloud) {
+      return ElevatedButton.icon(
+        icon: Icon(
+          Icons.add_circle,
+          color: Colors.grey,
+        ),
+        label: Text("Edit"),
+        onPressed: () {
+          print('Enable Edit');
+          submittedToCloud = false;
+          setState(() {});
+        }, //(ImageSource.gallery),
+      );
+    }
+    return ElevatedButton.icon(
+        icon: Icon(Icons.ac_unit),
+        label: Text("SAVE Img To Cloud + //List to Fire:"),
+        onPressed: () => {
+              if (submittedToCloud)
+                {
+                  showSubmitted(context),
+                }
+              else
+                {
+                  submitChoicesToCloud(),
+                  // Future.delayed(
+                  //     Duration(seconds: 5), () => uploadOpinListToFire()),
+                  // submittedToCloud = true,
+                }
+            });
   }
 
   void _popDialogImage(context) {
@@ -1187,64 +1328,72 @@ class _AddSrvImagesState extends State<AddSrvImages> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
           elevation: 16,
-          child: Center(
-            child: Container(
-              height: 200.0,
-              width: 200.0,
-              child: ListView(children: <Widget>[
-                SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton.icon(
-                      icon: Icon(Icons.save),
-                      label: Text("+Option Text/Image: "),
-                      onPressed: () {
-                        // Navigator.of(context).pop();
-                        // _displayTextInputDialog(context);
-                        printLastOption();
-                        print("Submitted Option");
-                        addLastOption(OptionsTextList.last.toString());
-                        Navigator.of(context).pop();
-                        Navigator.pop(context);
-                        setState(() {});
+          child: Container(
+            // height: 00.0,
+            // width: 200.0,
+            child: ListView(children: <Widget>[
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton.icon(
+                    icon: Icon(Icons.save),
+                    label: Text("+Option Text/Image: "),
+                    onPressed: () {
+                      // Navigator.of(context).pop();
+                      // _displayTextInputDialog(context);
+                      printLastOption();
+                      print("Submitted Option");
+                      addLastOption(OptionsTextList.last.toString());
+                      Navigator.of(context).pop();
+                      Navigator.pop(context);
+                      setState(() {});
 
-                        // Navigator.of(context).pop();
-                        // submitChoice(context);
-                      }
-                      //(ImageSource.gallery),
-                      ),
-                ),
-                SizedBox(height: 20),
-                // Text(_textFieldController.text),
-                SizedBox(height: 20),
-                Text(OptionsTextList.last),
-                // Text(textIputCheck().toString()),
-                // Image(
-                //   image: FileImage(File(image.toString()), scale: 4),
+                      // Navigator.of(context).pop();
+                      // submitChoice(context);
+                    }
+                    //(ImageSource.gallery),
+                    ),
+              ),
+              // SizedBox(height: 20),
+              // Text(_textFieldController.text),
+              SizedBox(height: 20),
+              Center(child: Text(OptionsTextList.last)),
+              SizedBox(height: 20),
+              // Text(textIputCheck().toString()),
+              // Image(
+              //   image: FileImage(File(image.toString()), scale: 4),
+              // ),
+              Container(
+                // width: 100,
+                height: 260,
+                color: Colors.yellow,
+                // child: Image.network(
+                //   "$imageUrlFire",
+                //   fit: BoxFit.contain,
                 // ),
-                Container(
-                  width: 100,
-                  height: 60,
-                  color: Colors.yellow,
-                  child: Image.network(
-                    // "https://firebasestorage.googleapis.com/v0/b/moodclick-3174b.appspot.com/o/folderName%2Fimage_picker7551681923167081009.jpg?alt=media&token=be7bf705-7362-4699-9043-6aab693dc5c4",
-
-                    "$imageUrlFire",
-                    fit: BoxFit.contain,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(68), // Image border
+                  child: SizedBox.fromSize(
+                    size: Size.fromRadius(48), // Image radius
+                    child: Image.file(
+                      imgMapList[index]['imageLocation'],
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                )
-                //  Container(
-                //   padding: const EdgeInsets.all(1.0),
-                //   decoration: BoxDecoration(
-                //       color: Colors.white,
-                //       image: DecorationImage(
-                //           image: FileImage(image!), fit: BoxFit.cover)),
-                // )
+                ),
+              ),
+              SizedBox(height: 20),
+              //  Container(
+              //   padding: const EdgeInsets.all(1.0),
+              //   decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       image: DecorationImage(
+              //           image: FileImage(image!), fit: BoxFit.cover)),
+              // )
 
-                // Center(
-                //   child: Text("Add Preview of Image in box below!:"),
-                // ),
-              ]),
-            ),
+              // Center(
+              //   child: Text("Add Preview of Image in box below!:"),
+              // ),
+            ]),
           ),
         );
       },

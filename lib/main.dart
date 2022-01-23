@@ -1,156 +1,230 @@
+import 'dart:async';
+// import 'package:flutter/material.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/screens/questioncard.dart';
+import 'package:moodclicks/screens/surveydisplay2.dart';
 
+// void main() => runApp(MyApp());
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   // runApp(MyApp()); // Emojo Picker
-  runApp(MaterialApp(home: Home()));
+  runApp(MaterialApp(home: HomePage()));
 }
 
-//Example for EmojiPickerFlutter
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'opinZy - Personal Stats',
+      routes: {
+        '/': (context) => HomePage(),
+        '/tutorials': (context) => TutorialsPage(),
+        '/error': (context) => ErrorPage(),
+        '/dylink': (context) => SurveyDisplay2(surveyId: ''),
+      },
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  final TextEditingController _controller = TextEditingController();
-  bool emojiShowing = false;
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-  _onEmojiSelected(Emoji emoji) {
-    _controller
-      ..text += emoji.emoji
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length));
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  String _shortUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    this._initDynamicLinks();
   }
 
-  _onBackspacePressed() {
-    _controller
-      ..text = _controller.text.characters.skipLast(1).toString()
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length));
+  void _initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      print("1 Printing myIxD: dynamicLinkData.toString ");
+      print(dynamicLinkData.link.toString());
+      //  Navigator.pushNamed(context, dynamicLinkData.link.path);
+      // Navigator.pushNamed(SurveyDisplay2(surveyId: 'tFISHjkrM1cXrfpmDMTS'));
+
+      // id = 'tFISHjkrM1cXrfpmDMTS';
+      // Uri deepLink = dynamicLinkData.link;
+
+      // if (dynamicLinkData != null) {
+      //   if (deepLink.queryParameters.containsKey('surveyId')) {
+      //     print("Printing deepLink ");
+      //     print(deepLink);
+      //     String? id = deepLink.queryParameters['surveyId'];
+      //     print("Printing id ");
+      //     print(id);
+      //     //  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SurveyDisplay2(surveyId: id);
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (BuildContext context) =>
+      //             SurveyDisplay2(surveyId: '$id'),
+      //       ),
+      //     );
+      //   }
+      // }
+      Uri id = dynamicLinkData.link;
+      // ignore: unnecessary_null_comparison
+      if (id != null) {
+        String myid = id.queryParameters['surveyId'].toString();
+        print("2 deeplink data " + id.queryParameters.values.first);
+        print("3 Printing myID ");
+        print(id);
+        print('4 ANother Hello');
+        print(id.queryParameters.values.first.toString());
+        String myLinkId = id.queryParameters.values.first.toString();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                SurveyDisplay2(surveyId: myLinkId),
+          ),
+        );
+        setState(() {});
+      } else {
+        print("5 Printing dynamicLinkData ");
+        print("6 deeplink data " + id.queryParameters.values.first);
+        print(dynamicLinkData.toString());
+        print("7 Printing DeepLink Ensd");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                SurveyDisplay2(surveyId: 'zLrGyGzOgDgRAH4Wrq4d'),
+          ),
+        );
+      }
+    }).onError((error) {
+      print("8 ERROR on _initDynamicLinks()");
+      print(error.toString());
+    });
+  }
+
+  // Future<void> _createDynamicLink() async {
+  static Future<String> _createDynamicLink(String surveyId) async {
+    String _linkMessage;
+
+    // FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://opinzy.page.link',
+      // link: Uri.parse('https://www.opinzy.com/surveyId?id=$surveyId'),
+      link: Uri.parse('https://opinzy.page.link/surveyId?id=$surveyId'),
+      androidParameters: const AndroidParameters(
+        //  fallbackUrl: Uri.parse('https://www.bbc.co.uk'),
+        // //default location if your App is not in Appstore yet
+        packageName: 'com.example.moodclicks',
+        minimumVersion: 1,
+      ),
+      // iosParameters: const IOSParameters(
+      //   bundleId: 'io.invertase.testing',
+      //   minimumVersion: '0',
+      // ),
+    );
+    //  final Uri uri = await dynamicLinks.buildLink(parameters);
+    Uri url;
+    // if (short) {
+    final ShortDynamicLink shortLink =
+        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    url = shortLink.shortUrl;
+    // } else {
+    //   uri = uri = await dynamicLinks.buildLink(parameters);
+    // setState(() {
+    //   _linkMessage = url.toString();
+    //   _isCreatingLink = false;
+    // });
+
+    // print(_linkMessage);
+    // uri = await dynamicLinks.buildLink(parameters);
+
+    // }
+//   static Future<void> initDynamicLink() async {
+//     dynamicLinks = FirebaseDynamicLinks.instance;
+//     dynamicLinks.onLink.listen((dynamicLinkData) {
+// //OnSuccess Here
+//     }).onError((error) {
+// //onError Here
+//     });
+//   }
+    _linkMessage = url.toString();
+    print('Message link $_linkMessage');
+    return _linkMessage;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Emoji Picker Exampl eApp'),
-        ),
-        body: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Woolha.com Flutter Tutorial'),
+      ),
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: Container()),
-            Container(
-                height: 66.0,
-                color: Colors.blue,
-                child: Row(
-                  children: [
-                    Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            emojiShowing = !emojiShowing;
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.emoji_emotions,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: TextFormField(
-                            controller: _controller,
-                            style: const TextStyle(
-                                fontSize: 20.0, color: Colors.black87),
-                            decoration: InputDecoration(
-                              hintText: 'Type a message',
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.only(
-                                  left: 16.0,
-                                  bottom: 8.0,
-                                  top: 8.0,
-                                  right: 16.0),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                            )),
-                      ),
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      child: IconButton(
-                          onPressed: () {
-                            // send message
-                            print(_controller.text);
-
-                            Map<String, dynamic> data = {
-                              // "f01name": name.text,
-                              // "f02surname": surname.text,
-                              // "f03postcode": postcode.text,
-                              // "f04business_name": business_name.text,
-                              // "f05business_desc": business_desc.text,
-                              // "f06service_radius": service_radius.text
-                              "f01name": _controller.text,
-                            };
-                            FirebaseFirestore.instance
-                                .collection("new_biz_add")
-                                .add(data);
-                          },
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.white,
-                          )),
-                    )
-                  ],
-                )),
-            Offstage(
-              offstage: !emojiShowing,
-              child: SizedBox(
-                height: 250,
-                child: EmojiPicker(
-                    onEmojiSelected: (Category category, Emoji emoji) {
-                      _onEmojiSelected(emoji);
-                    },
-                    onBackspacePressed: _onBackspacePressed,
-                    config: Config(
-                        columns: 7,
-                        // Issue: https://github.com/flutter/flutter/issues/28894
-                        emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
-                        verticalSpacing: 0,
-                        horizontalSpacing: 0,
-                        initCategory: Category.RECENT,
-                        bgColor: const Color(0xFFF2F2F2),
-                        indicatorColor: Colors.blue,
-                        iconColor: Colors.grey,
-                        iconColorSelected: Colors.blue,
-                        progressIndicatorColor: Colors.blue,
-                        backspaceColor: Colors.blue,
-                        showRecentsTab: true,
-                        recentsLimit: 28,
-                        noRecentsText: 'No Recents',
-                        noRecentsStyle: const TextStyle(
-                            fontSize: 20, color: Colors.black26),
-                        tabIndicatorAnimDuration: kTabScrollDuration,
-                        categoryIcons: const CategoryIcons(),
-                        buttonMode: ButtonMode.MATERIAL)),
-              ),
+            OutlinedButton(
+              child: const Text('Create Link'),
+              onPressed: () {
+                _createDynamicLink('surveyId');
+              },
             ),
+            SelectableText(_shortUrl),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("START Page (HOME)"),
+                onPressed: () => {
+                      print('Moving to ResultsChart CHARTS'),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              // builder: (BuildContext context) => ImpCharts()))
+                              builder: (BuildContext context) => Home()))
+                      // FireToObj()))
+                    }),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TutorialsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Woolha.com Flutter Tutorial'),
+      ),
+      body: const Center(
+        child: const Text('Tutorials Page'),
+      ),
+    );
+  }
+}
+
+class ErrorPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Woolha.com Flutter Tutorial'),
+      ),
+      body: const Center(
+        child: const Text('Error Page'),
       ),
     );
   }

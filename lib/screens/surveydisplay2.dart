@@ -1,10 +1,14 @@
 //2021-12-26 KEEP for v1
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/screens/chartsandvis2.dart';
 import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
+import 'package:moodclicks/services/dynamiclinks.dart';
+import 'package:moodclicks/services/firebase_dynamic_link.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class SurveyDisplay2 extends StatefulWidget {
   final String surveyId;
@@ -174,6 +178,27 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                               // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => ImpCharts()))
                     }),
+            GestureDetector(
+              onTap: () async {
+                // TODO: Generate DeepLink for Share
+                String generatedDeepLink =
+                    await FirebaseDynamicLinkService.createDynamicLinkService(
+                        widget.surveyId);
+                print(generatedDeepLink);
+                print(widget.surveyId);
+              },
+              child: Container(
+                height: 18,
+                child:
+                    Text('Click to Share Link to Contacts for their Opinion:'),
+              ),
+            ),
+            OutlinedButton(
+              child: const Text('Create Link'),
+              onPressed: () {
+                DynamicLinkService.createDynamicLink(widget.surveyId);
+              },
+            ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 //2021-12-26 KEEP for v1
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/screens/createsurvey.dart';
 
@@ -40,4 +41,28 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  //   Future<void> _initDynamicLinks() async {
+
+  //   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) (
+  //       onSuccess: (PendingDynamicLinkData dynamicLink) async {
+  //         final Uri deepLink = dynamicLink?.link;
+
+  //         if (deepLink != null) {
+  //           Navigator.pushNamed(context, deepLink.path);
+  //         }
+  //       },
+  //       onError: (OnLinkErrorException e) async {
+  //         Navigator.pushNamed(context, '/error');
+  //       }
+  //   ) ;
+
+  //   final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
+  //   final Uri deepLink = data?.link;
+
+  //   if (deepLink != null) {
+  //     Navigator.pushNamed(context, deepLink.path);
+  //   }
+  // }
+
 }

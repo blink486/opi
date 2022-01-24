@@ -199,6 +199,13 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                 DynamicLinkService.createDynamicLink(widget.surveyId);
               },
             ),
+            OutlinedButton(
+              child: const Text('Refresh Page'),
+              onPressed: () {
+                setState(() {});
+                ;
+              },
+            ),
           ],
         ),
       ),

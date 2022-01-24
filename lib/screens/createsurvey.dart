@@ -24,34 +24,38 @@ class _CreateSurveyState extends State<CreateSurvey> {
         //  actions: <Widget>[HomeNav()],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(34.0),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => SignUp(),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(34.0),
+                child: Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => SignUp(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      emojiHeart + " Sign up and Create Survey",
+                      style: TextStyle(fontSize: 18),
                     ),
-                  );
-                },
-                child: Text(
-                  emojiHeart + " Sign up and Create Survey",
-                  style: TextStyle(fontSize: 18),
+                    // ),
+                  ),
                 ),
-                // ),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
+              SizedBox(
+                height: 4,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
         ),
       ),
     );

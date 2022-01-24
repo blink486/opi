@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/screens/addsrvimages2.dart';
 import 'package:moodclicks/screens/addsrvquestions.dart';
-import 'package:moodclicks/services/createinitsurvey.dart';
+import 'package:moodclicks/model/createinitsurvey.dart';
 // import 'package:moodclicks/screens/addsrvquestions.dart';
 
 class AddQuestions extends StatefulWidget {
@@ -40,9 +40,15 @@ class _AddQuestionsState extends State<AddQuestions> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text('Account Created User ID:' +
-                  widget.srvCreator +
-                  '  Enter your first Questions'),
+              child: Text('Account Created User ID:'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text('User Details:  ' + widget.srvCreator),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text('Enter your first Questions'),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -69,8 +75,15 @@ class _AddQuestionsState extends State<AddQuestions> {
 // var postID = newPostRef.toString();
 // DEV NOTES: CREATE NEW Survey Class Object - NOt necessarily required for curent program,
 // but useful to create this way in furture in final version
-                final mySrv = Survey(
-                    name: srvName.text, description: srvDescription.text);
+
+                // final mySrv = Survey(
+                //     name: srvName.text, description: srvDescription.text);
+
+                // final mySrv = Survey(name: srvName.text, description: srvDescription.text);
+                // final mySrv = Survey(srvName.text, srvDescription.text, );
+                final mySrv = Survey(srvName.text, srvDescription.text, null,
+                    null, null, null, null);
+
                 // AddQuestions();
                 // DocumentReference ref =
                 //     FirebaseFirestore.instance.collection("test").doc();

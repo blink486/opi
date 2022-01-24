@@ -1,18 +1,13 @@
-// import 'dart:html';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:moodclicks/model/survey.dart';
 import 'package:moodclicks/model/surveyo.dart';
-
 import 'package:moodclicks/screens/surveydisplay2.dart';
-
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:moodclicks/model/classopinion.dart';
@@ -41,12 +36,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
   File? image;
   bool submittedToCloud = false;
 
-  // File? _image;
-
-  // void printimg() {
-  //   print(_image!.path.toString());
-  // }
-
   void uploadImage(ImageSource imgsrc, [String? optionText]) async {
     final _storage = FirebaseStorage.instance;
     // final _picker = ImagePicker();
@@ -59,18 +48,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     var imageCloud = await ImagePicker().pickImage(source: imgsrc);
     // _popDialogAddText(context);
     print("Hello Img Saving");
-    // print(imageCloud!.path);
-    // setState(() {
-    //   // _image = imageCloud as File?;
-    //   print('Image Path $_image');
-    // });
-
-    // final navigator = Navigator.of();
-    //  await
-    // navigator.push(
-    //       MaterialPageRoute(
-    //         builder: (context) =>
-    //             QList()));
 
     print(PickedFile);
     print(imageCloud!.path);
@@ -176,62 +153,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     }
     print("URLS Updated");
 
-    // var imageCloud = await ImagePicker().pickImage(source: imgsrc);
-    // List<Map> imgMapCopy = [];
-    // List<Map> img3 = [];
-
-    // List imgMapCopy = List.from(imgMapList);
-    // final imgMapCopy = imgMapList.toList();
-/*
-    List imgMapCopy = [...imgMapList];
-
-    print("imgMapList");
-    for (int i = 0; i < imgMapList.length; i++) {
-      print(imgMapList[i]['description']);
-      print(imgMapList[i]['downloadUrl']);
-    }
-
-    print("ADDING IMAGES to CLOUD");
-
-    for (int i = 0; i < imgMapCopy.length; i++) {
-      imgMapCopy[i]['downloadUrl'] = 'Blankety2';
-    }
-    print("New imgMapCopy:");
-    for (int i = 0; i < imgMapCopy.length; i++) {
-      print(imgMapCopy[i]['description']);
-      print(imgMapCopy[i]['downloadUrl']);
-    }
-
-    print("ORIG imgMapList:");
-
-    for (int i = 0; i < imgMapList.length; i++) {
-      print(imgMapList[i]['description']);
-      print(imgMapList[i]['downloadUrl']);
-    }
-*/
-    // for (int i = 0; i < imgMapList.length; i++) {
-    // final Map newMap = json.decode(json.encode(imgMapList));
-
-    // newMap[i]['downloadUrl'] = 'Blankety3';
-    // newMap["name"]["last"] = "Pinkman";
-    // newMap["asset"]["money"]["cash"] = 0;
-
-    // print('oldMap: $oldMap');
-    // print('newMap: $newMap');
-    // }
-
-//     var img4 = List.from(imgMapList);
-
-//     print("ORIG imgMapList:");
-
-//     for (int i = 0; i < imgMapList.length; i++) {
-//       print(imgMapList[i]['description']);
-//       print(imgMapList[i]['downloadUrl']);
-//     }
-// // Map newMap = {...oldMap}
-//     print(imgMapList);
-//     print("CLONE imgMapList:");
-//     print(img4);
     setState(() {});
 
     Future.delayed(Duration(seconds: 2), () => uploadOpinListToFire());
@@ -611,150 +532,13 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     addOptionButton(context),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(10.0),
-                    //   child: ElevatedButton.icon(
-                    //     icon: Icon(Icons.add_circle),
-                    //     label: Text("Add Options e.g.Pizza, Italian, Chinese?"),
-                    //     onPressed: () {
-                    //       _popDialogMain(context);
-                    //     }, //(ImageSource.gallery),
-                    //   ),
-                    // ),
-                    // FloatingActionButton(
-                    //   child: const Icon(Icons.add_circle),
-                    //   // label: Text("Add Option e.g. Take her out for lunch?"),
-                    //   onPressed: () => print("Hello"),
-                    // ),
-                    // SizedBox(width: 20),
-                    // Expanded(
-                    //   child: TextFormField(
-                    //     controller: question,
-                    //     decoration: InputDecoration(
-                    //         hintText:
-                    //             // "Add Option item to survey e.g. Take her out for lunch?  "),
-                    //             "Add Option e.g. Take her out for lunch?  "),
-                    //   ),
-                    // )
-                    // ElevatedButton.icon(
-                    //   icon: Icon(Icons.camera_alt_outlined),
-                    //   label: Text("Add picture from  Gallery to Firebase"),
-                    //   onPressed: () => uploadImage(
-                    //       ImageSource.gallery), //(ImageSource.gallery),
-                    // ),
                   ]),
-              // TextFormField(
-              //   controller: question,
-              //   decoration: InputDecoration(
-              //       hintText:
-              //           "Add Option item to survey e.g. Take her out for lunch?  "),
-              // ),
-              // SizedBox(height: 10.0),
 
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: ElevatedButton.icon(
-              //     icon: Icon(Icons.add_a_photo),
-              //     label: Text("Add picture from Camera to Firebase"),
-              //     onPressed: () =>
-              //         uploadImage(ImageSource.camera), //(ImageSource.gallery),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10.0),
-              //   child: ElevatedButton.icon(
-              //     icon: Icon(Icons.camera_alt_outlined),
-              //     label: Text("Add picture from  Gallery to Firebase"),
-              //     onPressed: () =>
-              //         uploadImage(ImageSource.gallery), //(ImageSource.gallery),
-              //   ),
-              // ),
-
-              // ListView.builder(
-              //   physics: NeverScrollableScrollPhysics(),
-              //   shrinkWrap: true,
-              //   itemCount: imgMapList.length,
-              //   itemBuilder: (context, index) {
-              //     // var imageLoc = imgMapList[index]['imageLocation'].toString();
-              //     // File file =
-              //     //     File(imgMapList[index]['imageLocation'].toString());
-
-              //     return Center(
-              //       child: TextButton(
-              //         onPressed: () {
-              //           print('pic pRESSED');
-              //           _voteIncrMap(index); //DONT DELETE _voteIncrMap(index)
-              //           _voteincr(); //DONT DELETE _voteIncrMap(index)
-              //         },
-              //         child: Container(
-              //           decoration: BoxDecoration(
-              //             color: Colors.amber,
-              //             borderRadius: BorderRadius.all(
-              //               Radius.circular(100),
-              //             ),
-              //           ),
-              //           alignment: Alignment.bottomLeft,
-              //           height: 180,
-              //           width: 100,
-              //           child: imageUrlFire == null
-              //               ? Text('No Image Showing')
-              //               // : Image.network(imgMapList[index]['downloadUrl']),
-              //               : Image.network(imgMapList[index]['downloadUrl']),
-              //           // : Image.file(
-              //           //     '/data/user/0/com.example.moodclicks/app_flutter/image_picker1557202220805647028.jpg'),
-              //         ),
-              //       ),
-              //     );
-              //   },
-              // ),
-              // calculateListOfStars(),
-
-              // ListView.builder(
-              //   physics: NeverScrollableScrollPhysics(),
-              //   shrinkWrap: true,
-              //   itemCount: imgMapList.length,
-              //   itemBuilder: (context, index) {
-              //     return Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //         children: <Widget>[
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: imgMapList[index]['description'] == null
-              //                 ? Text('No Image Showing')
-              //                 : ClipRRect(
-              //                     borderRadius:
-              //                         BorderRadius.circular(34), // Image border
-              //                     child: SizedBox.fromSize(
-              //                       size: Size.fromRadius(68), // Image radius
-              //                       child: Image.file(
-              //                         imgMapList.last['imageLocation'],
-              //                         fit: BoxFit.fill,
-              //                       ),
-              //                     ),
-              //                   ),
-              //           )
-              //         ]);
-              //   },
-              // ),
               SizedBox(
                 height: 34,
               ),
               preview(context),
               addImgToCloudOrEdit(context),
-              // ElevatedButton.icon(
-              //     icon: Icon(Icons.ac_unit),
-              //     label: Text("SAVE Img To Cloud + //List to Fire:"),
-              //     onPressed: () => {
-              //           if (submittedToCloud)
-              //             {
-              //               showSubmitted(context),
-              //             }
-              //           else
-              //             {
-              //               submitChoicesToCloud(),
-              //               submittedToCloud = true,
-              //             }
-              //         }),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -1066,23 +850,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                   child: Center(
                       child: Text(imgMapList[index]['description'].toString())),
                 ),
-                Center(child: editButton()
-                    // ElevatedButton.icon(
-                    //   icon: Icon(
-                    //     Icons.remove_circle,
-                    //     color: Colors.red,
-                    //   ),
-                    //   label: Text("REMOVE"),
-                    //   // onPressed: () => uploadImage(
-                    //   //   ImageSource.camera,
-                    //   // ),
-                    //   onPressed: () {
-                    //     print(imgMapList[index]);
-                    //     _removeBallotOption(index);
-                    //     // setState(() {});
-                    //   },
-                    // ),
-                    ),
+                Center(child: editButton()),
               ]);
         },
       );
@@ -1124,25 +892,12 @@ class _AddSrvImagesState extends State<AddSrvImages> {
         color: Colors.red,
       ),
       label: Text("REMOVE"),
-      // onPressed: () => uploadImage(
-      //   ImageSource.camera,
-      // ),
       onPressed: () {
         print(imgMapList[index]);
         _removeBallotOption(index);
-        // setState(() {});
       },
     );
   }
-
-//   Widget awaitOptions() {
-
-// return
-//   WidgetsBinding.instance
-//         .addOptionButton((context) => editButton(context));
-
-//  ;
-//   }
 
   Widget addOptionButton(context) {
     if (submittedToCloud) {
@@ -1229,15 +984,7 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                           label: Text("Image from Gallary"),
                           onPressed: () {
                             chooseImg(context);
-                            // Navigator.of(context).pop();
-                            // uploadImage(ImageSource.gallery, "smoe text");
-
-                            // _popDialogAddText(context);
-                            // printimg();
-                          }
-
-                          //(ImageSource.gallery),
-                          ),
+                          }),
                     ),
                     Center(
                       child: ElevatedButton.icon(
@@ -1297,18 +1044,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 SizedBox(height: 20),
                 // Text(OptionsTextList.last),
                 Text(textIputCheck().toString()),
-
-                // Container(
-                //   padding: const EdgeInsets.all(1.0),
-                //   decoration: BoxDecoration(
-                //       color: Colors.white,
-                //       image: DecorationImage(
-                //           image: FileImage(image!), fit: BoxFit.cover)),
-                // )
-
-                // Center(
-                //   child: Text("Add Preview of Image in box below!:"),
-                // ),
               ]),
             ),
           ),
@@ -1353,15 +1088,9 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                     //(ImageSource.gallery),
                     ),
               ),
-              // SizedBox(height: 20),
-              // Text(_textFieldController.text),
               SizedBox(height: 20),
               Center(child: Text(OptionsTextList.last)),
               SizedBox(height: 20),
-              // Text(textIputCheck().toString()),
-              // Image(
-              //   image: FileImage(File(image.toString()), scale: 4),
-              // ),
               Container(
                 // width: 100,
                 height: 260,
@@ -1382,17 +1111,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 ),
               ),
               SizedBox(height: 20),
-              //  Container(
-              //   padding: const EdgeInsets.all(1.0),
-              //   decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       image: DecorationImage(
-              //           image: FileImage(image!), fit: BoxFit.cover)),
-              // )
-
-              // Center(
-              //   child: Text("Add Preview of Image in box below!:"),
-              // ),
             ]),
           ),
         );
@@ -1413,63 +1131,9 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     // });
   }
 
-  // void addText(context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return Dialog(
-  //         shape:
-  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-  //         elevation: 16,
-  //         child: Center(
-  //           child: Container(
-  //             height: 200.0,
-  //             width: 200.0,
-  //             child: ListView(children: <Widget>[
-  //               SizedBox(height: 20),
-  //               Center(
-  //                 child: ElevatedButton.icon(
-  //                     icon: Icon(Icons.add_a_photo),
-  //                     label: Text("+ADD Text"),
-  //                     onPressed: () {
-  //                       openTextDialogInput(context);
-  //                     }
-  //                     //(ImageSource.gallery),
-  //                     ),
-  //               ),
-  //             ]),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   void submitChoice(context) {
     Navigator.of(context).pop();
   }
-
-//   Future openTextDialogInput(context) => showDialog(
-//         context: context,
-//         builder: (context) => AlertDialog(
-//           title: Text('Enter option Text'),
-//           content: TextField(
-//             autofocus: true,
-//             decoration: InputDecoration(hintText: 'Movie Choice: Spiderman'),
-//           ),
-//           actions: [
-//             TextButton(
-//               child: Text('Submit'),
-//               onPressed: Navigator.of(context).pop(),
-//             ),
-//           ],
-//         ),
-//       );
-
-// openDialog(context) => showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return Dialog("what ever the thing you wanna display" ),)
 
   TextEditingController _textFieldController = TextEditingController();
 
@@ -1503,8 +1167,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                // print(_textFieldController.text);
-                // Navigator.pop(context);
                 Navigator.of(context).pop();
                 _popDialogAddText(context);
                 setState(() {
@@ -1547,15 +1209,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
     printLastOption();
   }
 
-  //  Map<String, dynamic> data = {
-  //       "imageLocation": file, //In Phone
-  //       "imageName": fileName, //Name of image
-  //       "downloadUrl": downloadUrl, //Location in CloudFireStorage
-  //       "votes": 0,
-  //       "description": optionText
-  //     };
-  //     imgMapList.add(data);
-
   void _printimgMapList() {
     print("Printing Local image locations: ");
     for (int i = 0; i < imgMapList.length; i++) {
@@ -1565,37 +1218,6 @@ class _AddSrvImagesState extends State<AddSrvImages> {
 }
 
 List<Set> log = [];
-
-// Future<Widget?> _rowView() async {
-//   Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
-//     Container(
-//       decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(10), color: Colors.green),
-//       child: Text(
-//         "Geeks",
-//         style: TextStyle(color: Colors.white, fontSize: 25),
-//       ),
-//     ),
-//     Container(
-//       decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(10), color: Colors.green),
-//       child: Text(
-//         "For",
-//         style: TextStyle(color: Colors.white, fontSize: 25),
-//       ),
-//     ),
-//     Container(
-//       decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(10), color: Colors.green),
-//       child: Text(
-//         "Geeks",
-//         style: TextStyle(color: Colors.white, fontSize: 25),
-//       ),
-//     )
-//   ]);
-
-//   return Row();
-// }
 
 List<Map> ballotMapList = [];
 List<Map> castBallots = [];

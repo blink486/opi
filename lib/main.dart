@@ -1,10 +1,7 @@
 import 'dart:async';
 // import 'package:flutter/material.dart';
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';

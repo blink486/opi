@@ -93,9 +93,13 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
-            Text("Heres your Survey Data:"),
+            Text("Survey ID:"),
             Center(
               child: Text(widget.surveyId),
+            ),
+            Text("Survey Creator UserID:"),
+            Center(
+              child: Text(currUser2),
             ),
 
             ElevatedButton.icon(

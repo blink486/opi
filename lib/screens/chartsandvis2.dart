@@ -273,6 +273,7 @@
 // import 'package:firebase_database/firebase_database.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -479,11 +480,13 @@ class _ResultsChartState extends State<ResultsChart> {
   }
 
   List<Ballot> balList2 = [];
+  final loggedInUser = FirebaseAuth.instance.currentUser!.uid;
 
   void addBallots(option, votes) {
     // balList2.clear();
 
-    Ballot b = Ballot(option, int.parse('$votes'));
+    // Ballot b = Ballot(option, int.parse('$votes'), loggedInUser);
+    Ballot b = Ballot.voteSum(option, int.parse('$votes'));
     balList2.add(b);
     print('BOO!');
   }
@@ -513,9 +516,11 @@ class _ResultsChartState extends State<ResultsChart> {
           print("Length{$blen}"),
           for (int i = 0; i < blen; i++)
             {
-              b = Ballot(
-                  docSnapshot.data()['votingchoices']['Ballot'][i]['option'],
-                  docSnapshot.data()['votingchoices']['Ballot'][i]['vote']),
+              b = Ballot.voteSum(
+                docSnapshot.data()['votingchoices']['Ballot'][i]['option'],
+                docSnapshot.data()['votingchoices']['Ballot'][i]['vote'],
+                // docSnapshot.data()['votingchoices']['Ballot'][i]['voterid'],
+              ),
               // balList.add(b.toMap());
 
               print(b.option),
@@ -571,7 +576,7 @@ class _ResultsChartState extends State<ResultsChart> {
     Ballot b;
     carMap.forEach((k, v) {
       print("Key : $k, Value : $v");
-      b = Ballot(k, v);
+      b = Ballot.voteSum(k, v);
       ballotSummary.add(b);
     });
   }

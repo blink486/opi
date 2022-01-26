@@ -8,15 +8,12 @@ import 'package:moodclicks/screens/chartsandvis2.dart';
 import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
 import 'package:moodclicks/services/dynamiclinks.dart';
 import 'package:moodclicks/services/firebase_dynamic_link.dart';
-// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:moodclicks/services/getcurrentuser.dart';
 
 class SurveyDisplay2 extends StatefulWidget {
   final String surveyId;
 
   const SurveyDisplay2({Key? key, required this.surveyId}) : super(key: key);
-
-// ENTER THE DATA HERE
-// late Future data;
 
   @override
   _SurveyDisplay2State createState() => _SurveyDisplay2State();
@@ -24,9 +21,6 @@ class SurveyDisplay2 extends StatefulWidget {
 
 class _SurveyDisplay2State extends State<SurveyDisplay2> {
   late Future<Opinion> opik;
-  // final _firestore = FirebaseFirestore.instance;
-  // late Future<DocumentSnapshot<Map<String, dynamic>>> _futureDoc;
-  // late Future<QuerySnapshot<Map<String, dynamic>>> _futureSnapshot;
 
   @override
   void initState() {
@@ -51,19 +45,12 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
 
   int voteTally = 0;
   int listStatus = 0;
-  // int listStatus2 = 0;
 
   Future<int> listLength(Opinion list) async {
     print("HELOOx");
     print(list.sets.length);
     return listStatus = list.sets.length;
   }
-
-  // Future<int> listLength2() async {
-  //   print("HELOOx");
-  //   print(survey.sets.length);
-  //   return listStatus2 = survey.sets.length;
-  // }
 
   late Future<Opinion> survey2;
 
@@ -74,14 +61,6 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
         .doc(widget.surveyId)
         .get();
   }
-  // List<Opinion> opList = [];
-
-  // List<Opinion> oplist(Opinion o) {
-  //   List<Opinion> opiList = [];
-  //   opiList.add(o);
-  //   opList = opiList;
-  //   return opiList;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +80,12 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
             Center(
               child: Text(currUser2),
             ),
-
             ElevatedButton.icon(
                 icon: Icon(Icons.info),
                 label: Text("Print CurrentUserID"),
                 onPressed: () => {
                       print(currUser2),
                     }),
-
             ElevatedButton.icon(
                 icon: Icon(Icons.info),
                 label: Text("Signout CurrentUserID"),
@@ -116,7 +93,6 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                       print(currUser2),
                       signOut(),
                     }),
-
             Container(
               // height: 400,
               // height: MediaQuery.of(context).size.height / 3,
@@ -124,13 +100,10 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                   ? lviewB()
                   : Text("Error : Empty List, No Data Received"),
             ),
-            // lviewB(),
-
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
-                label: Text("SubmitVote:Adds new 'Ballot' to FireList[]"),
+                label: Text("+submitChoices():Adds new 'Ballot' to FireList[]"),
                 onPressed: () => {
-                      // dummyAddList(1),
                       submitChoices(),
                       setState(() {
                         voted = 'y';
@@ -139,10 +112,10 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
-                label: Text("+Choices TO Fire:Adds Votes to EXISTING 'Ballot'"),
+                label:
+                    Text("+AddToFire():Adds Votes to EXISTING 'Ballot' object"),
                 onPressed: () => {
                       print("ADDING UPDATED to FIREbase:"),
-                      // AddObjectToVotingChoices2(),
                       AddToFire(),
                       setState(() {
                         voted = 'y';
@@ -157,7 +130,6 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                       print(choiceList.length.toString()),
                       Text('${choiceList[0].votescast[0]}')
                     }),
-
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
                 label: Text("View Results Charts NEW"),
@@ -166,10 +138,8 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) =>
                                   ResultsChart(surveyId: widget.surveyId)))
-                      // FireToObj()))
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -179,12 +149,11 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              // builder: (BuildContext context) => ImpCharts()))
                               builder: (BuildContext context) => ImpCharts()))
                     }),
             GestureDetector(
               onTap: () async {
-                // TODO: Generate DeepLink for Share
+                // TODO: Generate DeepLink for Share WhatsApp / Contacts etc
                 String generatedDeepLink =
                     await FirebaseDynamicLinkService.createDynamicLinkService(
                         widget.surveyId);
@@ -219,44 +188,29 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
   AddToFire() async {
     final _fireStore = FirebaseFirestore.instance;
 
-    List<dynamic> d = [];
-    Ballot bb = Ballot('7', 5);
-    d.add(bb);
-    Ballot cc = Ballot('1', 1);
-    d.add(cc);
-    Ballot dd = Ballot('4', 1);
-    d.add(dd);
-    Ballot ee = Ballot('3', 1);
-    d.add(ee);
-
-    //  Map<String, dynamic> data = {
-    //       "option": options,
-    //       "vote": 1,
-    //     };
+    // List<dynamic> d = [];
+    // Ballot bb = Ballot('7', 5);
+    // d.add(bb);
+    // Ballot cc = Ballot('1', 1);
+    // d.add(cc);
+    // Ballot dd = Ballot('4', 1);
+    // d.add(dd);
+    // Ballot ee = Ballot('3', 1);
+    // d.add(ee);
 
     Choices c = Choices(
         currUser2, "https://www.google.co.frs/", widget.surveyId, 1, balCst);
 
     print(c.votescast);
 
-// To ONLY add the votingchoices use:
+//NOTE: To ONLY add the votingchoices use:
     // await _fireStore.collection('opinion').add({
-// To INCLUDE orig Survey Headers PLUS the votingchoices:
+//NOTE: To INCLUDE orig Survey Headers PLUS the votingchoices:
     await _fireStore.collection('opinion').doc(widget.surveyId).update({
-      // "item": c.item,
-      // "downloadUrl": c.downloadUrl,
-      // "description": c.description,
-      // "votes": c.votes,
-      // "Ballot": FieldValue.arrayUnion(voteList),
       "votingchoices": c.toMap(),
-
-      // "f0xdloadUerl": imgMapList[i]['downloadUrl'],
     });
-    // }, SetOptions(merge: true)).then((_) {
-    //   print("IMAGES added to Survey!!");
-    // });
-
-    d.clear();
+//From Dummy List d above line 190
+    // d.clear();
   }
 
   void submitChoices() {
@@ -289,14 +243,11 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
     // }
   }
 
+  final loggedInUser = FirebaseAuth.instance.currentUser!.uid;
+
   void AddObjectToVotingChoices(int option) {
     choiceList.clear();
-    // Map<String, dynamic> data = {
-    //   "option": option,
-    //   "vote": 1,
-    // };
-
-    Ballot bal = Ballot(option.toString(), 1);
+    Ballot bal = Ballot(option.toString(), 1, loggedInUser, DateTime.now());
 
     balCst.add(bal);
 
@@ -304,18 +255,12 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
     Choices choice = Choices(
       currUser2,
       "https://www.google.co.fr/",
-      // "w87f6S1H6ES4PPaehWxJ", option, toListVotes());
       widget.surveyId,
       option,
-      // VostCst,
       balCst,
-
-      // ball.toMap();
     );
-    // castBallots.toList()[0]['votes'].toString());
 
     choiceList.add(choice);
-    // VostCst.clear();
   }
 
   Future<void> readNestedData() async {
@@ -329,9 +274,6 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
                   Opinion.fromMap(docSnapshot.data() as Map<String, dynamic>),
               opinion.sets.forEach((set) {
                 Set setInst = set as Set;
-                // log("Reps :" + setInst.reps.toString());
-                // polloptions.add(set);
-                // polloptionsx.add(setInst);
               }),
               print("Print TOP level Data:"),
               print(opinion.description),
@@ -434,17 +376,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
 
 List<int> castVotes = [];
 List<Choices> choiceList = [];
-// List<Map> ballotMapList = [];
-// List<Map> castBallots = [];
-// List<Ballot> Ballots = [];
-// Future<List<Map>> ballotMapListft = [] as Future<List<Map>>;
-// List<dynamic> VostCst = [];
 List<Ballot> balCst = [];
-// List<Choices> choiceList2 = [];
-// Future<Ballot> balls = [] as Future<Ballot>;
-// Future<List<Map<dynamic, dynamic>>> jd = [] as Future<List<Map>>;
-// List<Set> polloptions = [];
-// List<Set> polloptionsx = [];
 
 CollectionReference opinions = FirebaseFirestore.instance.collection('opinion');
 final currUser2 = FirebaseAuth.instance.currentUser!.uid.toString();
@@ -489,8 +421,6 @@ Future<Opinion?> createOpObj() async {
 
     return opiz;
   });
-  // print(opi.toString());
-  // return op;
 }
 
 Future<Opinion> createOpObjFut() async {
@@ -513,9 +443,8 @@ class Opi {
 
       return opiz;
     });
-    // print(opi.toString());
+
     print("Other Return");
-    // return opiz;
   }
 }
 

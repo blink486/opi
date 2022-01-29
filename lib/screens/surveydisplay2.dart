@@ -189,7 +189,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
     final _fireStore = FirebaseFirestore.instance;
 
     // List<dynamic> d = [];
-    // Ballot bb = Ballot('7', 5);
+    // Ballot bb = Ballot('7',  5);
     // d.add(bb);
     // Ballot cc = Ballot('1', 1);
     // d.add(cc);

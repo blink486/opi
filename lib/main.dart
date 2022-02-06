@@ -5,29 +5,85 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:moodclicks/model/account.dart';
 import 'package:moodclicks/screens/questioncard.dart';
 import 'package:moodclicks/screens/surveydisplay2.dart';
+import 'package:moodclicks/screens/wrapper.dart';
+import 'package:moodclicks/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 // void main() => runApp(MyApp());
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await AuthService().signInAnon();
 
-  // runApp(MyApp()); // Emojo Picker
-  runApp(MaterialApp(home: HomePage()));
+  runApp(MyApp()); // Emojo Picker
+
+  // runApp(MultiProvider(
+  //   providers: [
+  //     Provider.value(value: AuthService()),
+  //   ],
+  //   // child: MaterialApp(home: HomePage()),
+  //   child: MaterialApp(home: Wrapper()),
+  // )
+  //     // ,
+  //     );
+
+  // runApp(MultiProvider(
+  //   providers: [
+  //     Provider.value(value: AuthService()),
+  //     // Provider.StreamProvider<Account?>.value(
+  //     // value: AuthService().user,
+  //     // initialData: null,
+  //     // catchError: (_, __) {},
+
+  //   ],
+  //   // child: MaterialApp(home: HomePage()),
+  //   child: MaterialApp(home: Wrapper()),
+  // )
+  // ,
+  // );
 }
+
+// StreamProvider<Account?>.value(
+//       value: AuthService().user,
+//       initialData: null,
+//       catchError: (_, __) {},
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Zympoll - Personal Stats',
+//       routes: {
+//         // '/': (context) => HomePage(),
+//         '/': (context) => Wrapper(),
+//         '/tutorials': (context) => TutorialsPage(),
+//         '/error': (context) => ErrorPage(),
+//         '/dylink': (context) => SurveyDisplay2(surveyId: ''),
+//       },
+//     );
+//   }
+// }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'opinZy - Personal Stats',
-      routes: {
-        '/': (context) => HomePage(),
-        '/tutorials': (context) => TutorialsPage(),
-        '/error': (context) => ErrorPage(),
-        '/dylink': (context) => SurveyDisplay2(surveyId: ''),
-      },
+    return StreamProvider<Account?>.value(
+      value: AuthService().user,
+      initialData: null,
+      catchError: (_, __) {},
+      child: MaterialApp(
+        title: 'Zympoll - Personal Stats',
+        routes: {
+          // '/': (context) => HomePage(),
+          '/': (context) => Wrapper(),
+          '/tutorials': (context) => TutorialsPage(),
+          '/error': (context) => ErrorPage(),
+          '/dylink': (context) => SurveyDisplay2(surveyId: ''),
+        },
+      ),
     );
   }
 }
@@ -192,6 +248,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               builder: (BuildContext context) => Home()))
                       // FireToObj()))
                     }),
+            // Text("CurrentLoggedInUser: ${AuthService().user?.uid}"),
+            Text("CurrentLoggedInUser: ${AuthService().signInAnon()}"),
+            OutlinedButton(
+              child: const Text('Press to Print'),
+              onPressed: () {
+                print(
+                    "HomePage Button Clicked by user: ${AuthService().signInAnon()}");
+              },
+            ),
           ],
         ),
       ),

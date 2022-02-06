@@ -3,6 +3,8 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/screens/createsurvey.dart';
+import 'package:moodclicks/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,27 +20,33 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("1.  questioncard.dt"),
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => Card(),
-            //   ),
-            // );
+      body: Column(children: <Widget>[
+        Center(
+          child: TextButton(
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => Card(),
+              //   ),
+              // );
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => CreateSurvey()));
-          },
-          child: Text(
-            'Start Survey',
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => CreateSurvey()));
+            },
+            child: Text(
+              'Start Survey',
+            ),
+
+            // ),
           ),
-          // ),
         ),
-      ),
+        Text(
+            // "Logged in User Via Providor: ${context.read<AuthService>().user?.uid}"),
+            "Logged in User Via Providor: ${context.read<AuthService>().signInAnon()}"),
+      ]),
     );
   }
 

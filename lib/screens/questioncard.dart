@@ -46,6 +46,9 @@ class _HomeState extends State<Home> {
         Text(
             // "Logged in User Via Providor: ${context.read<AuthService>().user?.uid}"),
             "Logged in User Via Providor: ${context.read<AuthService>().signInAnon()}"),
+        Text(
+            "Logged in User Via Providor: ${context.read<AuthService>().currentUser!.uid}"),
+        // "Logged in User Via Providor: ${context.read<AuthService>().signInAnon()}"),
       ]),
     );
   }

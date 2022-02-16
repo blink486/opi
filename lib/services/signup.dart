@@ -4,6 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:moodclicks/model/account.dart';
 import 'package:moodclicks/screens/addquestions.dart';
 
 // import 'anothersearch.dart';
@@ -25,6 +26,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     // TextEditingController searchController2;
+
     return
         // SingleChildScrollView(
         //   child:
@@ -97,11 +99,34 @@ class _SignUpState extends State<SignUp> {
                       final newUser =
                           await _auth.createUserWithEmailAndPassword(
                               email: email.text, password: password.text);
+                      // Account(uid: '') acc = Account.userid(uid: loggedInUser!.uid.toLowerCase());
 
                       // ignore: unnecessary_null_comparison
                       // if (newUser != null) {
 
                       addNewUserToReg();
+                      var k = Account.userid(
+                          uid: newUser.user!.uid,
+                          // name: 'email.text',
+                          password: password.text,
+                          email: email.text);
+                      print(k.uid.toString());
+                      print("me too!");
+                      print(k.email.toString());
+
+                      // Account j = Account(uid: loggedInUser!.uid);
+                      //TODO: Create k.toJson() and upload to Accounts Collection in FIRExfggf7
+                      k.toJson();
+
+                      Map<String, dynamic> data = k.toMap();
+                      print(k.uid.toString());
+                      DocumentReference docRef = await FirebaseFirestore
+                          .instance
+                          .collection('account')
+                          .add(data);
+                      print(docRef.id);
+
+                      // addNewAcctToReg();
 
                       {
                         print(newUser);
@@ -142,4 +167,13 @@ class _SignUpState extends State<SignUp> {
     };
     FirebaseFirestore.instance.collection("register").add(data);
   }
+
+  // void addNewAcctToReg() {
+  //   Map<String, dynamic> data = {
+  //     "f01email": email.text,
+  //     "f02password": password.text,
+  //     "f03userId": loggedInUser!.uid
+  //   };
+  //   FirebaseFirestore.instance.collection("Account").add(data);
+  // }
 }

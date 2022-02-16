@@ -19,16 +19,35 @@ import 'package:moodclicks/services/database.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+// My Addition 12/02/2020
+  User? get currentUser => _auth.currentUser;
+  Future<User?> getOrCreateUser() async {
+    if (currentUser == null) {
+      await _auth.signInAnonymously();
+      print("Printing Cuser :" + currentUser!.uid.toString());
+    }
+    return currentUser;
+  }
+
+//END
+
 //create user obj based on FirebaseUser
 
-  Account? _userFromFirebaseUser(User user) {
+  Account? _userFromFirebaseUser(User? user) {
     if (user == null) {
       return null;
     } else {
-      return Account(uid: user.uid);
+      return Account.userid(uid: user.uid, name: "dfgd");
     }
   }
 
+  // Account? _userFromFirebaseUser2(User? user) {
+  //   if (user == null) {
+  //     return null;
+  //   } else {
+  //     return Account(uid: user.uid);
+  //   }
+  // }
 //auth change user stream
 
   Stream<Account?> get user {

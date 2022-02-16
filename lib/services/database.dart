@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moodclicks/model/brew.dart';
+import 'package:moodclicks/model/user.dart';
 
 class DatabaseService {
   late final String? uid;
@@ -24,16 +25,24 @@ class DatabaseService {
       );
     }).toList();
   }
+
+// userData from snapshot
+
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserData(
+        uid: uid!,
+        name: snapshot['name'].toString(),
+        sugars: snapshot['sugars'].toString(),
+        strength: snapshot['strength']);
+  }
+
 //get brews stream
 
   Stream<List<Brew>?> get brews {
     return brewCollection.snapshots().map(_brewListFromSnapshot);
   }
 
-// DELETE Example:
-  // Future<Sample> getUser(String id) async {
-  //   return Sample.fromSnapshot(
-  //       await usersCollection.doc('iQkfaDnPAag5nK22Z2QH').get());
-  // }
-
+  Stream<UserData> get userData {
+    return brewCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
+  }
 }

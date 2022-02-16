@@ -17,8 +17,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await AuthService().signInAnon();
+  //Added for 1manStUP
+  await AuthService().getOrCreateUser();
 
-  runApp(MyApp()); // Emojo Picker
+// 1. BrewAppStart: MyApp()
+  // runApp(MyApp());
+
+  //myApp Start Home()
+  // runApp(Home());
+
+  // Emojo Picker
 
   // runApp(MultiProvider(
   //   providers: [
@@ -30,20 +38,20 @@ void main() async {
   //     // ,
   //     );
 
-  // runApp(MultiProvider(
-  //   providers: [
-  //     Provider.value(value: AuthService()),
-  //     // Provider.StreamProvider<Account?>.value(
-  //     // value: AuthService().user,
-  //     // initialData: null,
-  //     // catchError: (_, __) {},
-
-  //   ],
-  //   // child: MaterialApp(home: HomePage()),
-  //   child: MaterialApp(home: Wrapper()),
-  // )
-  // ,
-  // );
+//2. myApp with multiprovider
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider.value(value: AuthService()),
+        // Provider.StreamProvider<Account?>.value(
+        // value: AuthService().user,
+        // initialData: null,
+        // catchError: (_, __) {},
+      ],
+      child: MaterialApp(home: HomePage()),
+      // child: MaterialApp(home: Wrapper()),
+    ),
+  );
 }
 
 // StreamProvider<Account?>.value(
@@ -249,7 +257,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       // FireToObj()))
                     }),
             // Text("CurrentLoggedInUser: ${AuthService().user?.uid}"),
-            Text("CurrentLoggedInUser: ${AuthService().signInAnon()}"),
+            Text(
+                "CurrentLoggedInUser: ${AuthService().signInAnon().toString()}"),
             OutlinedButton(
               child: const Text('Press to Print'),
               onPressed: () {

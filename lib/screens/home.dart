@@ -51,7 +51,13 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: BrewList(),
+        body: Container(
+          child: BrewList(),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/coffee_bg.png'),
+                  fit: BoxFit.cover)),
+        ),
       ),
     );
   }

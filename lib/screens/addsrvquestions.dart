@@ -34,10 +34,10 @@ class _AddSrvQuestionsState extends State<AddSrvQuestions> {
     "HEllo Inspire 4",
   ];
 
-  List<String> srvq = [
-    "Question1",
-    "Question2",
-    "Question3",
+  List<String> pollType = [
+    "Single Choice",
+    "Multiple Choice",
+    "Continuous",
   ];
 
   List yourItemList = [];

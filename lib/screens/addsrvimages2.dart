@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moodclicks/model/surveyo.dart';
 import 'package:moodclicks/screens/surveydisplay2.dart';
+import 'package:moodclicks/screens/votinghome.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:moodclicks/model/classopinion.dart';
@@ -635,6 +636,28 @@ class _AddSrvImagesState extends State<AddSrvImages> {
                 },
                 child: Text(
                   " VIEW Single Saved Survey  >>> returnfromcloudsurvey:",
+                  style: TextStyle(fontSize: 14),
+                ),
+                // ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              // ViewSurvey()));
+                              // SurveyDisplay()));
+                              VotingChoices(
+                                surveyId: widget.surveyId,
+                              )));
+                  // ViewSurveyOnlyList()));
+                  //Go Sample Cards
+                  // builder: (BuildContext context) => SignUp()));
+                  // print('${smile.name}');
+                },
+                child: Text(
+                  " VIEW Single Saved POLL Survey  >>> returnfromcloudsurvey:",
                   style: TextStyle(fontSize: 14),
                 ),
                 // ),

@@ -10,16 +10,16 @@ import 'package:moodclicks/services/dynamiclinks.dart';
 import 'package:moodclicks/services/firebase_dynamic_link.dart';
 import 'package:moodclicks/services/getcurrentuser.dart';
 
-class SurveyDisplay2 extends StatefulWidget {
+class VotingChoices extends StatefulWidget {
   final String surveyId;
 
-  const SurveyDisplay2({Key? key, required this.surveyId}) : super(key: key);
+  const VotingChoices({Key? key, required this.surveyId}) : super(key: key);
 
   @override
-  _SurveyDisplay2State createState() => _SurveyDisplay2State();
+  _VotingChoicesState createState() => _VotingChoicesState();
 }
 
-class _SurveyDisplay2State extends State<SurveyDisplay2> {
+class _VotingChoicesState extends State<VotingChoices> {
   late Future<Opinion> opik;
 
   @override
@@ -66,7 +66,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("x. surveydisplay2.dt"),
+        title: Text("votinghome.dt"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),

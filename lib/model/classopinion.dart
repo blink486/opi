@@ -3,15 +3,17 @@
 // ADD: user, date, surveyEndDate, private, multipleChoice
 
 class Opinion {
-  final String name;
-  final String description;
+  String? name;
+  String? description;
+  String? pollType;
   List<dynamic> sets = [];
 
-  Opinion(this.name, this.description);
+  Opinion({this.name, this.description, this.pollType});
 
   Map<String, dynamic> toMap() => {
         "name": this.name,
         "description": this.description,
+        "pollType": this.pollType,
         "sets": firestoreSets()
       };
 
@@ -27,6 +29,7 @@ class Opinion {
   Opinion.fromMap(Map<String, dynamic> map)
       : name = map['name'],
         description = map['description'],
+        pollType = map['pollType'],
         sets = map['sets'].map((set) {
           return Set.fromMap(set);
         }).toList();
@@ -34,6 +37,7 @@ class Opinion {
   Opinion.fromJson(Map<String, dynamic> json, param1)
       : name = json['name'],
         description = json['description'],
+        pollType = json['pollType'],
         sets = json['sets'].json((set) {
           return Set.fromMap(set);
         }).toList();

@@ -37,7 +37,7 @@ class AuthService {
     if (user == null) {
       return null;
     } else {
-      return Account.userid(uid: user.uid, name: "dfgd");
+      return Account.userid(uid: user.uid, userName: "exampleUserName");
     }
   }
 

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moodclicks/model/polltype.dart';
 import 'package:moodclicks/screens/addsrvimages2.dart';
 import 'package:moodclicks/screens/addsrvquestions.dart';
 import 'package:moodclicks/model/createinitsurvey.dart';
@@ -26,6 +27,29 @@ class _AddQuestionsState extends State<AddQuestions> {
   TextEditingController srvName = new TextEditingController();
   TextEditingController srvDescription = new TextEditingController();
   bool privatePoll = true;
+
+  // static const values = <String>['Flutter', 'Dart', 'Firebase'];
+  // String selectedValue = values.first;
+
+  static const pollType = [
+    PollType(
+        id: 1, name: 'Single Choice', description: 'Only 1 choice can be made'),
+    PollType(
+        id: 2,
+        name: 'Multiple Choice',
+        description: '1 or More choices can be selected'),
+    PollType(
+        id: 3,
+        name: 'Continuous',
+        description:
+            'Continuous Voting allowed e.g. picking score/winner during live sports game'),
+  ];
+
+  PollType selectedValue = pollType.first;
+
+  final selectedColor = Colors.pink;
+  final unselectedColor = Colors.grey;
+
   @override
   Widget build(BuildContext context) {
     String emojiHeart = '\u2764';
@@ -72,6 +96,13 @@ class _AddQuestionsState extends State<AddQuestions> {
             Text(
                 'Case Statement Switch ?? Private (Voting Limited to Contacts )/Public(RED Color - Voting Open to all)'),
             buildSwitch(),
+            Divider(
+              color: Colors.white,
+            ),
+            buildRadios(),
+            Divider(
+              color: Colors.white,
+            ),
             TextButton(
               style: TextButton.styleFrom(primary: Colors.red),
               onPressed: () async {
@@ -89,8 +120,14 @@ class _AddQuestionsState extends State<AddQuestions> {
 
                 // final mySrv = Survey(name: srvName.text, description: srvDescription.text);
                 // final mySrv = Survey(srvName.text, srvDescription.text, );
-                final mySrv = Survey(srvName.text, srvDescription.text,
-                    createDT, 1, loggedInUserEmail, null, privatePoll);
+                final mySrv = Survey(
+                    srvName.text,
+                    srvDescription.text,
+                    createDT,
+                    selectedValue.id,
+                    loggedInUserEmail,
+                    null,
+                    privatePoll);
 
                 Map<String, dynamic> data = mySrv.toMap();
 
@@ -216,6 +253,31 @@ class _AddQuestionsState extends State<AddQuestions> {
 //     Survey _newsurvey =         Survey(name: srvName.text, description: srvDescription.text);
 //     print(srvDescription);
 //   }
+  Widget buildRadios() => Theme(
+        data: Theme.of(context).copyWith(
+          unselectedWidgetColor: unselectedColor,
+        ),
+        child: Column(
+          children: pollType.map((pollType) {
+            final selected = this.selectedValue == pollType;
+            final color = selected ? selectedColor : unselectedColor;
+            return RadioListTile<PollType>(
+              value: pollType,
+              groupValue: selectedValue,
+              title: Text(
+                pollType.name.toString(),
+                style: TextStyle(color: color),
+              ),
+              subtitle: Text(
+                pollType.description.toString(),
+                style: TextStyle(color: color),
+              ),
+              activeColor: selectedColor,
+              onChanged: (value) => setState(() => this.selectedValue = value!),
+            );
+          }).toList(),
+        ),
+      );
 
   Widget buildSwitch() => Transform.scale(
         scale: 1.2,

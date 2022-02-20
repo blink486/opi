@@ -106,28 +106,16 @@ class _SignUpState extends State<SignUp> {
 
                       addNewUserToReg();
                       var k = Account.userid(
-                          uid: newUser.user!.uid,
-                          // name: 'email.text',
-                          password: password.text,
-                          email: email.text);
-                      print(k.uid.toString());
-                      print("me too!");
-                      print(k.email.toString());
+                        uid: newUser.user!.uid,
+                        // name: 'email.text',
+                        password: password.text,
+                        email: email.text,
+                        userName: email.text,
+                        startDate: DateTime.now(),
+                      );
 
-                      // Account j = Account(uid: loggedInUser!.uid);
-                      //TODO: Create k.toJson() and upload to Accounts Collection in FIRExfggf7
-                      k.toJson();
-
-                      Map<String, dynamic> data = k.toMap();
-                      print(k.uid.toString());
-                      DocumentReference docRef = await FirebaseFirestore
-                          .instance
-                          .collection('account')
-                          .add(data);
-                      print(docRef.id);
-
+                      Account.createAccount(k);
                       // addNewAcctToReg();
-
                       {
                         print(newUser);
                         Navigator.push(

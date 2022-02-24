@@ -272,6 +272,11 @@ class _AddQuestionsState extends State<AddQuestions> {
                 pollType.description.toString(),
                 style: TextStyle(color: color),
               ),
+              // secondary: OutlinedButton(
+              //   onPressed: null,
+              //   child: Text('image link here'),
+              // ), //Change to Network Image
+              secondary: Image.network('https://picsum.photos/250?image=9'),
               activeColor: selectedColor,
               onChanged: (value) => setState(() => this.selectedValue = value!),
             );

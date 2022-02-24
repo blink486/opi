@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moodclicks/model/brew.dart';
+import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/model/user.dart';
 
 class DatabaseService {
   late final String? uid;
-  DatabaseService({this.uid});
-
+  late final String? docid;
+  DatabaseService({this.uid, this.docid});
+  DatabaseService.docId(String surveyId);
   //collection reference
   final CollectionReference brewCollection =
       FirebaseFirestore.instance.collection('brews');
@@ -44,5 +46,21 @@ class DatabaseService {
 
   Stream<UserData> get userData {
     return brewCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
+  }
+
+// get document ADDEd 20/02/2022
+
+  Future<Opinion?> getDocs(String docId) async {
+    Opinion opi = (await FirebaseFirestore.instance
+        .collection("opinion")
+        .doc(docId)
+        .get()) as Opinion;
+    return opi;
+  }
+
+  Future<DocumentSnapshot> getDocs2(String docId) async {
+    DocumentSnapshot opi =
+        await FirebaseFirestore.instance.collection("opinion").doc(docId).get();
+    return opi;
   }
 }

@@ -9,7 +9,7 @@ class Opinion {
   List<dynamic> sets = [];
 
   Opinion({this.name, this.description, this.pollType});
-
+  Opinion.empty();
   Map<String, dynamic> toMap() => {
         "name": this.name,
         "description": this.description,

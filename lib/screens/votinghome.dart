@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
+import 'package:moodclicks/model/polltype.dart';
 import 'package:moodclicks/screens/chartsandvis2.dart';
 import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
+import 'package:moodclicks/services/database.dart';
 import 'package:moodclicks/services/dynamiclinks.dart';
 import 'package:moodclicks/services/firebase_dynamic_link.dart';
 import 'package:moodclicks/services/getcurrentuser.dart';
@@ -25,16 +27,19 @@ class _VotingChoicesState extends State<VotingChoices> {
   @override
   void initState() {
     super.initState();
-    readNestedData();
+    // readNestedData();
+
     // polloptions.clear();
-
     print("Boj Opinio below:");
-
-    opik = OService.getOpi();
-    opik.then((value) {
+    // opik = OService.getOpi();
+    // opik.then((value) {
+    readNestedData().then((value) {
       setState(() {
+        //TODO: NEED to FIX:buildSingleChoice(value);
+        buildSingleChoice(value);
+        printOpin(pollType);
         // oplist(value);
-        listLength(value);
+        // listLength(value);
         setVoteStatus();
         // listLength2();
       });
@@ -54,13 +59,182 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   late Future<Opinion> survey2;
 
-  Future<void> getDocs() async {
-    Opinion opinion;
-    await FirebaseFirestore.instance
-        .collection("opinion")
-        .doc(widget.surveyId)
-        .get();
+  // Future<void> getDocs() async {
+  //   Opinion opinion;
+  //   await FirebaseFirestore.instance
+  //       .collection("opinion")
+  //       .doc(widget.surveyId)
+  //       .get();
+  // }
+
+  // static const pollType = [
+  //   PollTypeSingle(
+  //       id: 1, name: 'Single Choice', description: 'Only 1 choice can be made'),
+  //   PollTypeSingle(
+  //       id: 2,
+  //       name: 'Multiple Choice',
+  //       description: '1 or More choices can be selected'),
+  //   PollTypeSingle(
+  //       id: 3,
+  //       name: 'Continuous',
+  //       description:
+  //           'Continuous Voting allowed e.g. picking score/winner during live sports game'),
+  // ];
+
+  // List<PollTypeSingle> pollType = [
+  //   PollTypeSingle(
+  //       id: 1, name: 'Single Choice', description: 'Only 1 choice can be made'),
+  //   PollTypeSingle(
+  //       id: 2,
+  //       name: 'Multiple Choice',
+  //       description: '1 or More choices can be selected'),
+  //   PollTypeSingle(
+  //       id: 3,
+  //       name: 'Continuous',
+  //       description:
+  //           'Continuous Voting allowed e.g. picking score/winner during live sports game'),
+  // ];
+
+  // List<PollTypeSingle> pp = [];
+  // var pollType = <PollTypeSingle>[];
+
+  List<PollTypeSingle> pollType = [];
+
+  // List<PollTypeSingle> buildSingleChoice(Opinion survey) {
+  //   var len = survey.sets.length;
+  //   print(len.toInt());
+  //   List<PollTypeSingle> p = [];
+  //   for (int i = 0; i < len; i++) {
+  //     // p.add(PollTypeSingle(id: i, name: survey.sets[i][''], description: survey.sets[i]['']);
+  //     print(survey.sets[i].description);
+
+  //     p.add(PollTypeSingle(
+  //         id: i,
+  //         name: survey.sets[i].description,
+  //         description: survey.sets[i].description));
+  //   }
+  //   print('p PRINT');
+  //   print(p.first.description);
+  //   print(p.last.imgLink);
+  //   pollType = p;
+  //   return p;
+  // }
+
+  void buildSingleChoice(Opinion survey) {
+    var len = survey.sets.length;
+    print(len.toInt());
+    List<PollTypeSingle> p = [];
+    for (int i = 0; i < len; i++) {
+      // p.add(PollTypeSingle(id: i, name: survey.sets[i][''], description: survey.sets[i]['']);
+      print(survey.sets[i].description);
+
+      p.add(PollTypeSingle(
+          id: i,
+          name: survey.sets[i].description,
+          description: survey.sets[i].description));
+    }
+    print('p PRINT');
+    print(p.first.description);
+    print(p.last.imgLink);
+    pollType = p;
   }
+
+  void printOpin(List<PollTypeSingle> p) {
+    print('hellof me');
+    print(p[1].name);
+    // print(survey.sets[1].description);
+  }
+
+  // PollTypeSingle pd = PollTypeSingle(pollType.first.id);
+
+  // Future<String> id2 = pollType.first['id'];
+
+  // PollTypeSingle selectedValue = pollType.[]first;
+
+  // List<PollTypeSingle> get newMethod => pp;
+
+  final selectedColor = Colors.pink;
+  final unselectedColor = Colors.grey;
+
+  // late PollTypeSingle pp =
+  //     PollTypeSingle(id: id, name: name, description: description);
+
+  late PollTypeSingle selectedOption = pollType.first;
+
+  // PollTypeSingle(
+  //     id: pollType.first.id,
+  //     name: pollType.first.name,
+  //     description: pollType.first.description);
+
+  // Widget lviewB() {
+  //   return ListView.separated(
+  //     physics: NeverScrollableScrollPhysics(),
+  //     shrinkWrap: true,
+  //     padding: const EdgeInsets.all(8)
+
+  Widget radioBallot() {
+    return SizedBox(
+      height: 200,
+      child: ListView(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(vertical: 16),
+          children: pollType
+              .map(
+                (poll) => RadioListTile<PollTypeSingle>(
+                  value: poll,
+                  groupValue: selectedOption,
+                  title: Text(poll.description.toString()),
+                  subtitle: Text(poll.imgLink.toString()),
+                  secondary: OutlinedButton(
+                    child: Text('ViewPics'),
+                    onPressed: () {
+                      print('Hellos');
+                    },
+                  ),
+                  onChanged: (value) => setState(() => selectedOption = value!),
+                ),
+              )
+              .toList()),
+    );
+  }
+
+  // Widget buildRadios() => Theme(
+  //       data: Theme.of(context).copyWith(
+  //         unselectedWidgetColor: unselectedColor,
+  //       ),
+  //       child: Column(
+  //         children: pollType.map((poll) {
+  //           final selected = this.selectedValue == pollType.first;
+  //           final color = selected ? selectedColor : unselectedColor;
+  //           return RadioListTile<PollTypeSingle>(
+  //             value: pollType,
+  //             groupValue: pollType.first,
+  //             title: Text(
+  //               poll.name.toString(),
+  //               style: TextStyle(color: color),
+  //             ),
+  //             subtitle: Text(
+  //               poll.description.toString(),
+  //               style: TextStyle(color: color),
+  //             ),
+  //             // secondary: OutlinedButton(
+  //             //   onPressed: null,
+  //             //   child: Text('image link here'),
+  //             // ), //Change to Network Image
+  //             secondary: SizedBox(
+  //               child: Image.network('https://picsum.photos/250?image=9'),
+  //               // height: 40,
+  //               // width: 20,
+  //             ),
+  //             activeColor: selectedColor,
+  //             onChanged: (value) =>
+  //                 // setState(() => this.selectedValue = value! as int),
+  //                 setState(() => this.selectedValue = poll.id!),
+  //           );
+  //         }).toList(),
+  //       ),
+  //     );
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +267,25 @@ class _VotingChoicesState extends State<VotingChoices> {
                       print(currUser2),
                       signOut(),
                     }),
+            // Container(
+            //   // height: 400,
+            //   // height: MediaQuery.of(context).size.height / 3,
+            //   child: listStatus > 0
+            //       ? lviewB()
+            //       : Text("Error : Empty List, No Data Received"),
+            // ),
             Container(
               // height: 400,
               // height: MediaQuery.of(context).size.height / 3,
-              child: listStatus > 0
-                  ? lviewB()
-                  : Text("Error : Empty List, No Data Received"),
+              child: lviewB(),
+            ),
+            Divider(
+              color: Colors.white,
+            ),
+            // buildRadios(),
+            radioBallot(),
+            Divider(
+              color: Colors.white,
             ),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -123,7 +310,7 @@ class _VotingChoicesState extends State<VotingChoices> {
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
-                label: Text("Vote Cast Already! $voted:"),
+                label: Text("Vote Castv Already! $voted:"),
                 onPressed: () => {
                       print('HEllo'),
                       print(choiceList[0].votescast.toString()),
@@ -187,22 +374,9 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   AddToFire() async {
     final _fireStore = FirebaseFirestore.instance;
-
-    // List<dynamic> d = [];
-    // Ballot bb = Ballot('7',  5);
-    // d.add(bb);
-    // Ballot cc = Ballot('1', 1);
-    // d.add(cc);
-    // Ballot dd = Ballot('4', 1);
-    // d.add(dd);
-    // Ballot ee = Ballot('3', 1);
-    // d.add(ee);
-
     Choices c = Choices(
         currUser2, "https://www.google.co.frs/", widget.surveyId, 1, balCst);
-
     print(c.votescast);
-
 //NOTE: To ONLY add the votingchoices use:
     // await _fireStore.collection('opinion').add({
 //NOTE: To INCLUDE orig Survey Headers PLUS the votingchoices:
@@ -263,7 +437,7 @@ class _VotingChoicesState extends State<VotingChoices> {
     choiceList.add(choice);
   }
 
-  Future<void> readNestedData() async {
+  Future<Opinion> readNestedData() async {
     Opinion opinion;
     await FirebaseFirestore.instance
         .collection("opinion")
@@ -281,6 +455,28 @@ class _VotingChoicesState extends State<VotingChoices> {
               print(opinion.sets[0].votes),
               survey = opinion,
             });
+    return survey;
+  }
+
+// ADDED 20/02/2022
+// TODO: Dev Notes Tried getting from Database but kept returning null :
+// ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: type 'Null' is not a subtype of type 'Map<String, dynamic>' in type cast
+// use readNestedData() until getOpin() - solved
+
+  Future<void> getOpin() async {
+    Opinion kc;
+    DatabaseService ds = DatabaseService.docId(widget.surveyId);
+    ds.getDocs2(widget.surveyId).then((docSnapshot) => {
+          kc = Opinion.fromMap(docSnapshot.data() as Map<String, dynamic>),
+          kc.sets.forEach((set) {
+            Set setInst = set as Set;
+          }),
+          print("Print NEWWWW TOP level Data:"),
+          print(kc.description),
+          print("PrintENNND Lower level Data from ARRAY of  MAPS:"),
+          print(kc.sets[0].votes),
+          survey = kc,
+        });
   }
 
   Widget lviewB() {
@@ -288,7 +484,7 @@ class _VotingChoicesState extends State<VotingChoices> {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
-      itemCount: survey!.sets.length,
+      itemCount: survey.sets.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 50,
@@ -332,11 +528,11 @@ class _VotingChoicesState extends State<VotingChoices> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text("${i + 1} "),
-          Text(survey!.sets[i].description),
+          Text(survey.sets[i].description),
           Container(
             height: 120,
             width: 80,
-            child: Image.network(survey!.sets[i].downloadUrl),
+            child: Image.network(survey.sets[i].downloadUrl),
           ),
           // Container(
           //   height: 50,
@@ -359,7 +555,7 @@ class _VotingChoicesState extends State<VotingChoices> {
                 height: 50,
                 width: 50,
                 child: Text(
-                  "Votes: ${survey!.sets[i].votes.toString()}",
+                  "Votes: ${survey.sets[i].votes.toString()}",
                   // textAlign: TextAlign.center,
                 ),
               ),
@@ -371,98 +567,33 @@ class _VotingChoicesState extends State<VotingChoices> {
   }
 
   // ADD NEW  FUTURE METHOD Version:
-  Opinion? survey;
-}
+  late Opinion survey = Opinion();
 
-List<int> castVotes = [];
-List<Choices> choiceList = [];
-List<Ballot> balCst = [];
+//Search Create List Widget to make this into a Widget:
+  //TODO: NEED to FIX:buildSingleChoice(value);
 
-CollectionReference opinions = FirebaseFirestore.instance.collection('opinion');
-final currUser2 = FirebaseAuth.instance.currentUser!.uid.toString();
-var voted;
+  List<int> castVotes = [];
+  List<Choices> choiceList = [];
+  List<Ballot> balCst = [];
 
-void setVoteStatus() {
-  String voted = 'n';
-  print(voted);
-}
+  CollectionReference opinions =
+      FirebaseFirestore.instance.collection('opinion');
+  final currUser2 = FirebaseAuth.instance.currentUser!.uid.toString();
+  var voted;
 
-final _auth = FirebaseAuth.instance;
-signOut() async {
-  await _auth.signOut();
-}
-
-// TODO: CREATE FOR LOOP and SUM the Total Votes.
-
-Future<dynamic> importData() async {
-  var surveyData = await FirebaseFirestore.instance
-      .collection("opinion")
-      .doc("FeYHmHsHzbeKGNMG9gCI")
-      .get();
-  try {
-    if (surveyData.exists) ;
-    {
-      return surveyData;
-    }
-  } catch (e) {
-    return Text(e.toString());
+  void setVoteStatus() {
+    String voted = 'n';
+    print(voted);
   }
-}
 
-Future<Opinion?> createOpObj() async {
-  // Opinion op = Opinion();
-  Opinion opiz;
-  var opi = await importData().then((value) {
-    opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);
-    opiz.sets.forEach((set) {
-      Set setInst = set as Set;
-    });
-    print(opiz.name);
-
-    return opiz;
-  });
-}
-
-Future<Opinion> createOpObjFut() async {
-  Opinion op = Opinion();
-  var opi = await importData();
-  print(opi.toString());
-  return op;
-}
-
-class Opi {
-  Future<Opinion?> createOpObjCl() async {
-    late Opinion opiz;
-    var opi = await importData().then((value) {
-      opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);
-      opiz.sets.forEach((set) {
-        Set setInst = set as Set;
-      });
-      print("Obj Return");
-      print(opiz.name);
-
-      return opiz;
-    });
-
-    print("Other Return");
+  final _auth = FirebaseAuth.instance;
+  signOut() async {
+    await _auth.signOut();
   }
-}
 
-class OService {
-  static Future<Opinion> getOpi() async {
-    late Opinion opiz;
-    var response = await importData().then((value) {
-      opiz = Opinion.fromMap(value.data() as Map<String, dynamic>);
-    });
-
-    return opiz;
-  }
-}
-
-List<int> toListVotes() {
-  List<int> sendVotes = [];
-  castVotes.forEach((item) {
-    sendVotes.add(item);
-  });
-  return sendVotes.toList();
+  // void printOpin(Opinion p) {
+  //   print('hellof me');
+  //   print(p.description);
+  //   print(survey.sets[1].description);
+  // }
 }

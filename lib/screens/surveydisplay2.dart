@@ -247,7 +247,7 @@ class _SurveyDisplay2State extends State<SurveyDisplay2> {
 
   void AddObjectToVotingChoices(int option) {
     choiceList.clear();
-    Ballot bal = Ballot(option.toString(), 1, loggedInUser, DateTime.now());
+    Ballot bal = Ballot(option.toString(), 1, loggedInUser, DateTime.now(), '');
 
     balCst.add(bal);
 

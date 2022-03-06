@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:moodclicks/services/signup.dart';
 
+import 'bug_info_page.dart';
+
 class CreateSurvey extends StatefulWidget {
   const CreateSurvey({Key? key}) : super(key: key);
 
@@ -53,6 +55,21 @@ class _CreateSurveyState extends State<CreateSurvey> {
               ),
               SizedBox(
                 height: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => BugInfoPage(),
+                    ),
+                  );
+                },
+                child: Text(
+                  emojiHeart + " BugInfoPage",
+                  style: TextStyle(fontSize: 18),
+                ),
+                // ),
               ),
             ],
           ),

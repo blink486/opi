@@ -115,8 +115,10 @@ class Ballot {
   final int vote;
   String? voterid;
   DateTime? voteDate;
+  String? phoneIpAddr;
+  // TODO: ADD DOCID  AKA Survey ID  here so that it can be searched to see if already voted etc
 
-  Ballot(this.option, this.vote, this.voterid, this.voteDate);
+  Ballot(this.option, this.vote, this.voterid, this.voteDate, this.phoneIpAddr);
   Ballot.voteSum(this.option, this.vote);
 
   Map<String, dynamic> toMap() => {
@@ -124,6 +126,7 @@ class Ballot {
         "vote": this.vote,
         "voterid": this.voterid,
         "voteDate": this.voteDate,
+        "phoneIpAddr": this.phoneIpAddr,
       };
 
   Ballot.fromMap(Map<String, dynamic> map)
@@ -131,5 +134,6 @@ class Ballot {
       : option = map["option"] ?? "",
         vote = map["vote"].toInt(),
         voterid = map["voterid"],
-        voteDate = map["voteDate"].toDate();
+        voteDate = map["voteDate"].toDate(),
+        phoneIpAddr = map["phoneIpAddr"];
 }

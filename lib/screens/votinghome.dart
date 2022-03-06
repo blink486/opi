@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:moodclicks/model/classopinion.dart';
 import 'package:moodclicks/model/polltype.dart';
 import 'package:moodclicks/screens/chartsandvis2.dart';
+import 'package:moodclicks/screens/chartsandvis3subcoll.dart';
 import 'package:moodclicks/screens/chartsandvisOriUTube.dart';
 import 'package:moodclicks/services/database.dart';
 import 'package:moodclicks/services/dynamiclinks.dart';
 import 'package:moodclicks/services/firebase_dynamic_link.dart';
 import 'package:moodclicks/services/getcurrentuser.dart';
+import 'package:moodclicks/services/getdatalist.dart';
+import 'package:moodclicks/services/ip_info_api.dart';
 
 class VotingChoices extends StatefulWidget {
   final String surveyId;
@@ -23,6 +26,7 @@ class VotingChoices extends StatefulWidget {
 
 class _VotingChoicesState extends State<VotingChoices> {
   late Future<Opinion> opik;
+  late Future<String> phIp;
 
   @override
   void initState() {
@@ -41,7 +45,9 @@ class _VotingChoicesState extends State<VotingChoices> {
         // oplist(value);
         // listLength(value);
         setVoteStatus();
+        // phIp = await IpInfoApi.getIPAddress();
         // listLength2();
+        init();
       });
     });
 
@@ -161,6 +167,17 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   late PollTypeSingle selectedOption = pollType.first;
 
+  late String ipAddrn;
+
+  Future init() async {
+    final ipAddress = await IpInfoApi.getIPAddress();
+    if (!mounted) return;
+    print(ipAddress);
+    setState(() => ipAddrn = ipAddress!);
+    late String me = ipAddress.toString();
+    print(me);
+  }
+
   // PollTypeSingle(
   //     id: pollType.first.id,
   //     name: pollType.first.name,
@@ -172,11 +189,14 @@ class _VotingChoicesState extends State<VotingChoices> {
   //     shrinkWrap: true,
   //     padding: const EdgeInsets.all(8)
 
+  late Future<bool> ipexists;
+  late Future<String> ipexists2;
+  UserInformation sd = UserInformation();
   Widget radioBallot() {
-    return SizedBox(
-      height: 200,
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
       child: ListView(
-          physics: NeverScrollableScrollPhysics(),
+          // physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.symmetric(vertical: 16),
           children: pollType
@@ -184,7 +204,21 @@ class _VotingChoicesState extends State<VotingChoices> {
                 (poll) => RadioListTile<PollTypeSingle>(
                   value: poll,
                   groupValue: selectedOption,
-                  title: Text(poll.description.toString()),
+                  title: OutlinedButton(
+                    onPressed: () {
+                      print(
+                          ' ADD to Set State for Option Chosen - And Also Run Checks on User - Create Seperate SFinal Submit Button');
+                      // ipexists =
+                      //     sd.ipExists(widget.surveyId, '1') as Future<bool>;
+                      // if (ipexists == true) {
+                      //   print('object BOL');
+                      // }
+                      ipexists2 = sd.ipExistsPrint(widget.surveyId);
+
+                      ;
+                    },
+                    child: Text(poll.description.toString()),
+                  ),
                   subtitle: Text(poll.imgLink.toString()),
                   secondary: OutlinedButton(
                     child: Text('ViewPics'),
@@ -192,49 +226,41 @@ class _VotingChoicesState extends State<VotingChoices> {
                       print('Hellos');
                     },
                   ),
-                  onChanged: (value) => setState(() => selectedOption = value!),
+                  // ADD {} to Set State and ADD to Set State for Option Chosen - And Also Run Checks on User - Create Seperate SFinal Submit Button
+                  onChanged: (value) => setState(() {
+                    selectedOption = value!;
+                    AddObjectToVotingChoices2(poll.id!.toInt());
+                    print(choiceList.first);
+                  }),
                 ),
               )
               .toList()),
     );
   }
 
-  // Widget buildRadios() => Theme(
-  //       data: Theme.of(context).copyWith(
-  //         unselectedWidgetColor: unselectedColor,
-  //       ),
-  //       child: Column(
-  //         children: pollType.map((poll) {
-  //           final selected = this.selectedValue == pollType.first;
-  //           final color = selected ? selectedColor : unselectedColor;
-  //           return RadioListTile<PollTypeSingle>(
-  //             value: pollType,
-  //             groupValue: pollType.first,
-  //             title: Text(
-  //               poll.name.toString(),
-  //               style: TextStyle(color: color),
-  //             ),
-  //             subtitle: Text(
-  //               poll.description.toString(),
-  //               style: TextStyle(color: color),
-  //             ),
-  //             // secondary: OutlinedButton(
-  //             //   onPressed: null,
-  //             //   child: Text('image link here'),
-  //             // ), //Change to Network Image
-  //             secondary: SizedBox(
-  //               child: Image.network('https://picsum.photos/250?image=9'),
-  //               // height: 40,
-  //               // width: 20,
-  //             ),
-  //             activeColor: selectedColor,
-  //             onChanged: (value) =>
-  //                 // setState(() => this.selectedValue = value! as int),
-  //                 setState(() => this.selectedValue = poll.id!),
-  //           );
-  //         }).toList(),
-  //       ),
-  //     );
+  void AddObjectToVotingChoices2(int option) {
+    choiceList.clear();
+    Ballot bal =
+        Ballot(option.toString(), 1, loggedInUser, DateTime.now(), ipAddrn);
+
+    balCst.add(bal);
+
+    print(option);
+    Choices choice = Choices(
+      currUser2,
+      "https://www.google.co.fr/",
+      widget.surveyId,
+      option,
+      balCst,
+    );
+    if (choiceList.isEmpty) {
+      choiceList.add(choice);
+    } else
+      () {
+        choiceList.clear();
+        choiceList.add(choice);
+      };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -287,6 +313,7 @@ class _VotingChoicesState extends State<VotingChoices> {
             Divider(
               color: Colors.white,
             ),
+            // Text(ipAddrn),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
                 label: Text("+submitChoices():Adds new 'Ballot' to FireList[]"),
@@ -304,6 +331,7 @@ class _VotingChoicesState extends State<VotingChoices> {
                 onPressed: () => {
                       print("ADDING UPDATED to FIREbase:"),
                       AddToFire(),
+                      AddToFireSubColl(),
                       setState(() {
                         voted = 'y';
                       }),
@@ -327,6 +355,17 @@ class _VotingChoicesState extends State<VotingChoices> {
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   ResultsChart(surveyId: widget.surveyId)))
+                    }),
+            ElevatedButton.icon(
+                icon: Icon(Icons.ac_unit),
+                label: Text("View Results Charts CHARTS2 SubColl"),
+                onPressed: () => {
+                      print('Moving to ResultsChart CHARTS23 SubColl'),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ResultsChart2(surveyId: widget.surveyId)))
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),
@@ -387,6 +426,26 @@ class _VotingChoicesState extends State<VotingChoices> {
     // d.clear();
   }
 
+  AddToFireSubColl() async {
+    final _fireStore = FirebaseFirestore.instance;
+    Choices c = Choices(
+        currUser2, "https://www.google.co.frs/", widget.surveyId, 1, balCst);
+    print(c.votescast);
+//NOTE: To ONLY add the votingchoices use:
+    // await _fireStore.collection('opinion').add({
+//NOTE: To INCLUDE orig Survey Headers PLUS the votingchoices:
+    await _fireStore
+        .collection('opinion')
+        .doc(widget.surveyId)
+        .collection('response')
+        .doc()
+        .set({
+      "votingchoices": c.toMap(),
+    });
+//From Dummy List d above line 190
+    // d.clear();
+  }
+
   void submitChoices() {
     print("VOted?? ${choiceList.length}");
     // if (voted == 'y')
@@ -421,7 +480,8 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   void AddObjectToVotingChoices(int option) {
     choiceList.clear();
-    Ballot bal = Ballot(option.toString(), 1, loggedInUser, DateTime.now());
+    Ballot bal =
+        Ballot(option.toString(), 1, loggedInUser, DateTime.now(), ipAddrn);
 
     balCst.add(bal);
 

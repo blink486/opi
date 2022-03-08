@@ -65,45 +65,6 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   late Future<Opinion> survey2;
 
-  // Future<void> getDocs() async {
-  //   Opinion opinion;
-  //   await FirebaseFirestore.instance
-  //       .collection("opinion")
-  //       .doc(widget.surveyId)
-  //       .get();
-  // }
-
-  // static const pollType = [
-  //   PollTypeSingle(
-  //       id: 1, name: 'Single Choice', description: 'Only 1 choice can be made'),
-  //   PollTypeSingle(
-  //       id: 2,
-  //       name: 'Multiple Choice',
-  //       description: '1 or More choices can be selected'),
-  //   PollTypeSingle(
-  //       id: 3,
-  //       name: 'Continuous',
-  //       description:
-  //           'Continuous Voting allowed e.g. picking score/winner during live sports game'),
-  // ];
-
-  // List<PollTypeSingle> pollType = [
-  //   PollTypeSingle(
-  //       id: 1, name: 'Single Choice', description: 'Only 1 choice can be made'),
-  //   PollTypeSingle(
-  //       id: 2,
-  //       name: 'Multiple Choice',
-  //       description: '1 or More choices can be selected'),
-  //   PollTypeSingle(
-  //       id: 3,
-  //       name: 'Continuous',
-  //       description:
-  //           'Continuous Voting allowed e.g. picking score/winner during live sports game'),
-  // ];
-
-  // List<PollTypeSingle> pp = [];
-  // var pollType = <PollTypeSingle>[];
-
   List<PollTypeSingle> pollType = [];
 
   // List<PollTypeSingle> buildSingleChoice(Opinion survey) {
@@ -239,7 +200,10 @@ class _VotingChoicesState extends State<VotingChoices> {
   }
 
   void AddObjectToVotingChoices2(int option) {
+    print('CHOICEList Value:');
     choiceList.clear();
+    print(balCst.length);
+    balCst.clear();
     Ballot bal =
         Ballot(option.toString(), 1, loggedInUser, DateTime.now(), ipAddrn);
 
@@ -480,6 +444,7 @@ class _VotingChoicesState extends State<VotingChoices> {
 
   void AddObjectToVotingChoices(int option) {
     choiceList.clear();
+
     Ballot bal =
         Ballot(option.toString(), 1, loggedInUser, DateTime.now(), ipAddrn);
 

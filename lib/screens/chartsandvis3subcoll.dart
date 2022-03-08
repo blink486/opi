@@ -20,6 +20,7 @@ class _ResultsChart2State extends State<ResultsChart2> {
   @override
   void initState() {
     super.initState();
+    printBallot();
   }
 
   final _fireStore = FirebaseFirestore.instance;
@@ -37,128 +38,128 @@ class _ResultsChart2State extends State<ResultsChart2> {
             .where('votingchoices.description', isEqualTo: widget.surveyId)
             // isEqualTo: 'bSTqWjT0a4vRQfYU6ZJE')
             .snapshots();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('chartsandvis2'),
+        title: Text('chartsandvis3subcoll'),
       ),
       body: Column(children: <Widget>[
         Text("Results for surveyID:"),
         Text(widget.surveyId),
-        // Expanded(
-        //   child: StreamBuilder(
-        //       stream: streamDocs,
-        //       builder: (BuildContext context,
-        //           AsyncSnapshot<QuerySnapshot> snapshot) {
-        //         if (!snapshot.hasData) {
-        //           return Center(
-        //             child: CircularProgressIndicator(),
-        //           );
-        //         }
+        Expanded(
+          child: StreamBuilder(
+              stream: streamDocs,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-        //         for (int i = 0; i < snapshot.data!.size; i++) {
-        //           DocumentSnapshot course = snapshot.data!.docs[i];
-        //           print(snapshot.data!.size);
-        //           print(course['votingchoices']['downloadUrl']);
-        //           print(course['votingchoices']['Ballot'].toString());
-        //           // Ballot b = Ballot.fromMap(Map<String, dynamic> );
-        //           print("Len");
-        //           // len(course['votingchoices']['Ballot'][{[]}.length]);
-        //           print(course['votingchoices']['Ballot'][{
-        //             [2]
-        //           }.length]);
-        //           print("LenEND");
-        //           // for (int j = 0; j < snapshot.data!.size; j++) {
+                for (int i = 0; i < snapshot.data!.size; i++) {
+                  DocumentSnapshot course = snapshot.data!.docs[i];
+                  print('SnapshotSize:');
+                  print(snapshot.data!.size);
+                  // print(course['votingchoices']['downloadUrl']);
+                  // print(course['votingchoices']['Ballot'].toString());
+                  //* See what being Added ^ */
+                  // Ballot b = Ballot.fromMap(Map<String, dynamic> );
+                  print("Len");
+                  // len(course['votingchoices']['Ballot'][{[]}.length]);
+                  // print(course['votingchoices']['Ballot'][{[0]}.length]);
+                  print(course['votingchoices']['Ballot'].length);
+                  print("LenEND");
+                  // for (int j = 0; j < snapshot.data!.size; j++) {
+                  //   print(course['votingchoices']['Ballot'].toString());
+                  // };
+                  // List<Ballot>
+                  // ballotList = course['votingchoices']['Ballot']
+                  List<Ballot> bl;
+                  bl = course['votingchoices']['Ballot']
+                      .map<Ballot>((x) => Ballot.fromMap(x))
+                      .toList();
+                  // ballotList.addAll(bl);
+                  if (ballotList.isNotEmpty) {
+                    print('ENOT ballotList EMpty!');
+                    print(ballotList.length);
+                  }
+                  ballotList.addAll(bl);
+                  print(ballotList.length);
+                  bl.clear();
+                  if (bl.isNotEmpty) {
+                    print('ENOT EMpty!');
+                  } else if (bl.isEmpty) {
+                    print('empty');
+                  }
+                  print("Ballist Length");
+                  print(ballotList.length);
+                  printBallot();
 
-        //           //   print(course['votingchoices']['Ballot'].toString());
-        //           // }
-        //           ;
-        //           // List<Ballot>
-        //           // ballotList = course['votingchoices']['Ballot']
-        //           List<Ballot> bl;
-        //           bl = course['votingchoices']['Ballot']
-        //               .map<Ballot>((x) => Ballot.fromMap(x))
-        //               .toList();
+                  // print(ballotList[0].option);
 
-        //           // ballotList.addAll(bl);
-        //           ballotList.addAll(bl);
-        //           bl.clear();
-        //           print("Ballist Length");
-        //           print(ballotList.length);
-        //           printBallot();
+                  print("Adding Ballots i:");
+                  print(i);
+                  // stackVoteBalData2();
+                  print('See BELOW:');
+                }
+                _getSumByProduct();
+                print('PRINTING SUM:');
+                // _getSumByProduct();
+                _printMap();
+                print('Carmap Element');
 
-        //           // print(ballotList[0].option);
+                _swapLists();
 
-        //           print("Adding Ballots");
-        //           print(i);
+                List<VoteResults> voteResult3 = [];
 
-        //           addBallots(
-        //               course['votingchoices']['Ballot'][i].toString(),
-        //               course['votingchoices']['Ballot'][i]['option']
-        //                   .toString());
-        //           stackVoteBalData2();
-        //           print('See BELOW:');
-        //           _getSumByProduct();
-        //         }
+                void createVoteListForGraph3() {
+                  // for (int i = 0; i < balList.length; i++) {
+                  for (int i = 0; i < ballotList.length; i++) {
+                    Color _randomColor = Colors
+                        .primaries[Random().nextInt(Colors.primaries.length)];
+                    print(ballotList[i].option);
+                    int votes = ballotList[i].vote;
+                    //  VoteResult.add() VoteResults[balList][i].option);
+                    VoteResults vr =
+                        VoteResults(ballotList[i].option, votes, _randomColor);
+                    print(ballotList[i].vote);
+                    voteResult3.add(vr);
+                    // setState(() {
+                    //   voteResult2;
+                    // });
+                  }
+                }
 
-        //         ;
+                createVoteListForGraph3();
+                _printSummary();
+                _clearMap();
 
-        //         print('PRINTING SUM:');
-        //         // _getSumByProduct();
-        //         _printMap();
-        //         print('Carmap Element');
-        //         _swapLists();
+                // createVoteListForGraph2();
+                List<charts.Series<VoteResults, String>> series3 = [
+                  charts.Series(
+                      data: voteResult3,
+                      id: "Voting Results",
+                      domainFn: (VoteResults pops, _) => pops.option,
+                      measureFn: (VoteResults pops, _) => pops.votes,
+                      colorFn: (VoteResults pops, _) =>
+                          charts.ColorUtil.fromDartColor(pops.barColor))
+                ];
 
-        //         List<VoteResults> voteResult3 = [];
-
-        //         void createVoteListForGraph3() {
-        //           // for (int i = 0; i < balList.length; i++) {
-        //           for (int i = 0; i < ballotList.length; i++) {
-        //             Color _randomColor = Colors
-        //                 .primaries[Random().nextInt(Colors.primaries.length)];
-        //             print(ballotList[i].option);
-        //             int votes = ballotList[i].vote;
-        //             //  VoteResult.add() VoteResults[balList][i].option);
-        //             VoteResults vr =
-        //                 VoteResults(ballotList[i].option, votes, _randomColor);
-        //             print(ballotList[i].vote);
-        //             voteResult3.add(vr);
-        //             // setState(() {
-        //             //   voteResult2;
-        //             // });
-        //           }
-        //         }
-
-        //         createVoteListForGraph3();
-        //         _printSummary();
-        //         _clearMap();
-
-        //         // createVoteListForGraph2();
-        //         List<charts.Series<VoteResults, String>> series3 = [
-        //           charts.Series(
-        //               data: voteResult3,
-        //               id: "Voting Results",
-        //               domainFn: (VoteResults pops, _) => pops.option,
-        //               measureFn: (VoteResults pops, _) => pops.votes,
-        //               colorFn: (VoteResults pops, _) =>
-        //                   charts.ColorUtil.fromDartColor(pops.barColor))
-        //         ];
-
-        //         return Center(
-        //           child: Padding(
-        //             padding: const EdgeInsets.all(10),
-        //             child: Container(
-        //               width: MediaQuery.of(context).size.width,
-        //               height: MediaQuery.of(context).size.height / 2,
-        //               decoration: BoxDecoration(
-        //                   color: Colors.green,
-        //                   borderRadius: BorderRadius.circular(10)),
-        //               child: charts.BarChart(series3),
-        //             ),
-        //           ),
-        //         );
-        //       }),
-        // ),
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 2,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: charts.BarChart(series3),
+                    ),
+                  ),
+                );
+              }),
+        ),
         SizedBox(
           height: 28,
         ),
@@ -166,80 +167,15 @@ class _ResultsChart2State extends State<ResultsChart2> {
     );
   }
 
-  void printdata() async {
-    print("BELOW");
-    print(await balList2[0].vote.toString());
-  }
-
   List<Ballot> ballotList = [];
 
   void printBallot() {
-    print("Pringint Ballot List");
+    print("Pringint Ballot List : Length=");
+    print(ballotList.length);
     for (int i = 0; i < ballotList.length; i++) {
       print("Option $i : " + ballotList[i].option);
       print("Vote $i : " + ballotList[i].vote.toString());
     }
-  }
-
-  List<Ballot> balList2 = [];
-  final loggedInUser = FirebaseAuth.instance.currentUser!.uid;
-
-  void addBallots(option, votes) {
-    // balList2.clear();
-
-    // Ballot b = Ballot(option, int.parse('$votes'), loggedInUser);
-    Ballot b = Ballot.voteSum(option, int.parse('$votes'));
-    balList2.add(b);
-    print('BOO!');
-  }
-
-  stackVoteBalData2() async {
-    return await FirebaseFirestore.instance
-        .collection('opinion')
-        .where('votingchoices.description',
-            isEqualTo: 'w87f6S1H6ES4PPaehWxJUSERID')
-        // isEqualTo: 'bSTqWjT0a4vRQfYU6ZJE')
-
-        // .orderBy('votingchoices.description')
-        .snapshots();
-  }
-
-  void newAdd() async {
-    var b;
-    int blen;
-
-    await stackVoteBalData2().then((docSnapshot) => {
-          blen = docSnapshot.data()['votingchoices']['Ballot'].length,
-          print("Length{$blen}"),
-          for (int i = 0; i < blen; i++)
-            {
-              b = Ballot.voteSum(
-                docSnapshot.data()['votingchoices']['Ballot'][i]['option'],
-                docSnapshot.data()['votingchoices']['Ballot'][i]['vote'],
-                // docSnapshot.data()['votingchoices']['Ballot'][i]['voterid'],
-              ),
-              // balList.add(b.toMap());
-
-              print(b.option),
-
-              print(b.vote),
-              balList2.add(b),
-              print(balList2.length)
-            }
-        });
-  }
-
-  void printBalList2() {
-    print("DOC Data ADDED to balList2: ");
-    print(balList2.length);
-    print("LEN");
-    for (int i = 0; i < balList2.length; i++) {
-      print("i value" + "$i");
-      print(balList2[i].option);
-
-      // print(balList2[i].vote);
-    }
-    print('POO!');
   }
 
   var carMap = {};
@@ -259,18 +195,23 @@ class _ResultsChart2State extends State<ResultsChart2> {
         carMap[option] = ballot.vote;
       }
     });
-    // print(carMap);
+    print('Printing Carmap: $carMap');
   }
 
   List<Ballot> ballotSummary = [];
 
   _createSummaryList() {
     Ballot b;
+    print('Adding following to ballotSummary');
+    print('Printing Carmap: $carMap');
     carMap.forEach((k, v) {
+      print('LOOP $k, $v ');
       print("Key : $k, Value : $v");
       b = Ballot.voteSum(k, v);
       ballotSummary.add(b);
     });
+    print('BALLOT SUmmay Added');
+    _printSummary();
   }
 
   _printMap() {
@@ -283,6 +224,7 @@ class _ResultsChart2State extends State<ResultsChart2> {
     carMap.keys.forEach((k) => print("Key : $k"));
     carMap.values.forEach((v) => print("Value: $v"));
     carMap.forEach((k, v) => print("Key : $k, Value : $v"));
+
     _createSummaryList();
   }
 
@@ -298,6 +240,7 @@ class _ResultsChart2State extends State<ResultsChart2> {
     print("ballotlisLengthPRE");
     print(ballotList.length);
     ballotList = ballotSummary;
+
     print("ballotlisLengthPOST");
     print(ballotList.length);
   }

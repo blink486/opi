@@ -48,6 +48,7 @@ class _VotingChoicesState extends State<VotingChoices> {
         // phIp = await IpInfoApi.getIPAddress();
         // listLength2();
         init();
+        // gectSpecxieB();
       });
     });
 
@@ -112,19 +113,8 @@ class _VotingChoicesState extends State<VotingChoices> {
     // print(survey.sets[1].description);
   }
 
-  // PollTypeSingle pd = PollTypeSingle(pollType.first.id);
-
-  // Future<String> id2 = pollType.first['id'];
-
-  // PollTypeSingle selectedValue = pollType.[]first;
-
-  // List<PollTypeSingle> get newMethod => pp;
-
   final selectedColor = Colors.pink;
   final unselectedColor = Colors.grey;
-
-  // late PollTypeSingle pp =
-  //     PollTypeSingle(id: id, name: name, description: description);
 
   late PollTypeSingle selectedOption = pollType.first;
 
@@ -138,17 +128,6 @@ class _VotingChoicesState extends State<VotingChoices> {
     late String me = ipAddress.toString();
     print(me);
   }
-
-  // PollTypeSingle(
-  //     id: pollType.first.id,
-  //     name: pollType.first.name,
-  //     description: pollType.first.description);
-
-  // Widget lviewB() {
-  //   return ListView.separated(
-  //     physics: NeverScrollableScrollPhysics(),
-  //     shrinkWrap: true,
-  //     padding: const EdgeInsets.all(8)
 
   late Future<bool> ipexists;
   late Future<String> ipexists2;
@@ -169,11 +148,7 @@ class _VotingChoicesState extends State<VotingChoices> {
                     onPressed: () {
                       print(
                           ' ADD to Set State for Option Chosen - And Also Run Checks on User - Create Seperate SFinal Submit Button');
-                      // ipexists =
-                      //     sd.ipExists(widget.surveyId, '1') as Future<bool>;
-                      // if (ipexists == true) {
-                      //   print('object BOL');
-                      // }
+
                       ipexists2 = sd.ipExistsPrint(widget.surveyId);
 
                       ;
@@ -192,11 +167,139 @@ class _VotingChoicesState extends State<VotingChoices> {
                     selectedOption = value!;
                     AddObjectToVotingChoices2(poll.id!.toInt());
                     print(choiceList.first);
+
+                    gectSpecxieB().then((value) {
+                      print('it is:  $value');
+                    });
+                    chk('90.207.2.108');
                   }),
                 ),
               )
               .toList()),
     );
+  }
+
+// Future<String> getSpecie(String petId) async {
+//     DocumentReference documentReference =
+//    FirebaseFirestore.instance.collection("board").doc('doc_id').collection("Dates").doc().get().then((value) => null);
+
+//             FirebaseFirestore.instance.collection('opinion')
+//         .doc(widget.surveyId)
+//         .collection('response')
+//         .where('votingchoices.description', isEqualTo: widget.surveyId)
+//         .snapshots();
+
+//            petCollection.document(petId);
+//     String specie;
+//     await documentReference.get().then((snapshot) {
+//       specie = snapshot.data['specie'].toString();
+//     });
+//     return specie;
+
+  // }
+
+  String? futureIp;
+
+  Future<String?> gectSpecxie() async {
+    print('objectxcxc');
+    await FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('opinion')
+            // .doc(FirebaseAuth.instance.currentUser!.uid)
+            .doc(widget.surveyId)
+            .collection('response')
+            .get(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('objectxcxc A');
+            return Center(child: CircularProgressIndicator());
+          } else {
+            print('objectxcxc B');
+            String val = snapshot.data.docs[0].reference.id.toString();
+            print(Text(snapshot.data.docs[0].reference.id.toString()));
+            setState(() => futureIp = val);
+            return Text(snapshot.data.docs[0].reference.id.toString());
+          }
+        });
+  }
+
+  Future<String?> gectSpecxieB() async {
+    print('objectxcxc');
+    var db = await FirebaseFirestore.instance
+        .collection('opinion')
+        // .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(widget.surveyId)
+        .collection('response')
+        // .where('downloadUrl', isEqualTo: 'https://www.google.co.frsl/')
+        .get()
+        .then((snap) {
+      String st = snap.docs.first.data().toString();
+      print(st);
+      print('ELEMents d');
+      // String st2 = snap.docs.first.data()['Ballot']['phoneIpAddr'];
+      String st2 = snap.docs.first.data()['votingchoices']['description'];
+      print(st2);
+
+      DateTime myDateTime = (snap.docs.first.data()['votingchoices']['Ballot']
+              [0]['voteDate'])
+          .toDate();
+      print('VTdte£ dd');
+      print(myDateTime.toString());
+
+      String st3 =
+          snap.docs.first.data()['votingchoices']['Ballot'][0]['phoneIpAddr'];
+      print('ST£ $st3');
+      return st3;
+    });
+  }
+
+  Future<String?> chk(String ipaddr) async {
+    Future<String?> tx;
+
+    print('Printgin1');
+    var qSnapshot = await FirebaseFirestore.instance
+        .collection('opinion')
+        .doc(widget.surveyId)
+        .collection('response')
+        // .where('downloadUrl', isEqualTo: 'https://www.google.co.frs/')
+        .snapshots()
+        .forEach((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        print('ddffzz');
+        print(snapshot.size);
+        for (int i = 0; i < snapshot.size; i++) {
+          // print(snapshot.docs[i].data().toString());
+          print(snapshot.docs[i]
+              .data()['votingchoices']['Ballot'][0]['phoneIpAddr']
+              .toString());
+          print('ddffzz');
+          String ipr = (snapshot.docs[i]
+              .data()['votingchoices']['Ballot'][0]['phoneIpAddr']
+              .toString());
+          // print(snapshot.docs[i]
+          //     .data()['votingchoices']['Ballot']
+//DEVNOTES 278: Keep Code For when there are multiple Choices
+          int arrayLength = snapshot.docs[i]['votingchoices']['Ballot'].length;
+          print('LEN:');
+          print(arrayLength.toString());
+          //DEVNOTES 278: END
+          if (ipr == ipaddr) {
+            print('FOund It: $ipr');
+          }
+        }
+        // final String toPrint = snapshot.docs[0].data()['downloadUrl'];
+        // tx = toPrint as Future<String>;
+        print('Printgin2');
+        // print(toPrint);
+        // return Text(snapshot.data!.docs[0].data()['downloadUrl']);
+
+      } else if (snapshot.docs.isEmpty) {
+        print(widget.surveyId);
+        print(snapshot.docs[0].data()['downloadUrl']);
+        print('Empty result');
+      }
+    });
+    return 'helloEMpty';
   }
 
   void AddObjectToVotingChoices2(int option) {

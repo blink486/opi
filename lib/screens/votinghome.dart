@@ -253,9 +253,10 @@ class _VotingChoicesState extends State<VotingChoices> {
     });
   }
 
-  Future<String?> chk(String ipaddr) async {
-    Future<String?> tx;
+  bool votedAlready = false;
 
+  void chk(String ipaddr) async {
+    bool existvote = false;
     print('Printgin1');
     var qSnapshot = await FirebaseFirestore.instance
         .collection('opinion')
@@ -285,6 +286,11 @@ class _VotingChoicesState extends State<VotingChoices> {
           //DEVNOTES 278: END
           if (ipr == ipaddr) {
             print('FOund It: $ipr');
+            setState(() {
+              print(votedAlready);
+              votedAlready = true;
+              print(votedAlready);
+            });
           }
         }
         // final String toPrint = snapshot.docs[0].data()['downloadUrl'];
@@ -299,7 +305,7 @@ class _VotingChoicesState extends State<VotingChoices> {
         print('Empty result');
       }
     });
-    return 'helloEMpty';
+    // return 'helloEMpty';
   }
 
   void AddObjectToVotingChoices2(int option) {
@@ -396,12 +402,23 @@ class _VotingChoicesState extends State<VotingChoices> {
                 label:
                     Text("+AddToFire():Adds Votes to EXISTING 'Ballot' object"),
                 onPressed: () => {
-                      print("ADDING UPDATED to FIREbase:"),
-                      AddToFire(),
-                      AddToFireSubColl(),
-                      setState(() {
-                        voted = 'y';
-                      }),
+                      if (!votedAlready)
+                        {
+                          print("ADDING UPDATED to FIREbase:"),
+                          AddToFire(),
+                          AddToFireSubColl(),
+                          setState(() {
+                            voted = 'y';
+                          }),
+                        }
+                      else
+                        {
+                          print(
+                              'You Can only vote once !  Have Already Voted!!'),
+                          //        setState(() {
+
+                          // }),
+                        }
                     }),
             ElevatedButton.icon(
                 icon: Icon(Icons.ac_unit),

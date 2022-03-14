@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:moodclicks/model/account.dart';
 import 'package:moodclicks/screens/questioncard.dart';
 import 'package:moodclicks/screens/surveydisplay2.dart';
+import 'package:moodclicks/screens/votinghome.dart';
 import 'package:moodclicks/screens/wrapper.dart';
 import 'package:moodclicks/services/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +90,8 @@ class MyApp extends StatelessWidget {
           '/': (context) => Wrapper(),
           '/tutorials': (context) => TutorialsPage(),
           '/error': (context) => ErrorPage(),
-          '/dylink': (context) => SurveyDisplay2(surveyId: ''),
+          // '/dylink': (context) => SurveyDisplay2(surveyId: ''),
+          '/dylink': (context) => VotingChoices(surveyId: ''),
         },
       ),
     );
@@ -151,7 +153,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) =>
-                SurveyDisplay2(surveyId: myLinkId),
+                // SurveyDisplay2(surveyId: myLinkId),
+                VotingChoices(surveyId: myLinkId),
           ),
         );
         setState(() {});
@@ -164,7 +167,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) =>
-                SurveyDisplay2(surveyId: 'zLrGyGzOgDgRAH4Wrq4d'),
+                // SurveyDisplay2(surveyId: 'zLrGyGzOgDgRAH4Wrq4d'),
+                VotingChoices(surveyId: 'zLrGyGzOgDgRAH4Wrq4d'),
           ),
         );
       }
